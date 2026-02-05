@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+<FileZilla3 version="3.69.2" platform="mac">
+	<Layout Builddate="2025-07-17" Buildtime="11:09:23">
+		<Resources>
+			<xrc file="netconfwizard.xrc" date="1707300902" />
+			<xrc file="dialogs.xrc" date="1707300902" />
+		</Resources>
+		<Language id="ja_JP" date="1752743408">
+			<Font font="3;90;0;0;43;&lt;plist version=&quot;1.0&quot;>&lt;dict>&lt;key>NSCTFontUIUsageAttribute&lt;/key>&lt;string>CTFontRegularUsage&lt;/string>&lt;key>NSFontSizeAttribute&lt;/key>&lt;real>13&lt;/real>&lt;/dict>&lt;/plist>" width="779" height="16" />
+		</Language>
+	</Layout>
+</FileZilla3>

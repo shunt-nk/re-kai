@@ -1,0 +1,76 @@
+[DEBUG] [LSP MANAGER] initializeLspServerManager() called
+[DEBUG] [LSP MANAGER] Created manager instance, state=pending
+[DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+[DEBUG] [LSP SERVER MANAGER] initialize() called
+[DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/s2240025/.claude/skills, project=/Users/s2240025/Desktop/code/.claude/skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/s2240025/.zshrc
+[DEBUG] Shell config file not found: /Users/s2240025/.zshrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: /Users/s2240025/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/s2240025/.claude/shell-snapshots/snapshot-zsh-1762835830394-kl9pii.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/s2240025/.claude/todos/6e9ea205-4abb-4adc-b56a-ef5b22bbd06f-agent-6e9ea205-4abb-4adc-b56a-ef5b22bbd06f.json.tmp.99544.1762835830395
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/s2240025/.claude/todos/6e9ea205-4abb-4adc-b56a-ef5b22bbd06f-agent-6e9ea205-4abb-4adc-b56a-ef5b22bbd06f.json.tmp.99544.1762835830395 to /Users/s2240025/.claude/todos/6e9ea205-4abb-4adc-b56a-ef5b22bbd06f-agent-6e9ea205-4abb-4adc-b56a-ef5b22bbd06f.json
+[DEBUG] File /Users/s2240025/.claude/todos/6e9ea205-4abb-4adc-b56a-ef5b22bbd06f-agent-6e9ea205-4abb-4adc-b56a-ef5b22bbd06f.json written atomically
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Total plugin agents loaded: 0
+[DEBUG] Shell snapshot created successfully (697 bytes)
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99544.1762835830493
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37259 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99544.1762835830493 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Ripgrep first use test: PASSED (mode=builtin, path=/opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/vendor/ripgrep/arm64-darwin/rg)
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99544.1762835830634
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37311 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99544.1762835830634 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99544.1762835830639
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37311 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99544.1762835830639 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[ERROR] Error streaming, falling back to non-streaming mode: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+[ERROR] Error in non-streaming fallback: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+[ERROR] Error: Error: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+    at q_.validateHeaders (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:716:930)
+    at q_.buildHeaders (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:716:8423)
+    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)
+    at async q_.buildRequest (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:716:7481)
+    at async q_.makeRequest (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:716:3309)
+    at async Qs2.xnA.model (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:3534:15306)
+    at async xnA (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:1833:39781)
+    at async Qs2 (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:3534:15460)
+    at async file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:3534:8691
+    at async w00 (file:///opt/homebrew/lib/node_modules/@anthropic-ai/claude-code/cli.js:3534:1970)
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99544.1762836001597
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37311 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99544.1762836001597 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99544.1762836001605
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37311 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99544.1762836001605 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically

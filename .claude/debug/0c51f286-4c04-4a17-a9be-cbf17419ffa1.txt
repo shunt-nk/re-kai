@@ -1,0 +1,89 @@
+[ERROR] Failed to save config with lock: Error: ENOENT: no such file or directory, lstat '/Users/s2240025/.claude.json'
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835636854
+[DEBUG] Setting permissions for new file: 600
+[DEBUG] Temp file written successfully, size: 103 bytes
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835636854 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] [LSP MANAGER] initializeLspServerManager() called
+[DEBUG] [LSP MANAGER] Created manager instance, state=pending
+[DEBUG] [LSP MANAGER] Starting async initialization (generation 1)
+[DEBUG] [LSP SERVER MANAGER] initialize() called
+[DEBUG] [LSP SERVER MANAGER] Calling getAllLspServers()
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835636856
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 183 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835636856 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835636858
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 220 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835636858 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Found 0 plugins (0 enabled, 0 disabled)
+[DEBUG] Loading skills from directories: managed=/Library/Application Support/ClaudeCode/.claude/skills, user=/Users/s2240025/.claude/skills, project=/Users/s2240025/.claude/skills
+[DEBUG] >>>>> getPluginSkills CALLED <<<<<
+[DEBUG] Total LSP servers loaded: 0
+[DEBUG] getPluginSkills: Processing 0 enabled plugins
+[DEBUG] Total plugin skills loaded: 0
+[DEBUG] Total plugin commands loaded: 0
+[DEBUG] [LSP SERVER MANAGER] getAllLspServers returned 0 server(s)
+[DEBUG] LSP manager initialized with 0 servers
+[DEBUG] Loaded 0 unique skills (managed: 0, user: 0, project: 0, duplicates removed: 0)
+[DEBUG] LSP server manager initialized successfully
+[DEBUG] LSP notification handlers registered successfully for all 0 server(s)
+[DEBUG] getSkillsIfEnabled returning: 0 skill dir commands, 0 plugin skills
+[DEBUG] Registered 0 hooks from 0 plugins
+[DEBUG] Creating shell snapshot for zsh (/bin/zsh)
+[DEBUG] Looking for shell config file: /Users/s2240025/.zshrc
+[DEBUG] Shell config file not found: /Users/s2240025/.zshrc, creating snapshot with Claude Code defaults only
+[DEBUG] Snapshots directory: /Users/s2240025/.claude/shell-snapshots
+[DEBUG] Creating snapshot at: /Users/s2240025/.claude/shell-snapshots/snapshot-zsh-1762835636962-hnivpu.sh
+[DEBUG] Shell binary exists: true
+[DEBUG] Execution timeout: 10000ms
+[DEBUG] Writing to temp file: /Users/s2240025/.claude/todos/0c51f286-4c04-4a17-a9be-cbf17419ffa1-agent-0c51f286-4c04-4a17-a9be-cbf17419ffa1.json.tmp.99424.1762835636963
+[DEBUG] Temp file written successfully, size: 2 bytes
+[DEBUG] Renaming /Users/s2240025/.claude/todos/0c51f286-4c04-4a17-a9be-cbf17419ffa1-agent-0c51f286-4c04-4a17-a9be-cbf17419ffa1.json.tmp.99424.1762835636963 to /Users/s2240025/.claude/todos/0c51f286-4c04-4a17-a9be-cbf17419ffa1-agent-0c51f286-4c04-4a17-a9be-cbf17419ffa1.json
+[DEBUG] File /Users/s2240025/.claude/todos/0c51f286-4c04-4a17-a9be-cbf17419ffa1-agent-0c51f286-4c04-4a17-a9be-cbf17419ffa1.json written atomically
+[DEBUG] Install: Starting installation process (force=false, target=undefined)
+[DEBUG] Install: Calling installLatest(force=true, target=undefined, forceReinstall=false)
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835636999
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37158 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835636999 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Shell snapshot created successfully (679 bytes)
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835637053
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37218 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835637053 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[ERROR] Error streaming, falling back to non-streaming mode: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+[ERROR] Error in non-streaming fallback: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+[ERROR] Error: Error: Could not resolve authentication method. Expected either apiKey or authToken to be set. Or for one of the "X-Api-Key" or "Authorization" headers to be explicitly omitted
+    at validateHeaders (/$bunfs/root/claude:670:935)
+    at buildHeaders (/$bunfs/root/claude:670:8438)
+    at async buildRequest (/$bunfs/root/claude:670:7504)
+    at async makeRequest (/$bunfs/root/claude:670:3332)
+    at processTicksAndRejections (native:7:39)
+[DEBUG] Checking for native installer update to version 2.0.37
+[DEBUG] Downloading native installer version 2.0.37
+[DEBUG] Successfully updated to version 2.0.37
+[DEBUG] Writing to temp file: /Users/s2240025/.claude.json.tmp.99424.1762835649070
+[DEBUG] Preserving file permissions: 100600
+[DEBUG] Temp file written successfully, size: 37259 bytes
+[DEBUG] Applied original permissions to temp file
+[DEBUG] Renaming /Users/s2240025/.claude.json.tmp.99424.1762835649070 to /Users/s2240025/.claude.json
+[DEBUG] File /Users/s2240025/.claude.json written atomically
+[DEBUG] Native installer: Set installMethod to "native" and disabled legacy auto-updater for protection
+[DEBUG] Install: installLatest returned version=2.0.37, wasUpdated=true, lockFailed=false
+[DEBUG] Install: Setup launcher completed with 1 messages
+[DEBUG] Install: Setup message: Native installation exists but ~/.local/bin is not in your PATH. Run:
+
+echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.zshrc && source ~/.zshrc
+[DEBUG] Install: Cleaning up npm installations after successful install
+[DEBUG] Removed global npm installation of @anthropic-ai/claude-code
+[DEBUG] Cleaned up 1 npm installation(s)

@@ -1,0 +1,126 @@
+/* Global Layout */
+.container {
+    width: 100%;
+    min-height: 100vh;
+    background-color: #f0f5f9;
+    /* Lightest blue-gray */
+    font-family: "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+    padding-bottom: 100px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.contentWrapper {
+    width: 100%;
+    max-width: 1000px;
+    height: 100%;
+    flex: 1;
+    /* Constrained width */
+    margin-top: 40px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card {
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    /* Premium soft shadow */
+    padding: 50px 60px;
+    width: 100%;
+    max-width: 500px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title {
+    font-family: "Hiragino Mincho ProN", serif;
+    font-size: 28px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.subtitle {
+    font-family: "Hiragino Mincho ProN", serif;
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 40px;
+    letter-spacing: 0.05em;
+    text-align: center;
+}
+
+.form {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.label {
+    display: block;
+    font-size: 14px;
+    font-weight: 700;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+    margin-left: 4px;
+}
+
+.input {
+    width: 100%;
+    padding: 14px 16px;
+    font-size: 16px;
+    border: 2px solid #e5e5e5;
+    background-color: #f7f7f7;
+    border-radius: 12px;
+    outline: none;
+    transition: all 0.2s;
+}
+
+.input:focus {
+    background-color: #ffffff;
+    border-color: #5aa9fa;
+}
+
+.submitBtn {
+    margin-top: 20px;
+    background: linear-gradient(90deg, #63b3ed 0%, #4299e1 100%);
+    color: white;
+    border: none;
+    padding: 16px 0;
+    width: 100%;
+    border-radius: 12px;
+    font-weight: 700;
+    font-size: 16px;
+    box-shadow: 0 4px 12px rgba(66, 153, 225, 0.4);
+    cursor: pointer;
+    text-align: center;
+    transition: transform 0.2s;
+}
+
+.submitBtn:hover {
+    transform: translateY(-2px);
+}
+
+.linkContainer {
+    margin-top: 30px;
+    text-align: center;
+}
+
+.link {
+    font-size: 13px;
+    color: #4299e1;
+    text-decoration: none;
+    font-weight: 700;
+}
+
+.link:hover {
+    text-decoration: underline;
+}
