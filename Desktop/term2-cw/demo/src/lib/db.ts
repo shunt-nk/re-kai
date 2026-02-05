@@ -1,8 +1,17 @@
-import { kv } from '@vercel/kv';
+import Redis from 'ioredis';
 import { User } from '@/data/mockData';
 import { v4 as uuidv4 } from 'uuid';
 
-// Extended User Interface for DB
+// 環境変数 REDIS_URL を使って接続します
+const getClient = () => {
+    const url = process.env.REDIS_URL;
+    if (!url) {
+        throw new Error("REDIS_URL is not defined");
+    }
+    return new Redis(url);
+};
+
+// Extended User Interface
 export interface DBUser extends User {
     password?: string;
     email?: string;
@@ -25,67 +34,72 @@ export interface HistoryRecord {
     createdAt: string;
 }
 
-// クラウド(KV)からユーザーリストを取得する関数
-async function readDb(): Promise<DBUser[]> {
-    const users = await kv.get<DBUser[]>('users');
-    return users || [];
+// データを取得するヘルパー関数
+async function getData<T>(key: string): Promise<T | null> {
+    const redis = getClient();
+    try {
+        const data = await redis.get(key);
+        if (!data) return null;
+        return JSON.parse(data) as T;
+    } finally {
+        redis.quit(); // 接続を閉じる
+    }
 }
 
-// クラウド(KV)にユーザーリストを保存する関数
-async function writeDb(users: DBUser[]) {
-    await kv.set('users', users);
+// データを保存するヘルパー関数
+async function setData(key: string, value: any) {
+    const redis = getClient();
+    try {
+        await redis.set(key, JSON.stringify(value));
+    } finally {
+        redis.quit();
+    }
 }
 
-// クラウド(KV)から履歴を取得する関数
-async function readHistoryDb(): Promise<HistoryRecord[]> {
-    const records = await kv.get<HistoryRecord[]>('history');
-    return records || [];
-}
-
-// クラウド(KV)に履歴を保存する関数
-async function writeHistoryDb(records: HistoryRecord[]) {
-    await kv.set('history', records);
-}
+// === 以下、データベース操作関数 ===
 
 export const db = {
-    // 【重要】すべて async (非同期) になります
-    getUsers: async () => await readDb(),
+    getUsers: async (): Promise<DBUser[]> => {
+        const users = await getData<DBUser[]>('users');
+        return users || [];
+    },
 
     getUserById: async (id: string) => {
-        const users = await readDb();
+        const users = await getData<DBUser[]>('users');
+        if (!users) return undefined;
         return users.find(u => u.id === id);
     },
 
     saveUser: async (user: DBUser) => {
-        const users = await readDb();
+        const users = (await getData<DBUser[]>('users')) || [];
         const idx = users.findIndex(u => u.id === user.id);
         if (idx >= 0) {
             users[idx] = user;
         } else {
             users.push(user);
         }
-        await writeDb(users);
+        await setData('users', users);
         return user;
     },
 
     updateUserStats: async (id: string, updates: Partial<DBUser>) => {
-        const users = await readDb();
+        const users = (await getData<DBUser[]>('users')) || [];
         const idx = users.findIndex(u => u.id === id);
         if (idx === -1) return null;
 
         const updatedUser = { ...users[idx], ...updates };
         users[idx] = updatedUser;
-        await writeDb(users);
+        await setData('users', users);
         return updatedUser;
     },
 
     getExrichedUser: async (id: string) => {
-        const users = await readDb();
-        const allRecords = await readHistoryDb();
-        const records = allRecords.filter(r => r.userId === id);
+        const users = (await getData<DBUser[]>('users')) || [];
+        const records = (await getData<HistoryRecord[]>('history')) || [];
 
-        const totalQuestions = records.length;
-        const totalTimeSec = records.reduce((acc, r) => acc + (r.timeSpentSec || 0), 0);
+        const userRecords = records.filter(r => r.userId === id);
+        const totalQuestions = userRecords.length;
+        const totalTimeSec = userRecords.reduce((acc, r) => acc + (r.timeSpentSec || 0), 0);
         const totalStudyTimeHours = Math.round((totalTimeSec / 3600) * 10) / 10;
 
         const sorted = [...users].sort((a, b) => {
@@ -108,24 +122,26 @@ export const db = {
 
     // History Methods
     saveHistory: async (record: Omit<HistoryRecord, 'id' | 'createdAt'>) => {
-        const records = await readHistoryDb();
+        const records = (await getData<HistoryRecord[]>('history')) || [];
         const newRecord: HistoryRecord = {
             ...record,
             id: uuidv4(),
             createdAt: new Date().toISOString()
         };
         records.push(newRecord);
-        await writeHistoryDb(records);
+        await setData('history', records);
         return newRecord;
     },
 
     getHistoryByUserId: async (userId: string) => {
-        const records = await readHistoryDb();
-        return records.filter(r => r.userId === userId).sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        const records = (await getData<HistoryRecord[]>('history')) || [];
+        return records
+            .filter(r => r.userId === userId)
+            .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
     },
 
     getHistoryById: async (id: string) => {
-        const records = await readHistoryDb();
+        const records = (await getData<HistoryRecord[]>('history')) || [];
         return records.find(r => r.id === id);
     }
 };
