@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/data/db'; // ※ここは実際のdb.tsの場所に合わせる（例: @/data/db または @/lib/db）
+import { db } from '@/lib/db'; // ※ここは実際のdb.tsの場所に合わせる（例: @/data/db または @/lib/db）
 
 export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
