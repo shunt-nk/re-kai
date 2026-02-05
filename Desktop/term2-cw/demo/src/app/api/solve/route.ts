@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { db } from '@/lib/db';
+import { db } from '@/lib/db'; // ※ここは実際のdb.tsの場所に合わせる
 import { PROBLEMS } from '@/data/mockData';
 import { gradeWithGemini } from '@/lib/gemini';
 
@@ -12,7 +12,9 @@ export async function POST(request: Request) {
             return NextResponse.json({ error: 'User ID required' }, { status: 400 });
         }
 
-        const user = db.getUserById(userId);
+        // 【修正1】ユーザー取得を待つ (await)
+        const user = await db.getUserById(userId);
+
         if (!user) {
             return NextResponse.json({ error: 'User not found' }, { status: 404 });
         }
@@ -53,7 +55,8 @@ export async function POST(request: Request) {
             }
         }
 
-        db.updateUserStats(userId, {
+        // 【修正2】ステータス更新完了を待つ (await)
+        await db.updateUserStats(userId, {
             level,
             currentExp,
             maxExp,
@@ -62,7 +65,8 @@ export async function POST(request: Request) {
         });
 
         // Save detailed history
-        db.saveHistory({
+        // 【修正3】履歴保存完了を待つ (await)
+        await db.saveHistory({
             userId,
             problemId,
             problemTitle: problem.title,

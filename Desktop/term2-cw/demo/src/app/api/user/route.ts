@@ -9,13 +9,15 @@ export async function GET(request: Request) {
         return NextResponse.json({ error: 'User ID required' }, { status: 400 });
     }
 
-    const user = db.getExrichedUser(id);
+    // 【修正】データを計算して取ってくるのを待つ (await)
+    const user = await db.getExrichedUser(id);
 
     if (!user) {
         return NextResponse.json({ error: 'User not found' }, { status: 404 });
     }
 
     // Remove password before sending
+    // ※Vercel KVから取得したオブジェクトからパスワードを除外する
     const { password, ...safeUser } = user;
 
     return NextResponse.json({ user: safeUser });
