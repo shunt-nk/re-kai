@@ -103,7 +103,7 @@ export default function PCClient() {
         // 2. Pusherの初期化
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
             cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-            authEndpoint: '/api/pusher/auth', // 自作した認証API
+            authEndpoint: '/api/pusher', // 自作した認証API
         });
         pusherRef.current = pusher;
 

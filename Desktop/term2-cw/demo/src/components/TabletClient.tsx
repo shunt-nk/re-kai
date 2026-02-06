@@ -103,7 +103,7 @@ export default function TabletClient() {
         // 2. Pusherのセットアップ
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
             cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-            authEndpoint: '/api/pusher/auth', // 自作した認証API
+            authEndpoint: '/api/pusher', // 自作した認証API
         });
 
         // 3. チャンネルに参加 (private-session-トークン)
