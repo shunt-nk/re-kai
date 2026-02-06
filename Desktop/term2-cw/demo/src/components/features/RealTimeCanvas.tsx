@@ -2,6 +2,8 @@
 
 import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } from 'react';
 import QRCode from 'qrcode';
+import Pusher from 'pusher-js';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Stroke {
     type: string;
@@ -25,6 +27,16 @@ export interface RealTimeCanvasHandle {
     getImageData: () => string | null;
 }
 
+interface DrawData {
+    x: number;
+    y: number;
+    mode: string;
+    color?: string;
+    size?: number;
+    width?: number;
+    height?: number;
+}
+
 const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     className,
     onConnectionChange,
@@ -42,15 +54,15 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     const redoStackRef = useRef<Stroke[]>([]);
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const drawingRef = useRef(false);
-    const wsRef = useRef<WebSocket | null>(null);
-    const isRegisteredRef = useRef(false);
+    const pusherRef = useRef<Pusher | null>(null);
 
     useImperativeHandle(ref, () => ({
         clearCanvas: () => {
             historyRef.current = [];
             redoStackRef.current = [];
             redraw();
-            wsRef.current?.send(JSON.stringify({ type: 'clear_request', token }));
+            // Optional: send clear event to tablet if supported
+            // channelRef.current?.trigger('client-clear', {});
         },
         getToken: () => token,
         getImageData: () => {
@@ -88,124 +100,107 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     };
 
     useEffect(() => {
-        const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-        const ws = new WebSocket(`${protocol}//${window.location.hostname}:3001`);
-        wsRef.current = ws;
+        // Generate a new token
+        const newToken = uuidv4();
+        setToken(newToken);
 
-        ws.onopen = () => {
-            console.log('WS Connected');
-        };
+        // Notify parent about the token
+        if (onConnectionChange) onConnectionChange(false, newToken);
 
-        ws.onmessage = (e) => {
-            const d = JSON.parse(e.data);
+        // Generate QR Code
+        if (qrRef.current) {
+            // Use window.location.origin for correct protocol/host (works in Vercel)
+            const origin = typeof window !== 'undefined' ? window.location.origin : '';
+            const url = `${origin}/tablet?token=${newToken}`;
+
+            qrRef.current.innerHTML = '';
+            const qrCanvas = document.createElement('canvas');
+            QRCode.toCanvas(qrCanvas, url, { width: 160, margin: 1, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
+                if (!err && qrRef.current) qrRef.current.appendChild(qrCanvas);
+            });
+        }
+
+        // Initialize Pusher
+        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+            authEndpoint: '/api/pusher',
+        });
+        pusherRef.current = pusher;
+
+        const channelName = `private-session-${newToken}`;
+        const channel = pusher.subscribe(channelName);
+
+        // Bind Events
+        channel.bind('pusher:subscription_succeeded', () => {
+            console.log('Pusher Channel Subscribed:', channelName);
+        });
+
+        channel.bind('client-tablet-ready', () => {
+            setIsConnected(true);
+            if (onConnectionChange) onConnectionChange(true, null);
+        });
+
+        channel.bind('client-stroke-start', (d: DrawData) => {
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
-
-            if (d.type === 'token') {
-                setToken(d.token);
-                // Update ref to stop interval from re-registering
-                isRegisteredRef.current = true;
-
-                if (onConnectionChange) onConnectionChange(false, d.token);
-
-                // Generate QR
-                const host = d.ip ? `${d.ip}:3000` : window.location.host;
-                const url = `http://${host}/tablet?token=` + d.token;
-
-                if (qrRef.current) {
-                    qrRef.current.innerHTML = '';
-                    const qrCanvas = document.createElement('canvas');
-                    QRCode.toCanvas(qrCanvas, url, { width: 160, margin: 1, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
-                        if (!err && qrRef.current) qrRef.current.appendChild(qrCanvas);
-                    });
-                }
-            }
-
-            if (d.type === 'register_tablet_success') {
-                setIsConnected(true);
-                if (onConnectionChange) onConnectionChange(true, null);
-            }
-
-            if (d.type === 'start_timer') {
-                if (onStart) onStart();
-            }
-
-            if (d.type === 'token_invalid') {
-                ws.send(JSON.stringify({ type: 'register_pc' }));
-            }
-
-            // Ensure canvas exists for drawing operations
             if (!canvas || !ctx) return;
 
-            // --- Drawing Logic ---
-            if (d.type === 'stroke_start') {
-                drawingRef.current = true;
-                currentStrokeRef.current = {
-                    type: 'stroke',
-                    mode: d.mode,
-                    color: d.color,
-                    size: d.size,
-                    points: [{ x: d.x, y: d.y }]
-                };
+            drawingRef.current = true;
+            currentStrokeRef.current = {
+                type: 'stroke',
+                mode: d.mode,
+                color: d.color,
+                size: d.size,
+                points: [{ x: d.x, y: d.y }]
+            };
 
-                ctx.beginPath();
-                ctx.globalCompositeOperation = d.mode === 'erase' ? 'destination-out' : 'source-over';
-                ctx.strokeStyle = d.color || '#000000';
-                ctx.lineWidth = d.size || 2;
-                ctx.moveTo(d.x * canvas.width, d.y * canvas.height);
-            }
+            ctx.beginPath();
+            ctx.globalCompositeOperation = d.mode === 'erase' ? 'destination-out' : 'source-over';
+            ctx.strokeStyle = d.color || '#000000';
+            ctx.lineWidth = d.size || 2;
+            ctx.moveTo(d.x * canvas.width, d.y * canvas.height);
+        });
 
-            if (d.type === 'stroke_move' && drawingRef.current) {
-                currentStrokeRef.current.points.push({ x: d.x, y: d.y });
-                ctx.lineTo(d.x * canvas.width, d.y * canvas.height);
-                ctx.stroke();
-            }
+        channel.bind('client-stroke-move', (d: DrawData) => {
+            const canvas = canvasRef.current;
+            const ctx = canvas?.getContext('2d');
+            if (!canvas || !ctx || !drawingRef.current) return;
 
-            if (d.type === 'stroke_end') {
-                drawingRef.current = false;
-                historyRef.current.push({ ...currentStrokeRef.current });
-                redoStackRef.current = [];
-            }
+            currentStrokeRef.current.points.push({ x: d.x, y: d.y });
+            ctx.lineTo(d.x * canvas.width, d.y * canvas.height);
+            ctx.stroke();
+        });
 
-            if (d.type === 'undo') {
-                if (historyRef.current.length > 0) {
-                    const stroke = historyRef.current.pop();
-                    if (stroke) redoStackRef.current.push(stroke);
-                    redraw();
-                }
-            }
+        channel.bind('client-stroke-end', () => {
+            drawingRef.current = false;
+            historyRef.current.push({ ...currentStrokeRef.current });
+            redoStackRef.current = [];
+        });
 
-            if (d.type === 'redo') {
-                if (redoStackRef.current.length > 0) {
-                    const stroke = redoStackRef.current.pop();
-                    if (stroke) historyRef.current.push(stroke);
-                    redraw();
-                }
-            }
-
-            if (d.type === 'resize') {
+        channel.bind('client-undo', () => {
+            if (historyRef.current.length > 0) {
+                const stroke = historyRef.current.pop();
+                if (stroke) redoStackRef.current.push(stroke);
                 redraw();
             }
-        };
+        });
 
-        // Initial Register
-        const interval = setInterval(() => {
-            if (ws.readyState === WebSocket.OPEN && !isRegisteredRef.current) {
-                // Double check if we already have a token to be safe
-                // If token exists, we are fine, but re-registering causes no harm usually, 
-                // but checking token prevents loops
-                if (!token) {
-                    ws.send(JSON.stringify({ type: 'register_pc' }));
-                } else {
-                    isRegisteredRef.current = true;
-                }
+        channel.bind('client-redo', () => {
+            if (redoStackRef.current.length > 0) {
+                const stroke = redoStackRef.current.pop();
+                if (stroke) historyRef.current.push(stroke);
+                redraw();
             }
-        }, 1000);
+        });
+
+        channel.bind('client-resize', () => {
+            redraw();
+        });
 
         return () => {
-            clearInterval(interval);
-            ws.close();
-        }
+            pusher.unsubscribe(channelName);
+            pusher.disconnect();
+        };
     }, []);
 
     // Handle initial sizing
@@ -228,11 +223,70 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
 
     return (
         <div className={`relative ${className}`} style={{ width, height, overflow: 'hidden' }}>
-            {/* Overlay removed, handled by parent Modal */}
+            {/* The actual canvas */}
             <canvas
                 ref={canvasRef}
                 className="w-full h-full block touch-none cursor-default"
             />
+
+            {/* 
+              Note regarding QR Code:
+              SolvePage normally handles QR code display via the modal, 
+              which generates its own QR using the token we pass via onConnectionChange.
+              But RealTimeCanvas might be responsible for generating the QR code canvas element 
+              if the parent expects it to control a specific div.
+              
+              In SolvePage.tsx:
+              <div className={styles.qrFrame} ref={qrContainerRef}></div>
+              
+              Wait, SolvePage.tsx:
+              const qrContainerRef = useRef<HTMLDivElement>(null);
+              useEffect(() => { if (isModalOpen && connectionToken && qrContainerRef.current) ... })
+              
+              So SolvePage generates its OWN QR code! 
+              RealTimeCanvas does not need to render a QR code to the DOM.
+              However, RealTimeCanvas *does* use `qrRef` in my implementation above.
+              Wait, the original `RealTimeCanvas.tsx` had:
+              <div ref={qrRef} ...> (actually it didn't render it in the return, looks like it was just logic?)
+              
+              Looking at original `RealTimeCanvas.tsx`:
+              It had `qrRef = useRef`.
+              It updated `qrRef.current.innerHTML` when token arrived.
+              BUT `qrRef` was NOT attached to any element in the return JSX!
+              
+              Let's re-read the original `RealTimeCanvas.tsx` return:
+              return (
+                  <div ...>
+                     <canvas ... />
+                  </div>
+              );
+              
+              So `qrRef` in `RealTimeCanvas.tsx` was actually useless/dead code?
+              OR, maybe I missed where it was attached.
+              
+              Ah, `SolvePage.tsx` does the QR generation logic itself:
+              Line 67: QRCode.toCanvas(canvas, url, ...)
+              
+              It uses `connectionToken` from state, set via `onConnectionChange`.
+              
+              So my Refactored `RealTimeCanvas` only needs to:
+              1. Generate token.
+              2. Call `onConnectionChange(false, token)`.
+              3. Connect Pusher.
+              
+              It does NOT need to generate the QR code itself, because `SolvePage` does it based on the token.
+              
+              Wait, looking at my previous `view_file` of `RealTimeCanvas.tsx`:
+              Line 115: if (qrRef.current) { ... }
+              But where is qrRef attached?
+              Line 36: const qrRef = useRef<HTMLDivElement>(null);
+              I don't see `ref={qrRef}` anywhere in the return block for `RealTimeCanvas.tsx`!
+              
+              So the QR code generation in `RealTimeCanvas.tsx` was indeed doing nothing visible.
+              The `SolvePage` handles the QR display in the modal.
+              
+              So I can remove the QR code generation logic from `RealTimeCanvas.tsx` and just rely on `onConnectionChange`.
+            */}
         </div>
     );
 });
