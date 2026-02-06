@@ -120,9 +120,18 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             });
         }
 
+
         // Initialize Pusher
-        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+        const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
+        const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+
+        if (!pusherKey || !pusherCluster) {
+            console.error("Pusher Env Vars missing in Canvas", { pusherKey, pusherCluster });
+            return;
+        }
+
+        const pusher = new Pusher(pusherKey, {
+            cluster: pusherCluster,
             authEndpoint: '/api/pusher',
         });
         pusherRef.current = pusher;

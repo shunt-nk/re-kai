@@ -106,8 +106,16 @@ export default function TabletClient() {
 
 
             // 2. Pusherのセットアップ
-            const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-                cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+            const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
+            const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+
+            if (!pusherKey || !pusherCluster) {
+                console.error("Pusher Env Vars missing", { pusherKey, pusherCluster });
+                return;
+            }
+
+            const pusher = new Pusher(pusherKey, {
+                cluster: pusherCluster,
                 authEndpoint: '/api/pusher', // 自作した認証API
             });
 
