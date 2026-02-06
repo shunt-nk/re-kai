@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import Toolbar from './ui/Toolbar'; // パスが合っているか確認してください
 import Pusher from 'pusher-js';
+import { useSearchParams } from 'next/navigation';
 
 // 型定義
 interface Stroke {
@@ -91,80 +92,85 @@ export default function TabletClient() {
     // === 初期化 (Pusher接続) ===
     useEffect(() => {
         // 1. URLからトークンを取得
-        const params = new URLSearchParams(window.location.search);
-        const token = params.get('token');
+        const searchParams = useSearchParams();
+        const token = searchParams.get('token');
         tokenRef.current = token;
 
         if (!token) {
-            alert("トークンがありません。QRコードからアクセスしてください。");
-            return;
-        }
+            // alert("トークンがありません。QRコードからアクセスしてください。");
+            // return; 
+            // Alert is annoying, let's show UI message instead
+        } else {
+            // Only proceed with pusher if token exists
+            // ... existing pusher setup ...
 
-        // 2. Pusherのセットアップ
-        const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
-            cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-            authEndpoint: '/api/pusher', // 自作した認証API
-        });
 
-        // 3. チャンネルに参加 (private-session-トークン)
-        const channelName = `private-session-${token}`;
-        const channel = pusher.subscribe(channelName);
-
-        // 型キャスト (TSエラー回避)
-        channelRef.current = channel as unknown as PusherChannel;
-
-        // 4. 接続成功時の処理
-        channel.bind('pusher:subscription_succeeded', () => {
-            console.log('Connected to Pusher!');
-            setIsConnected(true);
-
-            // PCに「準備完了」を伝える
-            // ※ Client Events なので 'client-' をつける必須ルールがある
-            channel.trigger('client-tablet-ready', { device: 'tablet' });
-
-            // 画面サイズを送ってPC側のCanvasサイズを合わせる（任意）
-            channel.trigger('client-resize', {
-                width: window.innerWidth,
-                height: window.innerHeight
+            // 2. Pusherのセットアップ
+            const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
+                cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
+                authEndpoint: '/api/pusher', // 自作した認証API
             });
-        });
 
-        // 5. リサイズ処理
-        const handleResize = () => {
-            if (canvasRef.current) {
-                canvasRef.current.width = window.innerWidth;
-                canvasRef.current.height = window.innerHeight;
-                redraw();
+            // 3. チャンネルに参加 (private-session-トークン)
+            const channelName = `private-session-${token}`;
+            const channel = pusher.subscribe(channelName);
 
-                // PCにも通知
-                channelRef.current?.trigger('client-resize', {
+            // 型キャスト (TSエラー回避)
+            channelRef.current = channel as unknown as PusherChannel;
+
+            // 4. 接続成功時の処理
+            channel.bind('pusher:subscription_succeeded', () => {
+                console.log('Connected to Pusher!');
+                setIsConnected(true);
+
+                // PCに「準備完了」を伝える
+                // ※ Client Events なので 'client-' をつける必須ルールがある
+                channel.trigger('client-tablet-ready', { device: 'tablet' });
+
+                // 画面サイズを送ってPC側のCanvasサイズを合わせる（任意）
+                channel.trigger('client-resize', {
                     width: window.innerWidth,
                     height: window.innerHeight
                 });
-            }
-        };
+            });
 
-        window.addEventListener('resize', handleResize);
-        handleResize(); // 初回実行
+            // 5. リサイズ処理
+            const handleResize = () => {
+                if (canvasRef.current) {
+                    canvasRef.current.width = window.innerWidth;
+                    canvasRef.current.height = window.innerHeight;
+                    redraw();
 
-        // タッチスクロール防止
-        const canvas = canvasRef.current;
-        const preventDefault = (e: Event) => e.preventDefault();
-        if (canvas) {
-            canvas.addEventListener('touchstart', preventDefault, { passive: false });
-            canvas.addEventListener('touchmove', preventDefault, { passive: false });
-        }
+                    // PCにも通知
+                    channelRef.current?.trigger('client-resize', {
+                        width: window.innerWidth,
+                        height: window.innerHeight
+                    });
+                }
+            };
 
-        // クリーンアップ
-        return () => {
-            window.removeEventListener('resize', handleResize);
+            window.addEventListener('resize', handleResize);
+            handleResize(); // 初回実行
+
+            // タッチスクロール防止
+            const canvas = canvasRef.current;
+            const preventDefault = (e: Event) => e.preventDefault();
             if (canvas) {
-                canvas.removeEventListener('touchstart', preventDefault);
-                canvas.removeEventListener('touchmove', preventDefault);
+                canvas.addEventListener('touchstart', preventDefault, { passive: false });
+                canvas.addEventListener('touchmove', preventDefault, { passive: false });
             }
-            pusher.unsubscribe(channelName);
-            pusher.disconnect();
-        };
+
+            // クリーンアップ
+            return () => {
+                window.removeEventListener('resize', handleResize);
+                if (canvas) {
+                    canvas.removeEventListener('touchstart', preventDefault);
+                    canvas.removeEventListener('touchmove', preventDefault);
+                }
+                pusher.unsubscribe(channelName);
+                pusher.disconnect();
+            };
+        }
     }, []);
 
     // === 描画イベントハンドラ ===
@@ -234,7 +240,9 @@ export default function TabletClient() {
                 <span className="font-bold text-slate-800">描画入力</span>
                 <div className={`flex items-center gap-2 text-xs font-bold transition-colors duration-300 ${isConnected ? 'text-[#58cc02]' : 'text-[#afafaf]'}`}>
                     <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isConnected ? 'bg-[#58cc02]' : 'bg-[#e5e5e5]'}`} />
-                    {isConnected ? '接続済み' : '接続待機中...'}
+                    {isConnected ? '接続済み' : (tokenRef.current ? '接続待機中...' : 'トークンなし(無効なURL)')}
+                    {/* Debug info for dev: */}
+                    {!isConnected && <span className="text-[10px] text-gray-400 ml-1">{tokenRef.current?.slice(0, 4)}...</span>}
                 </div>
             </div>
 
