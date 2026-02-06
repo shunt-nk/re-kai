@@ -37,6 +37,7 @@ export default function TabletClient() {
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
     const tokenRef = useRef<string | null>(null);
+    const [lastSentEvent, setLastSentEvent] = useState<string>('');
 
     // === ヘルパー関数: 再描画 ===
     const redraw = () => {
@@ -209,6 +210,7 @@ export default function TabletClient() {
             x: e.nativeEvent.offsetX / canvas.width,
             y: e.nativeEvent.offsetY / canvas.height
         });
+        setLastSentEvent('Start');
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -236,6 +238,7 @@ export default function TabletClient() {
 
         // PCに送信
         channelRef.current?.trigger('client-stroke-end', {});
+        setLastSentEvent('End');
     };
 
     return (
@@ -247,7 +250,10 @@ export default function TabletClient() {
                     <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isConnected ? 'bg-[#58cc02]' : 'bg-[#e5e5e5]'}`} />
                     {isConnected ? '接続済み' : (tokenRef.current ? '接続待機中...' : 'トークンなし(無効なURL)')}
                     {/* Debug info for dev: */}
-                    {!isConnected && <span className="text-[10px] text-gray-400 ml-1">{tokenRef.current?.slice(0, 4)}...</span>}
+                    <span className="text-[10px] text-gray-400 ml-1">
+                        {tokenRef.current?.slice(0, 4)}...
+                        {lastSentEvent && ` | Evt: ${lastSentEvent}`}
+                    </span>
                 </div>
             </div>
 

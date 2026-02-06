@@ -145,11 +145,13 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-tablet-ready', () => {
+            setLastEvent('Tablet Ready');
             setIsConnected(true);
             if (onConnectionChange) onConnectionChange(true, null);
         });
 
         channel.bind('client-stroke-start', (d: DrawData) => {
+            setLastEvent('Stroke Start');
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx) return;
@@ -171,6 +173,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-move', (d: DrawData) => {
+            // setLastEvent('Move'); // Too noisy, maybe skip or throttle
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx || !drawingRef.current) return;
@@ -181,6 +184,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-end', () => {
+            setLastEvent('Stroke End');
             drawingRef.current = false;
             historyRef.current.push({ ...currentStrokeRef.current });
             redoStackRef.current = [];
@@ -212,90 +216,36 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         };
     }, []);
 
+    // Debug
+    const [lastEvent, setLastEvent] = useState<string>('None');
+
     // Handle initial sizing
     useEffect(() => {
         const resizeCanvas = () => {
-            if (canvasRef.current) {
-                const parent = canvasRef.current.parentElement;
-                if (parent) {
-                    canvasRef.current.width = parent.clientWidth;
-                    canvasRef.current.height = parent.clientHeight;
-                    redraw();
-                }
+            // ... existing resize logic ...
+            if (canvasRef.current && canvasRef.current.parentElement) {
+                canvasRef.current.width = canvasRef.current.parentElement.clientWidth;
+                canvasRef.current.height = canvasRef.current.parentElement.clientHeight;
+                redraw();
             }
         };
         window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
+        // Delay initial resize slightly to ensure parent is ready
+        setTimeout(resizeCanvas, 100);
         return () => window.removeEventListener('resize', resizeCanvas);
     }, []);
 
-
+    // ... existing return ...
     return (
         <div className={`relative ${className}`} style={{ width, height, overflow: 'hidden' }}>
-            {/* The actual canvas */}
             <canvas
                 ref={canvasRef}
                 className="w-full h-full block touch-none cursor-default"
             />
-
-            {/* 
-              Note regarding QR Code:
-              SolvePage normally handles QR code display via the modal, 
-              which generates its own QR using the token we pass via onConnectionChange.
-              But RealTimeCanvas might be responsible for generating the QR code canvas element 
-              if the parent expects it to control a specific div.
-              
-              In SolvePage.tsx:
-              <div className={styles.qrFrame} ref={qrContainerRef}></div>
-              
-              Wait, SolvePage.tsx:
-              const qrContainerRef = useRef<HTMLDivElement>(null);
-              useEffect(() => { if (isModalOpen && connectionToken && qrContainerRef.current) ... })
-              
-              So SolvePage generates its OWN QR code! 
-              RealTimeCanvas does not need to render a QR code to the DOM.
-              However, RealTimeCanvas *does* use `qrRef` in my implementation above.
-              Wait, the original `RealTimeCanvas.tsx` had:
-              <div ref={qrRef} ...> (actually it didn't render it in the return, looks like it was just logic?)
-              
-              Looking at original `RealTimeCanvas.tsx`:
-              It had `qrRef = useRef`.
-              It updated `qrRef.current.innerHTML` when token arrived.
-              BUT `qrRef` was NOT attached to any element in the return JSX!
-              
-              Let's re-read the original `RealTimeCanvas.tsx` return:
-              return (
-                  <div ...>
-                     <canvas ... />
-                  </div>
-              );
-              
-              So `qrRef` in `RealTimeCanvas.tsx` was actually useless/dead code?
-              OR, maybe I missed where it was attached.
-              
-              Ah, `SolvePage.tsx` does the QR generation logic itself:
-              Line 67: QRCode.toCanvas(canvas, url, ...)
-              
-              It uses `connectionToken` from state, set via `onConnectionChange`.
-              
-              So my Refactored `RealTimeCanvas` only needs to:
-              1. Generate token.
-              2. Call `onConnectionChange(false, token)`.
-              3. Connect Pusher.
-              
-              It does NOT need to generate the QR code itself, because `SolvePage` does it based on the token.
-              
-              Wait, looking at my previous `view_file` of `RealTimeCanvas.tsx`:
-              Line 115: if (qrRef.current) { ... }
-              But where is qrRef attached?
-              Line 36: const qrRef = useRef<HTMLDivElement>(null);
-              I don't see `ref={qrRef}` anywhere in the return block for `RealTimeCanvas.tsx`!
-              
-              So the QR code generation in `RealTimeCanvas.tsx` was indeed doing nothing visible.
-              The `SolvePage` handles the QR display in the modal.
-              
-              So I can remove the QR code generation logic from `RealTimeCanvas.tsx` and just rely on `onConnectionChange`.
-            */}
+            {/* Debug Overlay */}
+            <div style={{ position: 'absolute', bottom: 5, left: 5, fontSize: '10px', color: '#888', background: 'rgba(255,255,255,0.7)', padding: '2px 5px', pointerEvents: 'none' }}>
+                Last Event: {lastEvent} | ID: {token?.slice(0, 4)}
+            </div>
         </div>
     );
 });
