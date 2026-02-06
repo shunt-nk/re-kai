@@ -90,20 +90,17 @@ export default function TabletClient() {
     };
 
     // === 初期化 (Pusher接続) ===
+    const searchParams = useSearchParams(); // Hook call moved to top level
+
     useEffect(() => {
         // 1. URLからトークンを取得
-        const searchParams = useSearchParams();
         const token = searchParams.get('token');
         tokenRef.current = token;
 
         if (!token) {
-            // alert("トークンがありません。QRコードからアクセスしてください。");
-            // return; 
-            // Alert is annoying, let's show UI message instead
+            // トークンがない場合
         } else {
             // Only proceed with pusher if token exists
-            // ... existing pusher setup ...
-
 
             // 2. Pusherのセットアップ
             const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
@@ -179,7 +176,7 @@ export default function TabletClient() {
                 pusher.disconnect();
             };
         }
-    }, []);
+    }, [searchParams]); // Add searchParams to dependency array
 
     // === 描画イベントハンドラ ===
 
