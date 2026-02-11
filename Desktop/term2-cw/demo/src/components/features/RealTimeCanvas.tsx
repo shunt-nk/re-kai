@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } f
 import QRCode from 'qrcode';
 import Pusher from 'pusher-js';
 import { v4 as uuidv4 } from 'uuid';
+import { Tablet, X } from 'lucide-react'; // アイコン追加
 
 interface Stroke {
     type: string;
@@ -48,6 +49,8 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     const qrRef = useRef<HTMLDivElement>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [qrUrl, setQrUrl] = useState<string>('');
+    const [showModal, setShowModal] = useState(false); // モーダル表示管理
 
     // Drawing State
     const historyRef = useRef<Stroke[]>([]);
@@ -97,38 +100,38 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         ctx.globalCompositeOperation = 'source-over';
     };
 
+    // 1. トークンとURL生成
     useEffect(() => {
-        // Generate a new token
         const newToken = uuidv4();
         setToken(newToken);
-
-        // Notify parent about the token
         if (onConnectionChange) onConnectionChange(false, newToken);
 
-        // Generate QR Code
-        // 【修正】windowオブジェクトが存在することを確認してから実行
         if (typeof window !== 'undefined') {
-            // 【修正】正しいトークン付きURLを生成
             const origin = window.location.origin;
             const url = `${origin}/tablet?token=${newToken}`;
-
-            // DOM描画を待つために少し遅延
-            setTimeout(() => {
-                if (qrRef.current) {
-                    qrRef.current.innerHTML = '';
-                    const qrCanvas = document.createElement('canvas');
-
-                    QRCode.toCanvas(qrCanvas, url, { width: 160, margin: 1, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
-                        if (!err && qrRef.current) {
-                            qrRef.current.innerHTML = '';
-                            qrRef.current.appendChild(qrCanvas);
-                        }
-                    });
-                }
-            }, 100);
+            setQrUrl(url);
         }
+    }, []);
 
-        // Initialize Pusher
+    // 2. モーダルが開いた時にQRコードを描画
+    useEffect(() => {
+        if (showModal && qrUrl && qrRef.current) {
+            // 既存のQRがあればクリア
+            qrRef.current.innerHTML = '';
+
+            const qrCanvas = document.createElement('canvas');
+            QRCode.toCanvas(qrCanvas, qrUrl, { width: 200, margin: 2, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
+                if (!err && qrRef.current) {
+                    qrRef.current.appendChild(qrCanvas);
+                }
+            });
+        }
+    }, [showModal, qrUrl]);
+
+    // 3. Pusher接続
+    useEffect(() => {
+        if (!token) return;
+
         const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
         const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
@@ -143,20 +146,18 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
         pusherRef.current = pusher;
 
-        const channelName = `private-session-${newToken}`;
+        const channelName = `private-session-${token}`;
         const channel = pusher.subscribe(channelName);
 
-        // Bind Events
         channel.bind('client-tablet-ready', (data: any) => {
             console.log("[PC] Tablet Connected!", data);
-            setLastEvent('Tablet Ready');
             setIsConnected(true);
+            setShowModal(false); // 接続されたら自動で閉じる
             if (onConnectionChange) onConnectionChange(true, null);
             channel.trigger('client-pc-ack', { status: 'ok' });
         });
 
         channel.bind('client-stroke-start', (d: DrawData) => {
-            setLastEvent('Stroke Start');
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx) return;
@@ -188,7 +189,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-end', () => {
-            setLastEvent('Stroke End');
             drawingRef.current = false;
             historyRef.current.push({ ...currentStrokeRef.current });
             redoStackRef.current = [];
@@ -218,10 +218,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             pusher.unsubscribe(channelName);
             pusher.disconnect();
         };
-    }, []);
-
-    // Debug
-    const [lastEvent, setLastEvent] = useState<string>('None');
+    }, [token]);
 
     // Handle initial sizing
     useEffect(() => {
@@ -244,21 +241,45 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
                 className="w-full h-full block touch-none cursor-default"
             />
 
-            {/* 元のコードにはここのQRコード描画用divが抜けていましたが、
-               これがないとQRコードが表示されません。
-               「元のデザイン」を損なわないよう、未接続時のみ中央にポンと出るように復元しました。
-            */}
+            {/* --- タブレット接続ボタン (未接続時のみ表示) --- */}
             {!isConnected && (
-                <div
-                    ref={qrRef}
-                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-lg shadow-xl border border-gray-200 z-50"
-                />
+                <button
+                    onClick={() => setShowModal(true)}
+                    className="absolute top-4 right-4 bg-white border border-gray-200 text-gray-700 px-4 py-2 rounded-full shadow-md hover:bg-gray-50 flex items-center gap-2 font-medium transition-all z-20"
+                >
+                    <Tablet size={18} />
+                    タブレット接続
+                </button>
             )}
 
-            {/* Debug Overlay (元のコード通り) */}
-            <div style={{ position: 'absolute', bottom: 5, left: 5, fontSize: '10px', color: '#888', background: 'rgba(255,255,255,0.7)', padding: '2px 5px', pointerEvents: 'none' }}>
-                Last Event: {lastEvent} | ID: {token?.slice(0, 4)}
-            </div>
+            {/* --- QRコードモーダル --- */}
+            {showModal && (
+                <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+                    <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm relative flex flex-col items-center">
+                        {/* 閉じるボタン */}
+                        <button
+                            onClick={() => setShowModal(false)}
+                            className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 text-gray-500"
+                        >
+                            <X size={24} />
+                        </button>
+
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">タブレットを接続</h3>
+                        <p className="text-sm text-gray-500 mb-6 text-center">
+                            以下のQRコードをタブレットのカメラで<br />読み取ってください
+                        </p>
+
+                        {/* QRコード表示エリア */}
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-inner mb-4">
+                            <div ref={qrRef} />
+                        </div>
+
+                        <div className="text-xs text-gray-400 font-mono">
+                            ID: {token?.slice(0, 8)}...
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 });
