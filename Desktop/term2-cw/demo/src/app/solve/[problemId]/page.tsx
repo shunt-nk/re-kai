@@ -69,6 +69,10 @@ export default function SolvePage() {
     const [gradingStatus, setGradingStatus] = useState<'idle' | 'loading' | 'complete'>('idle');
     const [score, setScore] = useState(0);
 
+    // State for AI Feedback
+    const [aiFeedback, setAiFeedback] = useState<string>('');
+    const [validationError, setValidationError] = useState<string | null>(null);
+
     // Initial Answers State (preserved from before)
     const [answers, setAnswers] = useState<Record<string, string>>({});
 
@@ -118,15 +122,11 @@ export default function SolvePage() {
         setShowWarning(false);
     };
 
-    if (!problem) return <div>問題が見つかりません</div>;
-
     const handleAnswerChange = (qId: string, val: string) => {
         setAnswers(prev => ({ ...prev, [qId]: val }));
     };
 
-    // State for AI Feedback
-    const [aiFeedback, setAiFeedback] = useState<string>('');
-    const [validationError, setValidationError] = useState<string | null>(null);
+    if (!problem) return <div>問題が見つかりません</div>;
 
     const handleGrade = async () => {
         // Validation: Check if all questions are answered
