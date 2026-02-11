@@ -4,6 +4,7 @@ import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } f
 import QRCode from 'qrcode';
 import Pusher from 'pusher-js';
 import { v4 as uuidv4 } from 'uuid';
+import { Copy, Check } from 'lucide-react'; // アイコン追加
 
 interface Stroke {
     type: string;
@@ -45,9 +46,11 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     height = '100%'
 }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const qrRef = useRef<HTMLDivElement>(null);
+    const qrRef = useRef<HTMLCanvasElement>(null); // divではなくcanvasを直接参照
     const [token, setToken] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
+    const [connectUrl, setConnectUrl] = useState('');
+    const [copied, setCopied] = useState(false);
 
     // Drawing State
     const historyRef = useRef<Stroke[]>([]);
@@ -61,8 +64,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             historyRef.current = [];
             redoStackRef.current = [];
             redraw();
-            // Optional: send clear event to tablet if supported
-            // channelRef.current?.trigger('client-clear', {});
         },
         getToken: () => token,
         getImageData: () => {
@@ -99,52 +100,39 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         ctx.globalCompositeOperation = 'source-over';
     };
 
+    // 1. トークン生成とURL作成
     useEffect(() => {
-        // Generate a new token
         const newToken = uuidv4();
         setToken(newToken);
-
-        // Notify parent about the token
-        if (onConnectionChange) onConnectionChange(false, newToken);
-
-        // Generate QR Code
-        if (qrRef.current) {
-            // Use window.location.origin for correct protocol/host (works in Vercel)
-            const origin = typeof window !== 'undefined' ? window.location.origin : '';
-            const url = `${origin}/tablet?token=${newToken}`;
-
-            qrRef.current.innerHTML = '';
-            const qrCanvas = document.createElement('canvas');
-
-            // Use a flag to prevent appending if unmounted/token changed
-            let isCancelled = false;
-
-            QRCode.toCanvas(qrCanvas, url, { width: 160, margin: 1, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
-                if (isCancelled) return;
-                if (!err && qrRef.current) {
-                    qrRef.current.innerHTML = ''; // Clear again just in case
-                    qrRef.current.appendChild(qrCanvas);
-                }
-            });
-
-            // Cleanup function for this specific block not easy inside useEffect generally, 
-            // but we rely on the main cleanup or next run.
-            // Actually, we can't easily cancel strict mode dupes here without ref tracking.
+        if (typeof window !== 'undefined') {
+            const url = `${window.location.origin}/tablet?token=${newToken}`;
+            setConnectUrl(url);
+            console.log("Tablet URL:", url); // デバッグ用ログ
         }
+        if (onConnectionChange) onConnectionChange(false, newToken);
+    }, []);
 
+    // 2. QRコード描画 (URLが確定したら実行)
+    useEffect(() => {
+        if (connectUrl && qrRef.current) {
+            QRCode.toCanvas(qrRef.current, connectUrl, {
+                width: 160,
+                margin: 2,
+                color: { dark: '#334155', light: '#ffffff' }
+            }, (err) => {
+                if (err) console.error("QR Generation Error:", err);
+            });
+        }
+    }, [connectUrl]);
 
-        // Initialize Pusher
-        // Initialize Pusher
+    // 3. Pusher接続 (トークンが確定したら実行)
+    useEffect(() => {
+        if (!token) return;
+
         const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
         const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
-        if (!pusherKey || !pusherCluster) {
-            console.error("[PC] Pusher Env Vars missing", { pusherKey, pusherCluster });
-            return;
-        }
-
-        // Enable logger
-        Pusher.logToConsole = true;
+        if (!pusherKey || !pusherCluster) return;
 
         const pusher = new Pusher(pusherKey, {
             cluster: pusherCluster,
@@ -152,45 +140,17 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
         pusherRef.current = pusher;
 
-        // Connection Debugging
-        pusher.connection.bind('state_change', (states: any) => {
-            console.log('[PC] Pusher State Change:', states);
-        });
-        pusher.connection.bind('connected', () => {
-            console.log('[PC] Pusher Connected. Socket ID:', pusher.connection.socket_id);
-        });
-        pusher.connection.bind('error', (err: any) => {
-            console.error('[PC] Pusher Connection Error:', err);
-        });
-
-        const channelName = `private-session-${newToken}`;
-        console.log(`[PC] Subscribing to channel: ${channelName} (Token: ${newToken})`);
-
+        const channelName = `private-session-${token}`;
         const channel = pusher.subscribe(channelName);
 
         // Bind Events
-        channel.bind('pusher:subscription_succeeded', () => {
-            console.log('[PC] Subscription Succeeded:', channelName);
-        });
-
-        channel.bind('pusher:subscription_error', (status: any) => {
-            console.error('[PC] Subscription Error:', status);
-        });
-
-        channel.bind('client-tablet-ready', (data: any) => {
-            console.log("[PC] Received client-tablet-ready:", data);
-            setLastEvent('Tablet Ready');
+        channel.bind('client-tablet-ready', () => {
+            console.log("Tablet Connected!");
             setIsConnected(true);
-            if (onConnectionChange) onConnectionChange(true, null);
-
-            // Send Acknowledgement
-            console.log("[PC] Sending client-pc-ack");
-            const triggered = channel.trigger('client-pc-ack', { status: 'ok' });
-            console.log("[PC] client-pc-ack triggered:", triggered);
+            if (onConnectionChange) onConnectionChange(true, token);
         });
 
         channel.bind('client-stroke-start', (d: DrawData) => {
-            setLastEvent('Stroke Start');
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx) return;
@@ -212,7 +172,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-move', (d: DrawData) => {
-            // setLastEvent('Move'); // Too noisy, maybe skip or throttle
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx || !drawingRef.current) return;
@@ -223,7 +182,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-end', () => {
-            setLastEvent('Stroke End');
             drawingRef.current = false;
             historyRef.current.push({ ...currentStrokeRef.current });
             redoStackRef.current = [];
@@ -253,15 +211,11 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             pusher.unsubscribe(channelName);
             pusher.disconnect();
         };
-    }, []);
-
-    // Debug
-    const [lastEvent, setLastEvent] = useState<string>('None');
+    }, [token]);
 
     // Handle initial sizing
     useEffect(() => {
         const resizeCanvas = () => {
-            // ... existing resize logic ...
             if (canvasRef.current && canvasRef.current.parentElement) {
                 canvasRef.current.width = canvasRef.current.parentElement.clientWidth;
                 canvasRef.current.height = canvasRef.current.parentElement.clientHeight;
@@ -269,22 +223,47 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             }
         };
         window.addEventListener('resize', resizeCanvas);
-        // Delay initial resize slightly to ensure parent is ready
         setTimeout(resizeCanvas, 100);
         return () => window.removeEventListener('resize', resizeCanvas);
     }, []);
 
-    // ... existing return ...
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(connectUrl);
+        setCopied(true);
+        setTimeout(() => setCopied(false), 2000);
+    };
+
     return (
-        <div className={`relative ${className}`} style={{ width, height, overflow: 'hidden' }}>
+        <div className={`relative ${className} flex items-center justify-center bg-gray-50`} style={{ width, height, overflow: 'hidden' }}>
+
+            {/* キャンバス */}
             <canvas
                 ref={canvasRef}
-                className="w-full h-full block touch-none cursor-default"
+                className="absolute inset-0 w-full h-full block touch-none cursor-default z-10"
             />
-            {/* Debug Overlay */}
-            <div style={{ position: 'absolute', bottom: 5, left: 5, fontSize: '10px', color: '#888', background: 'rgba(255,255,255,0.7)', padding: '2px 5px', pointerEvents: 'none' }}>
-                Last Event: {lastEvent} | ID: {token?.slice(0, 4)}
-            </div>
+
+            {/* 未接続時にQRコードを表示 (キャンバスの下に配置) */}
+            {!isConnected && (
+                <div className="absolute z-20 bg-white/90 p-6 rounded-3xl shadow-xl backdrop-blur-sm border border-gray-100 flex flex-col items-center gap-4 animate-in fade-in zoom-in-95 duration-300">
+                    <div className="text-center space-y-1">
+                        <h3 className="font-bold text-gray-800 text-lg">タブレットを接続</h3>
+                        <p className="text-xs text-gray-500">QRコードを読み取ってください</p>
+                    </div>
+
+                    <div className="bg-white p-2 rounded-xl border border-gray-100 shadow-inner">
+                        <canvas ref={qrRef} className="rounded-lg" />
+                    </div>
+
+                    {/* コピーボタン */}
+                    <button
+                        onClick={copyToClipboard}
+                        className="flex items-center gap-2 text-xs font-medium text-gray-500 hover:text-gray-800 transition-colors bg-gray-100 px-3 py-1.5 rounded-full hover:bg-gray-200"
+                    >
+                        {copied ? <Check size={14} className="text-green-500" /> : <Copy size={14} />}
+                        {copied ? 'コピーしました' : 'URLをコピー'}
+                    </button>
+                </div>
+            )}
         </div>
     );
 });
