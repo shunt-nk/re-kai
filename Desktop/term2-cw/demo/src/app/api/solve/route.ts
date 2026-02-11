@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { db } from '@/lib/db'; // ※ここは実際のdb.tsの場所に合わせる
 import { PROBLEMS } from '@/data/mockData';
-import { gradeWithGemini } from '@/lib/gemini';
+import { gradeWithOpenAI } from '@/lib/openai';
 
 export async function POST(request: Request) {
     try {
@@ -25,7 +25,7 @@ export async function POST(request: Request) {
         }
 
         // AI Grading
-        const aiResult = await gradeWithGemini(
+        const aiResult = await gradeWithOpenAI(
             image, // canvas base64
             problem.text,
             problem.questions,

@@ -128,9 +128,9 @@ export default function TabletClient() {
             channel.bind('pusher:subscription_succeeded', () => {
                 console.log('Connected to Pusher!');
                 setIsConnected(true);
+                setLastSentEvent('Subscribed');
 
                 // PCに「準備完了」を伝える
-                // ※ Client Events なので 'client-' をつける必須ルールがある
                 channel.trigger('client-tablet-ready', { device: 'tablet' });
 
                 // 画面サイズを送ってPC側のCanvasサイズを合わせる（任意）
@@ -138,6 +138,11 @@ export default function TabletClient() {
                     width: window.innerWidth,
                     height: window.innerHeight
                 });
+            });
+
+            channel.bind('pusher:subscription_error', (status: any) => {
+                console.error('Pusher Subscription Error', status);
+                setLastSentEvent(`Sub Error: ${JSON.stringify(status)}`);
             });
 
             // 5. リサイズ処理
@@ -243,18 +248,27 @@ export default function TabletClient() {
 
     return (
         <div className="fixed inset-0 bg-white touch-none overflow-hidden">
-            {/* Header */}
-            <div className="absolute top-0 left-0 right-0 h-14 bg-white border-b border-slate-200 z-50 flex items-center justify-between px-4 shadow-sm">
-                <span className="font-bold text-slate-800">描画入力</span>
-                <div className={`flex items-center gap-2 text-xs font-bold transition-colors duration-300 ${isConnected ? 'text-[#58cc02]' : 'text-[#afafaf]'}`}>
+            {/* Header / Logo Area */}
+            <div className="absolute top-0 left-0 right-0 p-4 z-50 flex items-start justify-between pointer-events-none">
+                <img src="/logo.png" alt="RE:KAI" className="h-8 object-contain pointer-events-auto" />
+
+                {/* Connection Status Indicator (Subtle) */}
+                <div className={`flex items-center gap-2 text-xs font-bold transition-colors duration-300 ${isConnected ? 'text-[#58cc02]' : 'text-[#afafaf]'} pointer-events-auto bg-white/80 backdrop-blur rounded-full px-3 py-1 shadow-sm`}>
                     <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isConnected ? 'bg-[#58cc02]' : 'bg-[#e5e5e5]'}`} />
-                    {isConnected ? '接続済み' : (tokenRef.current ? '接続待機中...' : 'トークンなし(無効なURL)')}
-                    {/* Debug info for dev: */}
-                    <span className="text-[10px] text-gray-400 ml-1">
-                        {tokenRef.current?.slice(0, 4)}...
-                        {lastSentEvent && ` | Evt: ${lastSentEvent}`}
-                    </span>
+                    {isConnected ? 'Connected' : (tokenRef.current ? 'Connecting...' : 'No Token')}
                 </div>
+            </div>
+
+            <div className="absolute inset-x-4 bottom-4 top-20 border-2 border-slate-800 rounded-lg overflow-hidden bg-white shadow-sm">
+                <canvas
+                    ref={canvasRef}
+                    onPointerDown={handlePointerDown}
+                    onPointerMove={handlePointerMove}
+                    onPointerUp={handlePointerUp}
+                    // ポインターが外れた時もUp扱いにする
+                    onPointerLeave={handlePointerUp}
+                    className="block w-full h-full touch-none"
+                />
             </div>
 
             <Toolbar
@@ -268,20 +282,10 @@ export default function TabletClient() {
                 onRedo={performRedo}
             />
 
-            <canvas
-                ref={canvasRef}
-                onPointerDown={handlePointerDown}
-                onPointerMove={handlePointerMove}
-                onPointerUp={handlePointerUp}
-                // ポインターが外れた時もUp扱いにする
-                onPointerLeave={handlePointerUp}
-                className="block w-full h-full touch-none"
-            />
-
             {/* Orientation Modal (変更なし) */}
             {showOrientationModal && (
                 <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
-                    <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
+                    <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl" onClick={e => e.stopPropagation()}>
                         <div className="text-center mb-8">
                             <p className="text-slate-600 leading-relaxed font-medium">
                                 縦・横どちらでも利用することができます。<br />
