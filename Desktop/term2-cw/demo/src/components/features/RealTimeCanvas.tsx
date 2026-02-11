@@ -4,7 +4,7 @@ import React, { useEffect, useRef, useState, useImperativeHandle, forwardRef } f
 import QRCode from 'qrcode';
 import Pusher from 'pusher-js';
 import { v4 as uuidv4 } from 'uuid';
-import { Tablet, X } from 'lucide-react'; // アイコン追加
+import { Tablet, X } from 'lucide-react'; // 余計なアイコン削除
 
 interface Stroke {
     type: string;
@@ -47,10 +47,13 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
 }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const qrRef = useRef<HTMLDivElement>(null);
-    const [token, setToken] = useState<string | null>(null);
+
+    // 【修正】初期化時にUUIDを確定（タイミングズレ防止）
+    const [token] = useState<string>(() => uuidv4());
+
     const [isConnected, setIsConnected] = useState(false);
     const [qrUrl, setQrUrl] = useState<string>('');
-    const [showModal, setShowModal] = useState(false); // モーダル表示管理
+    const [showModal, setShowModal] = useState(false);
 
     // Drawing State
     const historyRef = useRef<Stroke[]>([]);
@@ -100,24 +103,22 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         ctx.globalCompositeOperation = 'source-over';
     };
 
-    // 1. トークンとURL生成
+    // 1. URL生成
     useEffect(() => {
-        const newToken = uuidv4();
-        setToken(newToken);
-        if (onConnectionChange) onConnectionChange(false, newToken);
+        if (onConnectionChange) onConnectionChange(false, token);
 
         if (typeof window !== 'undefined') {
+            // ここで確実にトークン付きURLをセット
             const origin = window.location.origin;
-            const url = `${origin}/tablet?token=${newToken}`;
+            const url = `${origin}/tablet?token=${token}`;
             setQrUrl(url);
         }
-    }, []);
+    }, [token]);
 
     // 2. モーダルが開いた時にQRコードを描画
     useEffect(() => {
         if (showModal && qrUrl && qrRef.current) {
-            // 既存のQRがあればクリア
-            qrRef.current.innerHTML = '';
+            qrRef.current.innerHTML = ''; // クリア
 
             const qrCanvas = document.createElement('canvas');
             QRCode.toCanvas(qrCanvas, qrUrl, { width: 200, margin: 2, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
@@ -152,8 +153,8 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         channel.bind('client-tablet-ready', (data: any) => {
             console.log("[PC] Tablet Connected!", data);
             setIsConnected(true);
-            setShowModal(false); // 接続されたら自動で閉じる
-            if (onConnectionChange) onConnectionChange(true, null);
+            setShowModal(false);
+            if (onConnectionChange) onConnectionChange(true, token);
             channel.trigger('client-pc-ack', { status: 'ok' });
         });
 
@@ -241,7 +242,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
                 className="w-full h-full block touch-none cursor-default"
             />
 
-            {/* --- タブレット接続ボタン (未接続時のみ表示) --- */}
+            {/* --- タブレット接続ボタン (未接続時のみ) --- */}
             {!isConnected && (
                 <button
                     onClick={() => setShowModal(true)}
@@ -252,7 +253,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
                 </button>
             )}
 
-            {/* --- QRコードモーダル --- */}
+            {/* --- QRコードモーダル (コピーボタン等は削除済み) --- */}
             {showModal && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4 animate-in fade-in duration-200">
                     <div className="bg-white rounded-2xl shadow-2xl p-6 w-full max-w-sm relative flex flex-col items-center">
@@ -270,12 +271,8 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
                         </p>
 
                         {/* QRコード表示エリア */}
-                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-inner mb-4">
+                        <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 shadow-inner">
                             <div ref={qrRef} />
-                        </div>
-
-                        <div className="text-xs text-gray-400 font-mono">
-                            ID: {token?.slice(0, 8)}...
                         </div>
                     </div>
                 </div>
