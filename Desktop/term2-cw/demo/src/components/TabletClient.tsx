@@ -213,31 +213,31 @@ function TabletClientContent() {
     };
 
     return (
-        <div className="fixed inset-0 bg-[#F5F5F5] select-none">
+        <div className="fixed inset-0 bg-[#EBF4FF] select-none font-sans">
             {/* Header */}
             <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10">
                 {/* Logo */}
                 <div className="flex items-center">
-                    <span className="text-2xl font-bold text-slate-900 tracking-tight font-sans">RE</span>
-                    <span className="text-2xl font-bold text-cyan-500 mx-[2px]">:</span>
-                    <span className="text-2xl font-bold text-slate-900 tracking-tight font-sans">KAI</span>
+                    <span className="text-2xl font-extrabold text-[#3c3c3c] tracking-tight font-sans">RE</span>
+                    <span className="text-2xl font-extrabold text-[#1cb0f6] mx-[2px]">:</span>
+                    <span className="text-2xl font-extrabold text-[#3c3c3c] tracking-tight font-sans">KAI</span>
                 </div>
 
                 {/* Undo/Redo Buttons */}
                 <div className="flex items-center gap-3">
                     <button
                         onClick={performUndo}
-                        className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center active:scale-95 transition-transform text-slate-600"
+                        className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777]"
                         aria-label="Undo"
                     >
-                        <RotateCcw size={20} />
+                        <RotateCcw size={20} strokeWidth={2.5} />
                     </button>
                     <button
                         onClick={performRedo}
-                        className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center active:scale-95 transition-transform text-slate-600"
+                        className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777]"
                         aria-label="Redo"
                     >
-                        <RotateCw size={20} />
+                        <RotateCw size={20} strokeWidth={2.5} />
                     </button>
                 </div>
             </div>
@@ -251,51 +251,55 @@ function TabletClientContent() {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={() => setMode('draw')}
-                            className={`w-10 h-10 rounded-md flex items-center justify-center transition-colors ${mode === 'draw' ? 'bg-slate-700 text-white' : 'bg-white text-slate-700 shadow-sm border border-slate-200'
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border-b-[4px] active:border-b-0 active:translate-y-[4px] ${mode === 'draw'
+                                    ? 'bg-[#3c3c3c] text-white border-[#2c2c2c]'
+                                    : 'bg-white text-[#777777] border-[#e5e5e5] shadow-[0_4px_0_#e5e5e5] active:shadow-none'
                                 }`}
                         >
-                            <Pencil size={20} fill={mode === 'draw' ? "currentColor" : "none"} />
+                            <Pencil size={20} strokeWidth={2.5} fill={mode === 'draw' ? "currentColor" : "none"} />
                         </button>
                         <button
                             onClick={() => setMode('erase')}
-                            className={`w-10 h-10 rounded-md flex items-center justify-center transition-colors ${mode === 'erase' ? 'bg-slate-700 text-white' : 'bg-white text-slate-700 shadow-sm border border-slate-200'
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border-b-[4px] active:border-b-0 active:translate-y-[4px] ${mode === 'erase'
+                                    ? 'bg-[#3c3c3c] text-white border-[#2c2c2c]'
+                                    : 'bg-white text-[#777777] border-[#e5e5e5] shadow-[0_4px_0_#e5e5e5] active:shadow-none'
                                 }`}
                         >
-                            <Eraser size={20} fill={mode === 'erase' ? "currentColor" : "none"} />
-                        </button>
-                        <button className="w-10 h-10 rounded-full flex items-center justify-center text-black">
-                            <Settings size={24} strokeWidth={2.5} />
+                            <Eraser size={20} strokeWidth={2.5} fill={mode === 'erase' ? "currentColor" : "none"} />
                         </button>
                     </div>
 
                     {/* Capsule Indicator (Color & Size) */}
-                    <div className="flex items-center bg-slate-500/80 rounded-full p-1 pl-2 gap-3 h-10 w-48 shadow-inner">
+                    <div className="flex items-center bg-white rounded-2xl p-1 pl-3 gap-3 h-12 w-56 shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5]">
                         {/* Color Preview */}
                         <div
-                            className="w-6 h-6 rounded-full border-2 border-white shadow-sm shrink-0"
+                            className="w-6 h-6 rounded-full border-2 border-[#e5e5e5] shadow-sm shrink-0"
                             style={{ backgroundColor: color }}
                         />
                         {/* Size Preview */}
                         <div className="flex-1 flex items-center h-full pr-3 relative">
-                            {/* Background Track (Visual only, distinct from actual slider) */}
-                            <div className="w-full h-1.5 bg-slate-600 rounded-full overflow-hidden">
-                                <div className="h-full bg-slate-400 w-full opacity-30"></div>
+                            {/* Background Track */}
+                            <div className="w-full h-2 bg-[#e5e5e5] rounded-full overflow-hidden">
                             </div>
 
-                            {/* Knob (Visual representation of size) */}
+                            {/* Knob */}
                             <div
-                                className="absolute w-5 h-5 bg-white rounded-full shadow-md left-0"
+                                className="absolute w-5 h-5 bg-[#3c3c3c] rounded-full shadow-sm left-0 border-2 border-white"
                                 style={{
-                                    left: `${Math.min(100, (size / 20) * 100)}%`, // Simplified mapping
+                                    left: `${Math.min(100, (size / 20) * 100)}%`,
                                     transform: 'translateX(-50%)'
                                 }}
                             />
                         </div>
                     </div>
+
+                    <button className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777] ml-auto">
+                        <Settings size={24} strokeWidth={2.5} />
+                    </button>
                 </div>
 
                 {/* Canvas Container */}
-                <div className="flex-1 relative rounded-lg border-2 border-slate-900 bg-white overflow-hidden shadow-sm">
+                <div className="flex-1 relative rounded-3xl border-[3px] border-[#3c3c3c] bg-white overflow-hidden shadow-sm">
                     <canvas
                         ref={canvasRef}
                         onPointerDown={handlePointerDown}
@@ -309,11 +313,11 @@ function TabletClientContent() {
 
             {/* Orientation Modal */}
             {showOrientationModal && (
-                <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
-                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl flex flex-col items-center animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
+                <div className="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
+                    <div className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex flex-col items-center animate-in fade-in zoom-in duration-300 border-2 border-[#e5e5e5]" onClick={e => e.stopPropagation()}>
 
                         <div className="text-center mb-10">
-                            <p className="text-slate-800 font-bold text-sm tracking-wide leading-relaxed">
+                            <p className="text-[#3c3c3c] font-bold text-base tracking-wider leading-relaxed">
                                 縦・横どちらでも利用することができます。<br />
                                 お好きなスタイルでご利用ください。
                             </p>
@@ -333,16 +337,16 @@ function TabletClientContent() {
                                     animation: rotate-device 4s ease-in-out infinite;
                                 }
                             `}</style>
-                            <div className="device-icon w-20 h-28 border-4 border-slate-800 rounded-xl bg-white relative shadow-xl flex flex-col items-center justify-between py-3">
-                                <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-                                <div className="w-16 h-20 bg-slate-100/50 rounded"></div>
-                                <div className="w-2 h-2 rounded-full border border-slate-300"></div>
+                            <div className="device-icon w-20 h-28 border-[4px] border-[#3c3c3c] rounded-2xl bg-white relative shadow-lg flex flex-col items-center justify-between py-3 box-border">
+                                <div className="w-1 h-1 bg-[#cecece] rounded-full"></div>
+                                <div className="w-14 h-16 bg-[#F5F5F5] rounded-md"></div>
+                                <div className="w-2 h-2 rounded-full border-2 border-[#cecece]"></div>
                             </div>
                         </div>
 
                         <button
                             onClick={() => setShowOrientationModal(false)}
-                            className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all active:scale-95 text-[15px]"
+                            className="w-full py-4 bg-[#58cc02] text-white font-extrabold rounded-2xl shadow-[0_4px_0_#58a700] hover:brightness-110 active:translate-y-[4px] active:shadow-none transition-all text-lg tracking-widest uppercase"
                         >
                             始める
                         </button>
@@ -356,7 +360,7 @@ function TabletClientContent() {
 export default function TabletClient() {
     return (
         <Suspense fallback={
-            <div className="flex items-center justify-center min-h-screen bg-slate-100 text-slate-500 font-bold">
+            <div className="flex items-center justify-center min-h-screen bg-[#EBF4FF] text-[#3c3c3c] font-bold">
                 Loading...
             </div>
         }>
