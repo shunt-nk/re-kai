@@ -3,6 +3,7 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Pusher from 'pusher-js';
 import { useSearchParams } from 'next/navigation';
+import { Undo, Redo, Eraser, Settings, Pencil, Loader2 } from 'lucide-react';
 
 // === Types ===
 interface Stroke {
@@ -20,18 +21,20 @@ interface PusherChannel {
 }
 
 function TabletPageContent() {
+    // Refs
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const channelRef = useRef<PusherChannel | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
     // State
     const [mode, setMode] = useState<'draw' | 'erase'>('draw');
-    const [color, setColor] = useState('#000000'); // Initial color black
+    const [color, setColor] = useState('#000000');
     const [size, setSize] = useState(2);
     const [isConnected, setIsConnected] = useState(false);
     const [showOrientationModal, setShowOrientationModal] = useState(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
 
-    // Drawing State
+    // Drawing Logic
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
@@ -63,7 +66,7 @@ function TabletPageContent() {
             }
         });
 
-        // Current context settings
+        // Restore context for current drawing
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = color;
         ctx.lineWidth = size;
@@ -92,45 +95,53 @@ function TabletPageContent() {
         tokenRef.current = token;
 
         if (!token) {
-            // setErrorMsg("Token is missing."); // Optional
+            setErrorMsg("URLにトークンが含まれていません。QRコードを読み直してください。");
+            return;
         }
 
         const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
         const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
-        if (pusherKey && pusherCluster && token) {
-            // Initialize Pusher
-            const pusher = new Pusher(pusherKey, {
-                cluster: pusherCluster,
-                authEndpoint: '/api/pusher',
-            });
-
-            const channelName = `private-session-${token}`;
-            const channel = pusher.subscribe(channelName);
-            channelRef.current = channel as unknown as PusherChannel;
-
-            channel.bind('pusher:subscription_succeeded', () => {
-                console.log('Connected to Pusher');
-                setIsConnected(true);
-                channel.trigger('client-tablet-ready', { device: 'tablet' });
-            });
-
-            channel.bind('pusher:subscription_error', (status: any) => {
-                console.error('Pusher Subscription Error', status);
-                // setErrorMsg("Connection Failed.");
-            });
-
-            return () => {
-                pusher.unsubscribe(channelName);
-                pusher.disconnect();
-            };
+        if (!pusherKey || !pusherCluster) {
+            setErrorMsg("Pusherの設定が見つかりません。");
+            return;
         }
+
+        // Initialize Pusher
+        const pusher = new Pusher(pusherKey, {
+            cluster: pusherCluster,
+            authEndpoint: '/api/pusher', // Adjust if your endpoint is different
+        });
+
+        const channelName = `private-session-${token}`;
+        const channel = pusher.subscribe(channelName);
+        channelRef.current = channel as unknown as PusherChannel;
+
+        channel.bind('pusher:subscription_succeeded', () => {
+            console.log('Connected to Pusher');
+            setIsConnected(true);
+            channel.trigger('client-tablet-ready', { device: 'tablet' });
+        });
+
+        channel.bind('pusher:subscription_error', (status: any) => {
+            console.error('Pusher Subscription Error', status);
+            setErrorMsg("接続に失敗しました。再読み込みしてください。");
+        });
+
+        return () => {
+            pusher.unsubscribe(channelName);
+            pusher.disconnect();
+        };
     }, [searchParams]);
 
-    // === Logic: Pointer Events ===
+    // === Logic: Pointer Events (Touch & Mouse) ===
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        e.preventDefault(); // Prevent scrolling
         const canvas = canvasRef.current;
         if (!canvas) return;
+
+        // Capture pointer for smooth tracking outside canvas bounds if needed
+        canvas.setPointerCapture(e.pointerId);
 
         const rect = canvas.getBoundingClientRect();
         const x = e.clientX - rect.left;
@@ -141,10 +152,12 @@ function TabletPageContent() {
         const ctx = canvas.getContext('2d');
         if (ctx) {
             ctx.beginPath();
+            // Important: Set properties here explicitly for instant feedback
             ctx.globalCompositeOperation = mode === 'erase' ? 'destination-out' : 'source-over';
             ctx.strokeStyle = color;
             ctx.lineWidth = size;
             ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
             ctx.moveTo(x, y);
         }
 
@@ -156,7 +169,8 @@ function TabletPageContent() {
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (e.buttons !== 1) return;
+        e.preventDefault();
+        if (e.buttons !== 1) return; // Only if primary button is pressed
         const canvas = canvasRef.current;
         if (!canvas) return;
 
@@ -178,155 +192,215 @@ function TabletPageContent() {
         });
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        e.preventDefault();
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+
+        canvas.releasePointerCapture(e.pointerId);
+
         if (currentStrokeRef.current.points.length > 0) {
             historyRef.current.push({ ...currentStrokeRef.current });
-            currentStrokeRef.current.points = [];
+            currentStrokeRef.current = { type: 'stroke', mode, color, size, points: [] }; // Reset properly
             redoStackRef.current = [];
             channelRef.current?.trigger('client-stroke-end', {});
         }
     };
 
-    // Resize Observer
+    // === Logic: Resize Observer ===
     useEffect(() => {
+        const container = containerRef.current;
         const canvas = canvasRef.current;
-        if (!canvas) return;
-        const resizeCanvas = () => {
-            if (canvas.parentElement) {
-                canvas.width = canvas.parentElement.clientWidth;
-                canvas.height = canvas.parentElement.clientHeight;
-                redraw();
-            }
-        };
-        window.addEventListener('resize', resizeCanvas);
-        resizeCanvas();
-        setTimeout(resizeCanvas, 100);
-        return () => window.removeEventListener('resize', resizeCanvas);
+        if (!container || !canvas) return;
+
+        const resizeObserver = new ResizeObserver(() => {
+            // Match canvas size to container size 1:1
+            canvas.width = container.clientWidth;
+            canvas.height = container.clientHeight;
+            redraw();
+        });
+
+        resizeObserver.observe(container);
+        return () => resizeObserver.disconnect();
     }, []);
 
-    // Color/Preview Logic
+    // Color picker ref
     const colorInputRef = useRef<HTMLInputElement>(null);
 
     return (
-        <div className="fixed inset-0 bg-gray-100 touch-none overflow-hidden font-sans select-none">
+        <div className="h-screen w-screen overflow-hidden bg-slate-100 flex flex-col font-sans select-none touch-none">
 
             {/* Header */}
-            <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10 pointer-events-none">
+            <header className="flex-none h-16 bg-white shadow-sm flex items-center justify-between px-6 z-20 relative">
                 {/* Logo */}
-                <div className="flex items-center text-2xl font-bold tracking-tight pointer-events-auto">
-                    <span className="text-slate-900">RE</span>
+                <div className="flex items-center text-2xl font-bold tracking-tight">
+                    <span className="text-slate-800">RE</span>
                     <span className="text-cyan-400 mx-[1px]">:</span>
-                    <span className="text-slate-900">KAI</span>
+                    <span className="text-slate-800">KAI</span>
                 </div>
 
                 {/* Right Tools: Undo/Redo */}
-                <div className="flex items-center gap-3 pointer-events-auto">
-                    <button onClick={performUndo} className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center text-slate-700 active:scale-95 transition-all">
-                        {/* Undo SVG */}
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M3 7v6h6" /><path d="M21 17a9 9 0 0 0-9-9 9 9 0 0 0-6 2.3L3 13" /></svg>
+                <div className="flex items-center gap-3">
+                    <button
+                        onClick={performUndo}
+                        className="w-10 h-10 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 active:scale-95 transition-all"
+                        aria-label="Undo"
+                    >
+                        <Undo size={20} />
                     </button>
-                    <button onClick={performRedo} className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center text-slate-700 active:scale-95 transition-all">
-                        {/* Redo SVG */}
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 7v6h-6" /><path d="M3 17a9 9 0 0 1 9-9 9 9 0 0 1 6 2.3L21 13" /></svg>
+                    <button
+                        onClick={performRedo}
+                        className="w-10 h-10 bg-white rounded-lg border border-slate-200 shadow-sm flex items-center justify-center text-slate-600 hover:bg-slate-50 active:scale-95 transition-all"
+                        aria-label="Redo"
+                    >
+                        <Redo size={20} />
                     </button>
-                    {/* Connection Status */}
-                    <div className={`ml-2 w-3 h-3 rounded-full transition-colors ${isConnected ? 'bg-green-500 shadow-[0_0_8px_rgba(34,197,94,0.6)]' : 'bg-slate-300'}`} />
-                </div>
-            </div>
 
-            {/* Toolbar (Left) */}
-            <div className="absolute top-24 left-6 flex flex-col gap-4 pointer-events-auto z-20">
-                <button
-                    onClick={() => setMode('draw')}
-                    className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-all ${mode === 'draw' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-slate-700 border-slate-200 shadow-sm'}`}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M12 19l7-7 3 3-7 7-3-3z"></path><path d="M18 13l-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"></path></svg>
-                </button>
-
-                <button
-                    onClick={() => setMode('erase')}
-                    className={`w-12 h-12 rounded-lg flex items-center justify-center border transition-all ${mode === 'erase' ? 'bg-gray-800 text-white border-gray-800' : 'bg-white text-slate-700 border-slate-200 shadow-sm'}`}
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M20 20H7L3 16C2 15 2 13 3 12L13 2L22 11L20 20Z"></path><line x1="18" y1="13" x2="18.01" y2="13"></line></svg>
-                </button>
-
-                <button
-                    onClick={() => colorInputRef.current?.click()}
-                    className="w-12 h-12 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center text-slate-700 relative"
-                >
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-                    <div className="absolute top-2 right-2 w-2.5 h-2.5 rounded-full border border-white" style={{ backgroundColor: color }}></div>
-                </button>
-                <input ref={colorInputRef} type="color" value={color} onChange={e => setColor(e.target.value)} className="hidden" />
-            </div>
-
-            {/* Center Indicator (Capsule) */}
-            <div className="absolute top-6 left-1/2 -translate-x-1/2 z-20 pointer-events-auto">
-                <div className="h-10 bg-white rounded-full p-1 pl-1 pr-4 shadow-sm border border-slate-200 flex items-center gap-3">
-                    <div className="w-8 h-8 rounded-full border border-slate-100 flex-shrink-0" style={{ backgroundColor: color }}></div>
-                    <div className="w-32 h-1.5 bg-slate-100 rounded-full relative overflow-hidden">
-                        <div className="absolute top-0 bottom-0 left-0 bg-slate-800" style={{ width: `${(size / 20) * 100}%` }}></div>
+                    {/* Connection Indicator */}
+                    <div className={`ml-2 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-2 ${isConnected ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'}`}>
+                        <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500' : 'bg-amber-500 animate-pulse'}`} />
+                        {isConnected ? 'Connected' : 'Connecting...'}
                     </div>
-                    <input type="range" min="1" max="20" value={size} onChange={e => setSize(Number(e.target.value))} className="absolute inset-0 opacity-0 cursor-pointer w-full h-full" />
                 </div>
-            </div>
+            </header>
 
-            {/* Main Canvas Area */}
-            <div className="absolute inset-x-8 bottom-8 top-24 border-2 border-black bg-white rounded-lg shadow-sm overflow-hidden z-0">
-                <canvas
-                    ref={canvasRef}
-                    onPointerDown={handlePointerDown}
-                    onPointerMove={handlePointerMove}
-                    onPointerUp={handlePointerUp}
-                    onPointerLeave={handlePointerUp}
-                    className="block w-full h-full touch-none"
-                    style={{ cursor: 'crosshair' }}
-                />
-            </div>
+            {/* Main Workspace */}
+            <main className="flex-1 relative flex">
+
+                {/* Floating Toolbar (Left) */}
+                <div className="mt-6 ml-6 flex flex-col gap-4 absolute top-0 left-0 z-10">
+                    <button
+                        onClick={() => setMode('draw')}
+                        className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all shadow-md ${mode === 'draw' ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-white text-slate-500'}`}
+                    >
+                        <Pencil size={24} />
+                    </button>
+
+                    <button
+                        onClick={() => setMode('erase')}
+                        className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all shadow-md ${mode === 'erase' ? 'bg-slate-900 border-slate-900 text-white' : 'bg-white border-white text-slate-500'}`}
+                    >
+                        <Eraser size={24} />
+                    </button>
+
+                    <button
+                        onClick={() => colorInputRef.current?.click()}
+                        className="w-14 h-14 bg-white rounded-2xl border-2 border-white shadow-md flex items-center justify-center text-slate-500 relative"
+                    >
+                        <Settings size={24} />
+                        {/* Current Color Indicator Dot */}
+                        <div className="absolute top-2 right-2 w-3 h-3 rounded-full border border-slate-200" style={{ backgroundColor: color }} />
+                    </button>
+                    <input
+                        ref={colorInputRef}
+                        type="color"
+                        value={color}
+                        onChange={e => setColor(e.target.value)}
+                        className="hidden"
+                    />
+                </div>
+
+                {/* Center Top Indicator (Size & Color) */}
+                <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10">
+                    <div className="bg-slate-200/90 backdrop-blur-sm rounded-full p-1 pl-2 pr-4 shadow-inner flex items-center gap-3 h-12">
+                        {/* Current Color Circle */}
+                        <div
+                            className="w-8 h-8 rounded-full border-2 border-white shadow-sm flex-shrink-0"
+                            style={{ backgroundColor: color }}
+                        />
+                        {/* Size Slider / Bar */}
+                        <div className="w-40 relative h-8 flex items-center">
+                            {/* Track */}
+                            <div className="w-full h-1.5 bg-slate-300 rounded-full overflow-hidden">
+                                <div
+                                    className="h-full bg-slate-800 transition-all duration-75"
+                                    style={{ width: `${(size / 20) * 100}%` }}
+                                />
+                            </div>
+                            {/* Invisible Range Input */}
+                            <input
+                                type="range"
+                                min="1"
+                                max="20"
+                                value={size}
+                                onChange={e => setSize(Number(e.target.value))}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Canvas Container */}
+                <div
+                    ref={containerRef}
+                    className="absolute inset-0 m-4 ml-24 mt-24 border-2 border-black bg-white rounded-xl shadow-sm overflow-hidden"
+                >
+                    <canvas
+                        ref={canvasRef}
+                        onPointerDown={handlePointerDown}
+                        onPointerMove={handlePointerMove}
+                        onPointerUp={handlePointerUp}
+                        onPointerLeave={handlePointerUp}
+                        className="block w-full h-full touch-none"
+                    />
+                </div>
+            </main>
 
             {/* Error Overlay */}
             {errorMsg && (
-                <div className="fixed inset-0 z-[200] bg-black/80 flex items-center justify-center p-6">
-                    <div className="bg-white p-6 rounded-xl max-w-sm text-center">
-                        <p className="text-red-500 font-bold mb-4">{errorMsg}</p>
-                        <button onClick={() => window.location.reload()} className="px-4 py-2 bg-slate-800 text-white rounded-lg">再読み込み</button>
+                <div className="fixed inset-0 z-[100] bg-black/80 flex items-center justify-center p-8 backdrop-blur-sm">
+                    <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center shadow-2xl">
+                        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-red-100 text-red-500 mb-4">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" /></svg>
+                        </div>
+                        <h3 className="text-lg font-bold text-slate-900 mb-2">エラーが発生しました</h3>
+                        <p className="text-slate-600 mb-6">{errorMsg}</p>
+                        <button
+                            onClick={() => window.location.reload()}
+                            className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl hover:bg-slate-800 transition-colors"
+                        >
+                            再読み込み
+                        </button>
                     </div>
                 </div>
             )}
 
-            {/* Orientation Modal */}
+            {/* Orientation Modal (Splash Screen) */}
             {showOrientationModal && (
                 <div
-                    className="fixed inset-0 z-[100] bg-gray-500/90 flex items-center justify-center p-6 backdrop-blur-sm"
-                    onClick={() => setShowOrientationModal(false)}
+                    className="fixed inset-0 z-[90] bg-slate-900/50 backdrop-blur-md flex items-center justify-center p-6 animate-in fade-in duration-300"
                 >
-                    <div className="bg-white rounded-[32px] p-12 max-w-sm w-full shadow-2xl flex flex-col items-center">
-                        <p className="text-slate-800 font-medium text-center leading-7 tracking-wide mb-10 text-[15px]">
-                            縦・横どちらでも利用することができます。<br />
-                            お好きなスタイルでご利用ください。
-                        </p>
+                    <div className="bg-white rounded-3xl p-10 max-w-sm w-full shadow-2xl flex flex-col items-center animate-in zoom-in-95 duration-300">
+                        <h2 className="text-xl font-bold text-slate-800 mb-6 text-center">
+                            ようこそ
+                        </h2>
 
-                        {/* Rotating Graphic */}
-                        <div className="relative w-48 h-48 mb-6 flex items-center justify-center">
-                            {/* Tablet shape */}
-                            <div className="w-28 h-20 border-4 border-slate-300 rounded-2xl relative flex items-center justify-center">
-                                {/* Just a visual block */}
+                        {/* Rotating Device Graphic */}
+                        <div className="relative w-40 h-40 mb-8 flex items-center justify-center">
+                            {/* Tablet Frame */}
+                            <div className="w-24 h-16 border-[3px] border-slate-800 rounded-xl bg-white relative z-10 flex items-center justify-center shadow-lg transform transition-transform animate-[spin_8s_linear_infinite]">
+                                <div className="w-1 h-1 rounded-full bg-slate-300 absolute top-1/2 left-1 -translate-y-1/2" />
+                                <div className="w-1 h-1 rounded-full bg-slate-300 absolute top-1/2 right-1 -translate-y-1/2" />
                             </div>
-                            {/* Arrows overlay */}
-                            <svg className="absolute inset-0 w-full h-full text-slate-500 animate-[spin_4s_linear_infinite]" viewBox="0 0 200 200">
-                                <defs>
-                                    <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
-                                        <polygon points="0 0, 10 3.5, 0 7" fill="currentColor" />
-                                    </marker>
-                                </defs>
-                                <path d="M60 40 A 70 70 0 0 0 40 100" stroke="currentColor" strokeWidth="2.5" markerEnd="url(#arrowhead)" fill="none" />
-                                <path d="M140 160 A 70 70 0 0 0 160 100" stroke="currentColor" strokeWidth="2.5" markerEnd="url(#arrowhead)" fill="none" />
+
+                            {/* Orbiting Arrows */}
+                            <svg className="absolute inset-0 w-full h-full text-cyan-400 animate-[spin_4s_ease-in-out_infinite_reverse]" viewBox="0 0 100 100">
+                                <path d="M50 10 A 40 40 0 0 1 90 50" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
+                                <path d="M50 90 A 40 40 0 0 1 10 50" fill="none" stroke="currentColor" strokeWidth="2" strokeDasharray="4 4" />
                             </svg>
                         </div>
 
-                        <div className="px-6 py-2 bg-slate-100 rounded-full text-xs text-slate-400 font-medium">
-                            タップして開始
+                        <div className="text-slate-600 font-medium text-center leading-relaxed mb-10 text-sm">
+                            <p>縦・横どちらでも利用することができます。</p>
+                            <p>お好きなスタイルでご利用ください。</p>
                         </div>
+
+                        <button
+                            onClick={() => setShowOrientationModal(false)}
+                            className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all active:scale-95 text-base"
+                        >
+                            理解しました
+                        </button>
                     </div>
                 </div>
             )}
@@ -334,10 +408,14 @@ function TabletPageContent() {
     );
 }
 
-// Suspense Wrapper
+// Suspense Wrapper for useSearchParams
 export default function TabletPage() {
     return (
-        <Suspense fallback={<div className="flex min-h-screen items-center justify-center text-slate-500">Loading...</div>}>
+        <Suspense fallback={
+            <div className="h-screen w-screen flex items-center justify-center bg-slate-50 text-slate-400">
+                <Loader2 className="animate-spin" size={32} />
+            </div>
+        }>
             <TabletPageContent />
         </Suspense>
     );
