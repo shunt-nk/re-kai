@@ -15,11 +15,15 @@ export async function POST(request: Request) {
         const socketId = data.get('socket_id') as string;
         const channel = data.get('channel_name') as string;
 
+        console.log(`[API/Pusher] Auth Request for socket_id: ${socketId}, channel: ${channel}`);
+
         // 誰でも許可する（簡易的な認証）
         const authResponse = pusher.authorizeChannel(socketId, channel);
+
+        console.log(`[API/Pusher] Auth Success:`, JSON.stringify(authResponse));
         return NextResponse.json(authResponse);
     } catch (error) {
-        console.error('Pusher Auth Error:', error);
-        return NextResponse.json({ error: 'Auth failed' }, { status: 500 });
+        console.error('[API/Pusher] Auth Error:', error);
+        return NextResponse.json({ error: 'Auth failed: ' + (error as any).message }, { status: 500 });
     }
 }

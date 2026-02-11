@@ -113,31 +113,45 @@ function TabletClientContent() {
         });
 
         const channelName = `private-session-${token}`;
+        console.log(`[Tablet] Subscribing to channel: ${channelName} (Token provided: ${token})`);
+
         const channel = pusher.subscribe(channelName);
         channelRef.current = channel as unknown as PusherChannel;
 
+        // Connection Debugging
+        pusher.connection.bind('state_change', (states: any) => {
+            console.log('[Tablet] Pusher State Change:', states);
+        });
+        pusher.connection.bind('connected', () => {
+            console.log('[Tablet] Pusher Connected. Socket ID:', pusher.connection.socket_id);
+        });
+        pusher.connection.bind('error', (err: any) => {
+            console.error('[Tablet] Pusher Connection Error:', err);
+        });
+
         channel.bind('pusher:subscription_succeeded', () => {
-            console.log('Pusher Connected');
+            console.log('[Tablet] Subscription Succeeded:', channelName);
             setIsConnected(true);
             setConnectionError(null);
 
             // Send Ready Signal immediately
+            console.log("[Tablet] Sending client-tablet-ready...");
             channel.trigger('client-tablet-ready', { device: 'tablet' });
 
             // Retry sending ready signal every 2 seconds until acknowledged
             const intervalId = setInterval(() => {
-                console.log("Retrying client-tablet-ready...");
+                console.log("[Tablet] Retrying client-tablet-ready...");
                 channel.trigger('client-tablet-ready', { device: 'tablet' });
             }, 2000);
 
             // Listen for Ack from PC
             channel.bind('client-pc-ack', () => {
-                console.log("Received PC Ack! Connection established.");
+                console.log("[Tablet] Received PC Ack! Connection established.");
                 clearInterval(intervalId);
             });
 
             // Clean up: We can't easily clean up this interval if unmounted inside this callback closure
-            // unless we use a ref to store intervalId. 
+            // unless we use a ref to store intervalId.
             // For now, reliance on page refresh or disconnect is acceptable for this critical handshake.
 
             // Initial resize after connection
@@ -147,17 +161,18 @@ function TabletClientContent() {
                 canvasRef.current.height = clientHeight;
                 redraw();
                 try {
+                    console.log("[Tablet] Sending initial client-resize");
                     channel.trigger('client-resize', { width: clientWidth, height: clientHeight });
                 } catch (e) {
-                    console.warn("Resize trigger failed during init", e);
+                    console.warn("[Tablet] Resize trigger failed during init", e);
                 }
             }
         });
 
         channel.bind('pusher:subscription_error', (status: any) => {
-            console.error('Pusher Subscription Error:', status);
+            console.error('[Tablet] Pusher Subscription Error:', status);
             setIsConnected(false);
-            setConnectionError("接続エラー: 認証に失敗しました (" + status + ")");
+            setConnectionError("接続エラー: 認証に失敗しました (" + JSON.stringify(status) + ")");
         });
 
         const handleResize = () => {

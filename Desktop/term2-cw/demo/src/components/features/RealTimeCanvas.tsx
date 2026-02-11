@@ -134,13 +134,17 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
 
 
         // Initialize Pusher
+        // Initialize Pusher
         const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
         const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
         if (!pusherKey || !pusherCluster) {
-            console.error("Pusher Env Vars missing in Canvas", { pusherKey, pusherCluster });
+            console.error("[PC] Pusher Env Vars missing", { pusherKey, pusherCluster });
             return;
         }
+
+        // Enable logger
+        Pusher.logToConsole = true;
 
         const pusher = new Pusher(pusherKey, {
             cluster: pusherCluster,
@@ -148,22 +152,41 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
         pusherRef.current = pusher;
 
+        // Connection Debugging
+        pusher.connection.bind('state_change', (states: any) => {
+            console.log('[PC] Pusher State Change:', states);
+        });
+        pusher.connection.bind('connected', () => {
+            console.log('[PC] Pusher Connected. Socket ID:', pusher.connection.socket_id);
+        });
+        pusher.connection.bind('error', (err: any) => {
+            console.error('[PC] Pusher Connection Error:', err);
+        });
+
         const channelName = `private-session-${newToken}`;
+        console.log(`[PC] Subscribing to channel: ${channelName} (Token: ${newToken})`);
+
         const channel = pusher.subscribe(channelName);
 
         // Bind Events
         channel.bind('pusher:subscription_succeeded', () => {
-            console.log('Pusher Channel Subscribed:', channelName);
+            console.log('[PC] Subscription Succeeded:', channelName);
         });
 
-        channel.bind('client-tablet-ready', () => {
-            console.log("Received client-tablet-ready");
+        channel.bind('pusher:subscription_error', (status: any) => {
+            console.error('[PC] Subscription Error:', status);
+        });
+
+        channel.bind('client-tablet-ready', (data: any) => {
+            console.log("[PC] Received client-tablet-ready:", data);
             setLastEvent('Tablet Ready');
             setIsConnected(true);
             if (onConnectionChange) onConnectionChange(true, null);
 
             // Send Acknowledgement
-            channel.trigger('client-pc-ack', { status: 'ok' });
+            console.log("[PC] Sending client-pc-ack");
+            const triggered = channel.trigger('client-pc-ack', { status: 'ok' });
+            console.log("[PC] client-pc-ack triggered:", triggered);
         });
 
         channel.bind('client-stroke-start', (d: DrawData) => {
