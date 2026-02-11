@@ -212,10 +212,13 @@ function TabletClientContent() {
         channelRef.current?.trigger('client-stroke-end', {});
     };
 
+    // 色のプリセット定義
+    const colors = ['#000000', '#FF3B30', '#34C759', '#007AFF', '#AF52DE', '#FF9500'];
+
     return (
         <div className="fixed inset-0 bg-[#EBF4FF] select-none font-sans">
             {/* Header */}
-            <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10">
+            <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10 bg-white shadow-[0_4px_0_#e5e5e5] border-b-2 border-[#e5e5e5]">
                 {/* Logo */}
                 <div className="flex items-center">
                     <span className="text-2xl font-extrabold text-[#3c3c3c] tracking-tight font-sans">RE</span>
@@ -243,26 +246,26 @@ function TabletClientContent() {
             </div>
 
             {/* Main Layout: Toolbar & Canvas */}
-            <div className="absolute top-16 left-0 right-0 bottom-0 flex flex-col p-4 pt-0 gap-4">
+            <div className="absolute top-16 left-0 right-0 bottom-0 flex flex-col p-4 gap-4 bg-[#EBF4FF]">
 
                 {/* Toolbar Area */}
-                <div className="flex items-center gap-4 px-2">
+                <div className="flex items-center gap-3 px-2">
                     {/* Tools */}
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-2 bg-white p-1 rounded-2xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5]">
                         <button
                             onClick={() => setMode('draw')}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border-b-[4px] active:border-b-0 active:translate-y-[4px] ${mode === 'draw'
-                                    ? 'bg-[#3c3c3c] text-white border-[#2c2c2c]'
-                                    : 'bg-white text-[#777777] border-[#e5e5e5] shadow-[0_4px_0_#e5e5e5] active:shadow-none'
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${mode === 'draw'
+                                ? 'bg-[#3c3c3c] text-white'
+                                : 'text-[#777777] hover:bg-[#f0f0f0]'
                                 }`}
                         >
                             <Pencil size={20} strokeWidth={2.5} fill={mode === 'draw' ? "currentColor" : "none"} />
                         </button>
                         <button
                             onClick={() => setMode('erase')}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all border-b-[4px] active:border-b-0 active:translate-y-[4px] ${mode === 'erase'
-                                    ? 'bg-[#3c3c3c] text-white border-[#2c2c2c]'
-                                    : 'bg-white text-[#777777] border-[#e5e5e5] shadow-[0_4px_0_#e5e5e5] active:shadow-none'
+                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${mode === 'erase'
+                                ? 'bg-[#3c3c3c] text-white'
+                                : 'text-[#777777] hover:bg-[#f0f0f0]'
                                 }`}
                         >
                             <Eraser size={20} strokeWidth={2.5} fill={mode === 'erase' ? "currentColor" : "none"} />
@@ -270,30 +273,55 @@ function TabletClientContent() {
                     </div>
 
                     {/* Capsule Indicator (Color & Size) */}
-                    <div className="flex items-center bg-white rounded-2xl p-1 pl-3 gap-3 h-12 w-56 shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5]">
-                        {/* Color Preview */}
-                        <div
-                            className="w-6 h-6 rounded-full border-2 border-[#e5e5e5] shadow-sm shrink-0"
-                            style={{ backgroundColor: color }}
-                        />
-                        {/* Size Preview */}
-                        <div className="flex-1 flex items-center h-full pr-3 relative">
-                            {/* Background Track */}
-                            <div className="w-full h-2 bg-[#e5e5e5] rounded-full overflow-hidden">
+                    <div className="flex-1 flex items-center bg-white rounded-2xl p-1 pl-3 gap-4 h-12 shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] max-w-md">
+                        {/* Color Preview & Picker Trigger */}
+                        <div className="relative group">
+                            <button
+                                className="w-8 h-8 rounded-full border-[3px] border-white ring-2 ring-[#e5e5e5] shadow-sm shrink-0 transition-transform group-hover:scale-105"
+                                style={{ backgroundColor: color }}
+                            />
+                            {/* Simple Color Palette Popover */}
+                            <div className="absolute top-full left-0 mt-2 p-2 bg-white rounded-xl shadow-lg border-2 border-[#e5e5e5] grid grid-cols-3 gap-2 hidden group-hover:grid z-20">
+                                {colors.map(c => (
+                                    <button
+                                        key={c}
+                                        className="w-6 h-6 rounded-full border-2 border-white ring-1 ring-[#e5e5e5] hover:scale-110 transition-all"
+                                        style={{ backgroundColor: c }}
+                                        onClick={() => setColor(c)}
+                                    />
+                                ))}
                             </div>
+                        </div>
 
-                            {/* Knob */}
+                        {/* Size Preview & Slider */}
+                        <div className="flex-1 flex items-center h-full pr-3 relative group">
+                            {/* Background Track & Thumb (Visual) */}
+                            <div className="w-full h-2 bg-[#e5e5e5] rounded-full overflow-hidden relative">
+                                <div
+                                    className="h-full bg-[#3c3c3c] rounded-full"
+                                    style={{ width: `${(size / 20) * 100}%` }}
+                                />
+                            </div>
                             <div
-                                className="absolute w-5 h-5 bg-[#3c3c3c] rounded-full shadow-sm left-0 border-2 border-white"
+                                className="absolute w-5 h-5 bg-white rounded-full shadow-sm border-2 border-[#3c3c3c] top-1/2 -translate-y-1/2 pointer-events-none transition-all group-hover:scale-110"
                                 style={{
-                                    left: `${Math.min(100, (size / 20) * 100)}%`,
-                                    transform: 'translateX(-50%)'
+                                    left: `${(size / 20) * 100}%`,
+                                    transform: `translate(-50%, -50%)`
                                 }}
+                            />
+                            {/* Actual Range Input (Hidden but Functional) */}
+                            <input
+                                type="range"
+                                min="1"
+                                max="20"
+                                value={size}
+                                onChange={(e) => setSize(Number(e.target.value))}
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                             />
                         </div>
                     </div>
 
-                    <button className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777] ml-auto">
+                    <button className="w-12 h-12 bg-white rounded-2xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777] ml-auto">
                         <Settings size={24} strokeWidth={2.5} />
                     </button>
                 </div>
@@ -306,47 +334,47 @@ function TabletClientContent() {
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerLeave={handlePointerUp}
-                        className="block w-full h-full touch-none"
+                        className="block w-full h-full touch-none cursor-crosshair"
                     />
                 </div>
             </div>
 
             {/* Orientation Modal */}
             {showOrientationModal && (
-                <div className="fixed inset-0 z-[100] bg-black/40 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
+                <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-6 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
                     <div className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex flex-col items-center animate-in fade-in zoom-in duration-300 border-2 border-[#e5e5e5]" onClick={e => e.stopPropagation()}>
 
                         <div className="text-center mb-10">
-                            <p className="text-[#3c3c3c] font-bold text-base tracking-wider leading-relaxed">
+                            <p className="text-[#3c3c3c] font-bold text-lg tracking-wider leading-relaxed">
                                 縦・横どちらでも利用することができます。<br />
                                 お好きなスタイルでご利用ください。
                             </p>
                         </div>
 
                         {/* Animation Container */}
-                        <div className="relative w-full h-40 flex items-center justify-center mb-8">
+                        <div className="relative w-full h-48 flex items-center justify-center mb-10">
                             <style jsx>{`
                                 @keyframes rotate-device {
-                                    0% { transform: rotate(0deg); }
-                                    25% { transform: rotate(0deg); }
-                                    50% { transform: rotate(90deg); }
-                                    75% { transform: rotate(90deg); }
+                                    0%, 20% { transform: rotate(0deg); }
+                                    50%, 70% { transform: rotate(90deg); }
                                     100% { transform: rotate(0deg); }
                                 }
                                 .device-icon {
                                     animation: rotate-device 4s ease-in-out infinite;
                                 }
                             `}</style>
-                            <div className="device-icon w-20 h-28 border-[4px] border-[#3c3c3c] rounded-2xl bg-white relative shadow-lg flex flex-col items-center justify-between py-3 box-border">
-                                <div className="w-1 h-1 bg-[#cecece] rounded-full"></div>
-                                <div className="w-14 h-16 bg-[#F5F5F5] rounded-md"></div>
-                                <div className="w-2 h-2 rounded-full border-2 border-[#cecece]"></div>
-                            </div>
+                            {/* SVG Device Icon for better scaling and detail */}
+                            <svg className="device-icon w-32 h-32 drop-shadow-xl" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="5" y="5" width="90" height="130" rx="12" fill="white" stroke="#3c3c3c" strokeWidth="4" />
+                                <circle cx="50" cy="125" r="4" stroke="#3c3c3c" strokeWidth="2" />
+                                <rect x="35" y="12" width="30" height="3" rx="1.5" fill="#cecece" />
+                                <rect x="12" y="25" width="76" height="90" rx="4" fill="#F5F5F5" stroke="#cecece" strokeWidth="1" />
+                            </svg>
                         </div>
 
                         <button
                             onClick={() => setShowOrientationModal(false)}
-                            className="w-full py-4 bg-[#58cc02] text-white font-extrabold rounded-2xl shadow-[0_4px_0_#58a700] hover:brightness-110 active:translate-y-[4px] active:shadow-none transition-all text-lg tracking-widest uppercase"
+                            className="w-full py-4 bg-[#58cc02] text-white font-extrabold rounded-2xl shadow-[0_4px_0_#58a700] hover:brightness-110 active:translate-y-[4px] active:shadow-none transition-all text-xl tracking-widest uppercase"
                         >
                             始める
                         </button>
@@ -360,8 +388,8 @@ function TabletClientContent() {
 export default function TabletClient() {
     return (
         <Suspense fallback={
-            <div className="flex items-center justify-center min-h-screen bg-[#EBF4FF] text-[#3c3c3c] font-bold">
-                Loading...
+            <div className="flex items-center justify-center min-h-screen bg-[#EBF4FF]">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#1cb0f6]"></div>
             </div>
         }>
             <TabletClientContent />
