@@ -45,7 +45,7 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
     height = '100%'
 }, ref) => {
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const qrRef = useRef<HTMLDivElement>(null); // ※元のコード通りdiv参照に戻しました
+    const qrRef = useRef<HTMLDivElement>(null);
     const [token, setToken] = useState<string | null>(null);
     const [isConnected, setIsConnected] = useState(false);
 
@@ -61,8 +61,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
             historyRef.current = [];
             redoStackRef.current = [];
             redraw();
-            // Optional: send clear event to tablet if supported
-            // channelRef.current?.trigger('client-clear', {});
         },
         getToken: () => token,
         getImageData: () => {
@@ -108,12 +106,13 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         if (onConnectionChange) onConnectionChange(false, newToken);
 
         // Generate QR Code
-        // 【修正点】URL生成ロジックを確実に実行
+        // 【修正】windowオブジェクトが存在することを確認してから実行
         if (typeof window !== 'undefined') {
-            // トークン付きURLを生成
-            const url = `${window.location.origin}/tablet?token=${newToken}`;
+            // 【修正】正しいトークン付きURLを生成
+            const origin = window.location.origin;
+            const url = `${origin}/tablet?token=${newToken}`;
 
-            // 少し遅延させて確実にQR要素がある状態で描画
+            // DOM描画を待つために少し遅延
             setTimeout(() => {
                 if (qrRef.current) {
                     qrRef.current.innerHTML = '';
@@ -134,12 +133,9 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
         if (!pusherKey || !pusherCluster) {
-            console.error("[PC] Pusher Env Vars missing", { pusherKey, pusherCluster });
+            console.error("[PC] Pusher Env Vars missing");
             return;
         }
-
-        // Enable logger
-        // Pusher.logToConsole = true; // 必要ならコメントアウト解除
 
         const pusher = new Pusher(pusherKey, {
             cluster: pusherCluster,
@@ -148,18 +144,14 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         pusherRef.current = pusher;
 
         const channelName = `private-session-${newToken}`;
-        // console.log(`[PC] Subscribing to channel: ${channelName} (Token: ${newToken})`);
-
         const channel = pusher.subscribe(channelName);
 
         // Bind Events
         channel.bind('client-tablet-ready', (data: any) => {
-            console.log("[PC] Received client-tablet-ready:", data);
+            console.log("[PC] Tablet Connected!", data);
             setLastEvent('Tablet Ready');
             setIsConnected(true);
             if (onConnectionChange) onConnectionChange(true, null);
-
-            // Send Acknowledgement
             channel.trigger('client-pc-ack', { status: 'ok' });
         });
 
@@ -186,7 +178,6 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-stroke-move', (d: DrawData) => {
-            // setLastEvent('Move'); 
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
             if (!canvas || !ctx || !drawingRef.current) return;
@@ -246,24 +237,28 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         return () => window.removeEventListener('resize', resizeCanvas);
     }, []);
 
-    // ... existing return ...
     return (
         <div className={`relative ${className}`} style={{ width, height, overflow: 'hidden' }}>
             <canvas
                 ref={canvasRef}
                 className="w-full h-full block touch-none cursor-default"
             />
-            {/* Debug Overlay */}
+
+            {/* 元のコードにはここのQRコード描画用divが抜けていましたが、
+               これがないとQRコードが表示されません。
+               「元のデザイン」を損なわないよう、未接続時のみ中央にポンと出るように復元しました。
+            */}
+            {!isConnected && (
+                <div
+                    ref={qrRef}
+                    className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white p-2 rounded-lg shadow-xl border border-gray-200 z-50"
+                />
+            )}
+
+            {/* Debug Overlay (元のコード通り) */}
             <div style={{ position: 'absolute', bottom: 5, left: 5, fontSize: '10px', color: '#888', background: 'rgba(255,255,255,0.7)', padding: '2px 5px', pointerEvents: 'none' }}>
                 Last Event: {lastEvent} | ID: {token?.slice(0, 4)}
             </div>
-            {/* QR Code Container (Hidden but used for logic if needed in parent, or can be exposed via ref if this component was meant to render it inside itself. Assuming external QR usage or overlays based on original structure, but kept ref binding just in case.) */}
-            {/* Note: Original code implies qrRef is bound to a div somewhere. If this component is supposed to RENDER the QR code, it needs a div. 
-                 The original return didn't have the QR div visible in the JSX provided in the prompt's snippet, 
-                 but the logic uses `qrRef.current`. 
-                 If you are rendering the QR code OUTSIDE via the ref, that's fine. 
-                 If it should be inside, I will add the hidden div back for safety to match logic. */}
-            <div ref={qrRef} style={{ display: 'none' }} />
         </div>
     );
 });
