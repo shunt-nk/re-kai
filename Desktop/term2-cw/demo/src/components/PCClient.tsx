@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import QRCode from 'qrcode';
 import Pusher from 'pusher-js';
 import { v4 as uuidv4 } from 'uuid';
 
-// 型定義
+// === Type Definitions ===
 interface Stroke {
     type: string;
     mode: string;
@@ -24,20 +24,20 @@ interface DrawData {
     height?: number;
 }
 
-export default function PCClient() {
+function PCClientContent() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const qrRef = useRef<HTMLDivElement>(null);
     const [token, setToken] = useState<string | null>(null);
     const [status, setStatus] = useState<string>("待機中...");
 
-    // 描画用の状態管理 (変更なし)
+    // Drawing State
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const drawingRef = useRef(false);
     const pusherRef = useRef<Pusher | null>(null);
 
-    // 再描画関数 (変更なし)
+    // Redraw Function
     const redraw = () => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
@@ -61,11 +61,12 @@ export default function PCClient() {
             }
         });
 
+        // Restore context
         ctx.globalCompositeOperation = 'source-over';
         ctx.lineWidth = 2;
     };
 
-    // Pusherのクリーンアップ
+    // Cleanup Pusher on unmount
     useEffect(() => {
         return () => {
             if (pusherRef.current) {
@@ -74,17 +75,15 @@ export default function PCClient() {
         };
     }, []);
 
-    // トークンが生成されたらQRコードを表示
+    // Generate QR when token changes
     useEffect(() => {
         if (token && qrRef.current) {
-            qrRef.current.innerHTML = ''; // 前のQRを消す
-
-            // Vercel上のURLを作成 (window.location.origin で今のドメインを取得)
+            qrRef.current.innerHTML = '';
             const origin = typeof window !== 'undefined' ? window.location.origin : '';
             const url = `${origin}/tablet?token=${token}`;
 
             const qrCanvas = document.createElement('canvas');
-            QRCode.toCanvas(qrCanvas, url, { width: 200 }, (err) => {
+            QRCode.toCanvas(qrCanvas, url, { width: 180, margin: 1 }, (err) => {
                 if (!err && qrRef.current) {
                     qrRef.current.appendChild(qrCanvas);
                 }
@@ -93,39 +92,31 @@ export default function PCClient() {
     }, [token]);
 
     const generateQR = () => {
-        if (pusherRef.current) return; // 二重接続防止
+        if (pusherRef.current) return;
 
-        // 1. トークン(UUID)を生成
         const newToken = uuidv4();
         setToken(newToken);
         setStatus("接続待ち: QRを読み込んでください");
 
-        // 2. Pusherの初期化
         const pusher = new Pusher(process.env.NEXT_PUBLIC_PUSHER_KEY!, {
             cluster: process.env.NEXT_PUBLIC_PUSHER_CLUSTER!,
-            authEndpoint: '/api/pusher', // 自作した認証API
+            authEndpoint: '/api/pusher',
         });
         pusherRef.current = pusher;
 
-        // 3. チャンネル購読 (private-session-トークン)
         const channelName = `private-session-${newToken}`;
         const channel = pusher.subscribe(channelName);
 
-        // === イベントハンドラ (WebSocketのonmessageから移植) ===
-
-        // 接続成功時
+        // === Event Handlers ===
         channel.bind('pusher:subscription_succeeded', () => {
             console.log('Pusher Channel Subscribed:', channelName);
         });
 
-        // タブレットが接続してきた時
         channel.bind('client-tablet-ready', () => {
             setStatus("タブレットと接続されました！");
-            // QRコードを隠すなどの処理をしても良い
             if (qrRef.current) qrRef.current.style.display = 'none';
         });
 
-        // 描き始め
         channel.bind('client-stroke-start', (d: DrawData) => {
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
@@ -147,7 +138,6 @@ export default function PCClient() {
             ctx.moveTo(d.x * canvas.width, d.y * canvas.height);
         });
 
-        // 描画中
         channel.bind('client-stroke-move', (d: DrawData) => {
             const canvas = canvasRef.current;
             const ctx = canvas?.getContext('2d');
@@ -158,14 +148,12 @@ export default function PCClient() {
             ctx.stroke();
         });
 
-        // 描き終わり
         channel.bind('client-stroke-end', () => {
             drawingRef.current = false;
             historyRef.current.push({ ...currentStrokeRef.current });
             redoStackRef.current = [];
         });
 
-        // アンドゥ
         channel.bind('client-undo', () => {
             if (historyRef.current.length > 0) {
                 const stroke = historyRef.current.pop();
@@ -174,7 +162,6 @@ export default function PCClient() {
             }
         });
 
-        // リドゥ
         channel.bind('client-redo', () => {
             if (redoStackRef.current.length > 0) {
                 const stroke = redoStackRef.current.pop();
@@ -183,7 +170,6 @@ export default function PCClient() {
             }
         });
 
-        // リサイズ (タブレットの画面サイズに合わせる場合)
         channel.bind('client-resize', (d: DrawData) => {
             const canvas = canvasRef.current;
             if (canvas && d.width && d.height) {
@@ -195,51 +181,49 @@ export default function PCClient() {
     };
 
     return (
-        <div style={{ position: 'relative', width: '100vw', height: '100vh', overflow: 'hidden' }}>
-            <div style={{
-                position: 'fixed',
-                top: 10,
-                left: 10,
-                zIndex: 10,
-                background: 'rgba(255, 255, 255, 0.9)',
-                padding: '15px',
-                borderRadius: '8px',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.1)'
-            }}>
-                <h2 style={{ margin: '0 0 10px 0', fontSize: '1.2rem' }}>PC画面</h2>
-                <p style={{ fontSize: '0.8rem', color: '#666', marginBottom: '10px' }}>{status}</p>
+        <div className="relative w-screen h-screen overflow-hidden bg-slate-50">
+            {/* Status Card / QR Overlay */}
+            <div className={`fixed top-6 left-6 z-50 transition-all duration-300 ${!token ? 'w-auto' : 'w-auto'}`}>
+                <div className="bg-white/90 backdrop-blur-md p-6 rounded-2xl shadow-xl border border-slate-100/50">
+                    <div className="mb-4">
+                        <h2 className="text-lg font-bold text-slate-900 m-0">PC画面</h2>
+                        <p className={`text-sm mt-1 font-medium ${status.includes("接続されました") ? "text-green-600" : "text-slate-500"}`}>
+                            {status}
+                        </p>
+                    </div>
 
-                {!token && (
-                    <button
-                        onClick={generateQR}
-                        style={{
-                            padding: '10px 15px',
-                            fontSize: '14px',
-                            cursor: 'pointer',
-                            background: '#0070f3',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: '5px'
-                        }}
-                    >
-                        QRを生成して接続
-                    </button>
-                )}
+                    {!token && (
+                        <button
+                            onClick={generateQR}
+                            className="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2.5 px-4 rounded-xl shadow-md transition-all active:scale-95"
+                        >
+                            QRを生成して接続
+                        </button>
+                    )}
 
-                <div ref={qrRef} style={{ marginTop: '10px' }}></div>
+                    <div ref={qrRef} className="mt-2 flex justify-center empty:hidden" />
+                </div>
             </div>
 
+            {/* Main Canvas */}
             <canvas
                 ref={canvasRef}
-                width={window.innerWidth}
-                height={window.innerHeight}
-                style={{
-                    display: 'block',
-                    width: '100%',
-                    height: '100%',
-                    touchAction: 'none'
-                }}
+                width={typeof window !== 'undefined' ? window.innerWidth : 1920}
+                height={typeof window !== 'undefined' ? window.innerHeight : 1080}
+                className="block w-full h-full touch-none cursor-crosshair"
             />
         </div>
+    );
+}
+
+export default function PCClient() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen bg-slate-50 text-slate-400">
+                Loading PC Client...
+            </div>
+        }>
+            <PCClientContent />
+        </Suspense>
     );
 }

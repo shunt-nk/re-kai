@@ -1,11 +1,11 @@
 'use client';
 
-import React, { useEffect, useRef, useState } from 'react';
-import Toolbar from './ui/Toolbar'; // パスが合っているか確認してください
+import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Pusher from 'pusher-js';
 import { useSearchParams } from 'next/navigation';
+import { Pencil, Eraser, Settings, RotateCcw, RotateCw } from 'lucide-react';
 
-// 型定義
+// === Interfaces ===
 interface Stroke {
     type: string;
     mode: string;
@@ -14,14 +14,13 @@ interface Stroke {
     points: { x: number; y: number }[];
 }
 
-// Pusherのチャンネル型（簡易定義）
 interface PusherChannel {
     trigger: (eventName: string, data: any) => void;
     bind: (eventName: string, callback: any) => void;
     unbind_all: () => void;
 }
 
-export default function TabletClient() {
+function TabletClientContent() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const channelRef = useRef<PusherChannel | null>(null);
 
@@ -32,14 +31,13 @@ export default function TabletClient() {
     const [isConnected, setIsConnected] = useState(false);
     const [showOrientationModal, setShowOrientationModal] = useState(true);
 
-    // 描画用の状態管理
+    // Drawing State
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
     const tokenRef = useRef<string | null>(null);
-    const [lastSentEvent, setLastSentEvent] = useState<string>('');
 
-    // === ヘルパー関数: 再描画 ===
+    // === Helper: Redraw ===
     const redraw = () => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
@@ -63,7 +61,7 @@ export default function TabletClient() {
             }
         });
 
-        // 現在の設定に戻す
+        // Restore current settings
         ctx.globalCompositeOperation = 'source-over';
         ctx.strokeStyle = color;
         ctx.lineWidth = size;
@@ -75,8 +73,6 @@ export default function TabletClient() {
         const stroke = historyRef.current.pop();
         if (stroke) redoStackRef.current.push(stroke);
         redraw();
-
-        // PCに通知
         channelRef.current?.trigger('client-undo', {});
     };
 
@@ -85,25 +81,17 @@ export default function TabletClient() {
         const stroke = redoStackRef.current.pop();
         if (stroke) historyRef.current.push(stroke);
         redraw();
-
-        // PCに通知
         channelRef.current?.trigger('client-redo', {});
     };
 
-    // === 初期化 (Pusher接続) ===
-    const searchParams = useSearchParams(); // Hook call moved to top level
+    // === Initialization (Pusher) ===
+    const searchParams = useSearchParams();
 
     useEffect(() => {
-        // 1. URLからトークンを取得
         const token = searchParams.get('token');
         tokenRef.current = token;
 
-        if (!token) {
-            // トークンがない場合
-        } else {
-            // Only proceed with pusher if token exists
-
-            // 2. Pusherのセットアップ
+        if (token) {
             const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
             const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
@@ -114,45 +102,34 @@ export default function TabletClient() {
 
             const pusher = new Pusher(pusherKey, {
                 cluster: pusherCluster,
-                authEndpoint: '/api/pusher', // 自作した認証API
+                authEndpoint: '/api/pusher',
             });
 
-            // 3. チャンネルに参加 (private-session-トークン)
             const channelName = `private-session-${token}`;
             const channel = pusher.subscribe(channelName);
-
-            // 型キャスト (TSエラー回避)
             channelRef.current = channel as unknown as PusherChannel;
 
-            // 4. 接続成功時の処理
             channel.bind('pusher:subscription_succeeded', () => {
                 console.log('Connected to Pusher!');
                 setIsConnected(true);
-                setLastSentEvent('Subscribed');
-
-                // PCに「準備完了」を伝える
                 channel.trigger('client-tablet-ready', { device: 'tablet' });
-
-                // 画面サイズを送ってPC側のCanvasサイズを合わせる（任意）
-                channel.trigger('client-resize', {
-                    width: window.innerWidth,
-                    height: window.innerHeight
-                });
+                if (typeof window !== 'undefined') {
+                    channel.trigger('client-resize', {
+                        width: window.innerWidth,
+                        height: window.innerHeight
+                    });
+                }
             });
 
             channel.bind('pusher:subscription_error', (status: any) => {
                 console.error('Pusher Subscription Error', status);
-                setLastSentEvent(`Sub Error: ${JSON.stringify(status)}`);
             });
 
-            // 5. リサイズ処理
             const handleResize = () => {
                 if (canvasRef.current) {
                     canvasRef.current.width = window.innerWidth;
                     canvasRef.current.height = window.innerHeight;
                     redraw();
-
-                    // PCにも通知
                     channelRef.current?.trigger('client-resize', {
                         width: window.innerWidth,
                         height: window.innerHeight
@@ -161,9 +138,9 @@ export default function TabletClient() {
             };
 
             window.addEventListener('resize', handleResize);
-            handleResize(); // 初回実行
+            handleResize();
 
-            // タッチスクロール防止
+            // Prevent touch scrolling
             const canvas = canvasRef.current;
             const preventDefault = (e: Event) => e.preventDefault();
             if (canvas) {
@@ -171,7 +148,6 @@ export default function TabletClient() {
                 canvas.addEventListener('touchmove', preventDefault, { passive: false });
             }
 
-            // クリーンアップ
             return () => {
                 window.removeEventListener('resize', handleResize);
                 if (canvas) {
@@ -182,16 +158,14 @@ export default function TabletClient() {
                 pusher.disconnect();
             };
         }
-    }, [searchParams]); // Add searchParams to dependency array
+    }, [searchParams]);
 
-    // === 描画イベントハンドラ ===
-
+    // === Drawing Event Handlers ===
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
 
-        // 自分の画面に描く
         currentStrokeRef.current = {
             type: 'stroke',
             mode,
@@ -204,10 +178,9 @@ export default function TabletClient() {
         ctx.globalCompositeOperation = mode === 'erase' ? 'destination-out' : 'source-over';
         ctx.strokeStyle = color;
         ctx.lineWidth = size;
-        ctx.lineCap = 'round'; // 角を丸くする
+        ctx.lineCap = 'round';
         ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
 
-        // PCに送信 (正規化して送る: 0.0〜1.0)
         channelRef.current?.trigger('client-stroke-start', {
             mode,
             color,
@@ -215,21 +188,18 @@ export default function TabletClient() {
             x: e.nativeEvent.offsetX / canvas.width,
             y: e.nativeEvent.offsetY / canvas.height
         });
-        setLastSentEvent('Start');
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-        if (e.buttons !== 1) return; // 押されてなければ無視
+        if (e.buttons !== 1) return;
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
 
-        // 自分の画面に描く
         currentStrokeRef.current.points.push({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
         ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
         ctx.stroke();
 
-        // PCに送信
         channelRef.current?.trigger('client-stroke-move', {
             x: e.nativeEvent.offsetX / canvas.width,
             y: e.nativeEvent.offsetY / canvas.height
@@ -237,117 +207,142 @@ export default function TabletClient() {
     };
 
     const handlePointerUp = () => {
-        // 履歴に保存
         historyRef.current.push({ ...currentStrokeRef.current });
         redoStackRef.current = [];
-
-        // PCに送信
         channelRef.current?.trigger('client-stroke-end', {});
-        setLastSentEvent('End');
     };
 
     return (
-        <div className="fixed inset-0 bg-white touch-none overflow-hidden">
-            {/* Header / Logo Area */}
-            <div className="absolute top-0 left-0 right-0 p-3 z-50 flex items-center justify-between pointer-events-none">
-                <img src="/logo.png" alt="RE:KAI" className="h-5 object-contain pointer-events-auto" />
+        <div className="fixed inset-0 bg-[#F5F5F5] select-none">
+            {/* Header */}
+            <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10">
+                {/* Logo */}
+                <div className="flex items-center">
+                    <span className="text-2xl font-bold text-slate-900 tracking-tight font-sans">RE</span>
+                    <span className="text-2xl font-bold text-cyan-500 mx-[2px]">:</span>
+                    <span className="text-2xl font-bold text-slate-900 tracking-tight font-sans">KAI</span>
+                </div>
 
-                <div className="flex items-center gap-2 pointer-events-auto">
-                    {/* Connection Status Indicator */}
-                    <div className={`flex items-center gap-2 text-[10px] font-bold transition-all duration-300 ${isConnected ? 'text-green-600 bg-green-50 border border-green-200' : 'text-slate-400 bg-slate-50 border border-slate-200'} rounded-full px-3 py-1 shadow-sm`}>
-                        <div className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
-                        {isConnected ? 'Connected' : (tokenRef.current ? 'Connecting...' : 'No Token')}
-                    </div>
-
-                    {/* Resend Signal Button (Only if not connected or to force sync) */}
+                {/* Undo/Redo Buttons */}
+                <div className="flex items-center gap-3">
                     <button
-                        onClick={() => {
-                            if (channelRef.current) {
-                                channelRef.current.trigger('client-tablet-ready', { device: 'tablet', force: true });
-                                setLastSentEvent('Resent Ready Signal');
-                            }
-                        }}
-                        className="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm active:scale-95 transition-transform hover:bg-blue-600"
+                        onClick={performUndo}
+                        className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center active:scale-95 transition-transform text-slate-600"
+                        aria-label="Undo"
                     >
-                        再接続信号を送る
+                        <RotateCcw size={20} />
+                    </button>
+                    <button
+                        onClick={performRedo}
+                        className="w-10 h-10 bg-white rounded-lg shadow-sm border border-slate-200 flex items-center justify-center active:scale-95 transition-transform text-slate-600"
+                        aria-label="Redo"
+                    >
+                        <RotateCw size={20} />
                     </button>
                 </div>
             </div>
 
-            <div className="absolute inset-x-4 bottom-4 top-20 border-2 border-slate-800 rounded-lg overflow-hidden bg-white shadow-sm">
-                <canvas
-                    ref={canvasRef}
-                    onPointerDown={handlePointerDown}
-                    onPointerMove={handlePointerMove}
-                    onPointerUp={handlePointerUp}
-                    // ポインターが外れた時もUp扱いにする
-                    onPointerLeave={handlePointerUp}
-                    className="block w-full h-full touch-none"
-                />
-            </div>
+            {/* Main Layout: Toolbar & Canvas */}
+            <div className="absolute top-16 left-0 right-0 bottom-0 flex flex-col p-4 pt-0 gap-4">
 
-            <Toolbar
-                mode={mode}
-                setMode={setMode}
-                color={color}
-                setColor={setColor}
-                size={size}
-                setSize={setSize}
-                onUndo={performUndo}
-                onRedo={performRedo}
-            />
+                {/* Toolbar Area */}
+                <div className="flex items-center gap-4 px-2">
+                    {/* Tools */}
+                    <div className="flex items-center gap-2">
+                        <button
+                            onClick={() => setMode('draw')}
+                            className={`w-10 h-10 rounded-md flex items-center justify-center transition-colors ${mode === 'draw' ? 'bg-slate-700 text-white' : 'bg-white text-slate-700 shadow-sm border border-slate-200'
+                                }`}
+                        >
+                            <Pencil size={20} fill={mode === 'draw' ? "currentColor" : "none"} />
+                        </button>
+                        <button
+                            onClick={() => setMode('erase')}
+                            className={`w-10 h-10 rounded-md flex items-center justify-center transition-colors ${mode === 'erase' ? 'bg-slate-700 text-white' : 'bg-white text-slate-700 shadow-sm border border-slate-200'
+                                }`}
+                        >
+                            <Eraser size={20} fill={mode === 'erase' ? "currentColor" : "none"} />
+                        </button>
+                        <button className="w-10 h-10 rounded-full flex items-center justify-center text-black">
+                            <Settings size={24} strokeWidth={2.5} />
+                        </button>
+                    </div>
+
+                    {/* Capsule Indicator (Color & Size) */}
+                    <div className="flex items-center bg-slate-500/80 rounded-full p-1 pl-2 gap-3 h-10 w-48 shadow-inner">
+                        {/* Color Preview */}
+                        <div
+                            className="w-6 h-6 rounded-full border-2 border-white shadow-sm shrink-0"
+                            style={{ backgroundColor: color }}
+                        />
+                        {/* Size Preview */}
+                        <div className="flex-1 flex items-center h-full pr-3 relative">
+                            {/* Background Track (Visual only, distinct from actual slider) */}
+                            <div className="w-full h-1.5 bg-slate-600 rounded-full overflow-hidden">
+                                <div className="h-full bg-slate-400 w-full opacity-30"></div>
+                            </div>
+
+                            {/* Knob (Visual representation of size) */}
+                            <div
+                                className="absolute w-5 h-5 bg-white rounded-full shadow-md left-0"
+                                style={{
+                                    left: `${Math.min(100, (size / 20) * 100)}%`, // Simplified mapping
+                                    transform: 'translateX(-50%)'
+                                }}
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* Canvas Container */}
+                <div className="flex-1 relative rounded-lg border-2 border-slate-900 bg-white overflow-hidden shadow-sm">
+                    <canvas
+                        ref={canvasRef}
+                        onPointerDown={handlePointerDown}
+                        onPointerMove={handlePointerMove}
+                        onPointerUp={handlePointerUp}
+                        onPointerLeave={handlePointerUp}
+                        className="block w-full h-full touch-none"
+                    />
+                </div>
+            </div>
 
             {/* Orientation Modal */}
             {showOrientationModal && (
                 <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
-                    <div className="bg-white rounded-3xl p-10 max-w-sm w-full shadow-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
+                    <div className="bg-white rounded-3xl p-8 max-w-sm w-full shadow-2xl flex flex-col items-center animate-in fade-in zoom-in duration-300" onClick={e => e.stopPropagation()}>
 
                         <div className="text-center mb-10">
-                            <p className="text-slate-700 leading-relaxed font-bold text-sm tracking-wide">
+                            <p className="text-slate-800 font-bold text-sm tracking-wide leading-relaxed">
                                 縦・横どちらでも利用することができます。<br />
                                 お好きなスタイルでご利用ください。
                             </p>
                         </div>
 
                         {/* Animation Container */}
-                        <div className="relative w-32 h-32 flex items-center justify-center mb-8">
+                        <div className="relative w-full h-40 flex items-center justify-center mb-8">
                             <style jsx>{`
                                 @keyframes rotate-device {
-                                    0% { transform: rotate(0deg); opacity: 1; }
-                                    30% { transform: rotate(0deg); opacity: 1; }
-                                    50% { transform: rotate(90deg); opacity: 1; }
-                                    80% { transform: rotate(90deg); opacity: 1; }
-                                    100% { transform: rotate(0deg); opacity: 1; }
+                                    0% { transform: rotate(0deg); }
+                                    25% { transform: rotate(0deg); }
+                                    50% { transform: rotate(90deg); }
+                                    75% { transform: rotate(90deg); }
+                                    100% { transform: rotate(0deg); }
                                 }
                                 .device-icon {
-                                    animation: rotate-device 4s infinite ease-in-out;
+                                    animation: rotate-device 4s ease-in-out infinite;
                                 }
                             `}</style>
-
-                            {/* Device Icon */}
-                            <div className="device-icon w-16 h-24 border-[3px] border-slate-400 rounded-lg flex flex-col items-center justify-between py-2 relative bg-white">
-                                {/* Top Speaker/Cam */}
+                            <div className="device-icon w-20 h-28 border-4 border-slate-800 rounded-xl bg-white relative shadow-xl flex flex-col items-center justify-between py-3">
                                 <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
-                                {/* Screen Area */}
-                                <div className="w-12 h-16 bg-slate-100 rounded"></div>
-                                {/* Home Button */}
-                                <div className="w-2 h-2 border border-slate-400 rounded-full"></div>
-
-                                {/* Rotate Arrow (Visual Hint) */}
-                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 text-slate-400">
-                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform rotate-90">
-                                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
-                                        <path d="M3 3v5h5"></path>
-                                    </svg>
-                                </div>
+                                <div className="w-16 h-20 bg-slate-100/50 rounded"></div>
+                                <div className="w-2 h-2 rounded-full border border-slate-300"></div>
                             </div>
                         </div>
 
-                        {/* Close / OK Button */}
-                        {/* Note: User's image didn't clearly show a button, but UX requires one. styling to be subtle or standard. */}
                         <button
                             onClick={() => setShowOrientationModal(false)}
-                            className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-700 transition-all active:scale-95 text-sm"
+                            className="w-full py-3.5 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-800 transition-all active:scale-95 text-[15px]"
                         >
                             始める
                         </button>
@@ -355,5 +350,17 @@ export default function TabletClient() {
                 </div>
             )}
         </div>
+    );
+}
+
+export default function TabletClient() {
+    return (
+        <Suspense fallback={
+            <div className="flex items-center justify-center min-h-screen bg-slate-100 text-slate-500 font-bold">
+                Loading...
+            </div>
+        }>
+            <TabletClientContent />
+        </Suspense>
     );
 }
