@@ -34,7 +34,6 @@ function TabletPageContent() {
     const [isConnected, setIsConnected] = useState(false);
     const [showOrientationModal, setShowOrientationModal] = useState(true);
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
-    const [showSettings, setShowSettings] = useState(false); // Toggle for settings if needed, though design shows it inline
 
     // Drawing Logic
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
@@ -239,15 +238,15 @@ function TabletPageContent() {
     };
 
     return (
-        <div className="h-screen w-screen overflow-hidden bg-slate-100 flex flex-col font-sans select-none touch-none text-slate-900">
+        <div className="h-[100dvh] w-screen overflow-hidden bg-[#F5F5F5] flex flex-col font-sans select-none touch-none text-slate-900 overscroll-none fixed inset-0">
 
             {/* Header */}
-            <header className="flex-none h-16 bg-slate-50 flex items-center justify-between px-6 z-20 relative border-b border-slate-200">
+            <header className="flex-none h-16 bg-[#F5F5F5] flex items-center justify-between px-6 z-20 relative">
                 {/* Logo */}
                 <div className="flex items-center text-3xl font-extrabold tracking-tight">
-                    <span className="text-[#1e293b]">RE</span>
-                    <span className="text-[#06b6d4] mx-0.5">:</span>
-                    <span className="text-[#1e293b]">KAI</span>
+                    <span className="text-[#1A2B4C]">RE</span> {/* Dark Navy */}
+                    <span className="text-[#00B4D8] mx-0.5">:</span> {/* Cyan */}
+                    <span className="text-[#1A2B4C]">KAI</span> {/* Dark Navy */}
                 </div>
 
                 {/* Right Tools: Undo/Redo & Status */}
@@ -261,88 +260,91 @@ function TabletPageContent() {
                     <div className="flex items-center gap-2">
                         <button
                             onClick={performUndo}
-                            className="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 active:scale-95 transition-all"
+                            className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all"
                             aria-label="Undo"
                         >
-                            <Undo size={24} strokeWidth={2} />
+                            <Undo size={20} strokeWidth={2} />
                         </button>
                         <button
                             onClick={performRedo}
-                            className="w-12 h-12 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 active:scale-95 transition-all"
+                            className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 hover:bg-gray-50 active:scale-95 transition-all"
                             aria-label="Redo"
                         >
-                            <Redo size={24} strokeWidth={2} />
+                            <Redo size={20} strokeWidth={2} />
                         </button>
                     </div>
                 </div>
             </header>
 
-            {/* Main Workspace */}
-            <main className="flex-1 relative flex bg-slate-50">
+            {/* Tools Area (Between Header and Canvas) */}
+            <div className="flex-none px-6 pb-2 flex items-center justify-between z-10">
+                {/* Left Tools: Pencil, Eraser, Settings */}
+                <div className="flex items-center gap-2">
+                    <button
+                        onClick={() => setMode('draw')}
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${mode === 'draw' ? 'bg-[#333] text-white shadow-md' : 'bg-white text-gray-500 shadow-sm border border-gray-200'}`}
+                    >
+                        <Pencil size={20} />
+                    </button>
+                    <button
+                        onClick={() => setMode('erase')}
+                        className={`w-10 h-10 rounded-lg flex items-center justify-center transition-all ${mode === 'erase' ? 'bg-[#333] text-white shadow-md' : 'bg-white text-gray-500 shadow-sm border border-gray-200'}`}
+                    >
+                        <Eraser size={20} />
+                    </button>
+                    <button
+                        onClick={() => {/* Settings logic placeholder */ }}
+                        className="w-10 h-10 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center justify-center text-gray-900 hover:bg-gray-50"
+                    >
+                        <Settings size={22} strokeWidth={2} />
+                    </button>
+                </div>
 
-                {/* Toolbar Area (Top floating or Fixed) - As per design B, it looks like a toolbar strip */}
-                <div className="absolute top-4 left-4 z-10 flex items-center gap-4">
-                    {/* Tools */}
-                    <div className="flex items-center gap-3">
-                        <button
-                            onClick={() => setMode('draw')}
-                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all ${mode === 'draw' ? 'bg-[#333] text-white shadow-lg scale-105' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}
-                        >
-                            <Pencil size={24} />
-                        </button>
-                        <button
-                            onClick={() => setMode('erase')}
-                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all ${mode === 'erase' ? 'bg-[#333] text-white shadow-lg scale-105' : 'bg-white text-slate-500 shadow-sm border border-slate-200'}`}
-                        >
-                            <Eraser size={24} />
-                        </button>
-                        <button
-                            onClick={() => {/* Settings logic placeholder */ }}
-                            className="w-14 h-14 bg-white rounded-xl shadow-sm border border-slate-200 flex items-center justify-center text-slate-900 font-bold text-xl hover:bg-slate-50"
-                        >
-                            <Settings size={28} strokeWidth={2.5} />
-                        </button>
-                    </div>
+                {/* Center: Brush Settings Capsule */}
+                <div className="flex items-center h-10 bg-[#555] rounded-full px-1 pl-1 pr-4 shadow-md gap-3">
+                    {/* Color Circle */}
+                    <button
+                        onClick={() => colorInputRef.current?.click()}
+                        className="w-8 h-8 rounded-full border-2 border-white relative shadow-sm"
+                        style={{ backgroundColor: color }}
+                    >
+                        <input
+                            ref={colorInputRef}
+                            type="color"
+                            value={color}
+                            onChange={e => setColor(e.target.value)}
+                            className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
+                        />
+                    </button>
 
-                    {/* Brush Settings Capsule */}
-                    <div className="flex items-center h-14 bg-[#555] rounded-full px-2 pl-2 pr-6 shadow-md gap-4">
-                        {/* Color Circle */}
-                        <button
-                            onClick={() => colorInputRef.current?.click()}
-                            className="w-10 h-10 rounded-full border-2 border-white relative shadow-sm"
-                            style={{ backgroundColor: color }}
-                        >
-                            <input
-                                ref={colorInputRef}
-                                type="color"
-                                value={color}
-                                onChange={e => setColor(e.target.value)}
-                                className="absolute inset-0 opacity-0 cursor-pointer w-full h-full"
-                            />
-                        </button>
-
-                        {/* Size Bar */}
-                        <div className="w-32 h-2.5 bg-gray-400 rounded-full relative">
-                            <div
-                                className="absolute top-0 left-0 h-full bg-blue-400 rounded-full"
-                                style={{ width: `${(size / 30) * 100}%` }}
-                            />
-                            <input
-                                type="range"
-                                min="1"
-                                max="30"
-                                value={size}
-                                onChange={e => setSize(Number(e.target.value))}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                            />
-                        </div>
+                    {/* Size Bar */}
+                    <div className="w-40 h-2 bg-gray-400 rounded-full relative overflow-hidden">
+                        <div
+                            className="absolute top-0 left-0 h-full bg-[#60A5FA] rounded-full"
+                            style={{ width: `${(size / 30) * 100}%` }}
+                        />
+                        <input
+                            type="range"
+                            min="1"
+                            max="30"
+                            value={size}
+                            onChange={e => setSize(Number(e.target.value))}
+                            className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                        />
                     </div>
                 </div>
 
+                {/* Spacer to balance layout if needed, or just empty */}
+                <div className="w-20 hidden md:block"></div>
+            </div>
+
+            {/* Main Workspace (Canvas) */}
+            <main className="flex-1 relative px-6 pb-6 w-full h-full overflow-hidden">
                 {/* Canvas Container */}
                 <div
                     ref={containerRef}
-                    className="absolute inset-0 m-4 mt-24 border-[3px] border-black bg-white shadow-sm overflow-hidden"
+                    className="w-full h-full border-[2px] border-black bg-white shadow-sm overflow-hidden relative user-select-none"
+                    style={{ touchAction: 'none' }}
                 >
                     <canvas
                         ref={canvasRef}
@@ -359,23 +361,23 @@ function TabletPageContent() {
             {showOrientationModal && (
                 <div
                     onClick={handleModalClick}
-                    className="fixed inset-0 z-[100] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-300 cursor-pointer"
+                    className="fixed inset-0 z-[9999] bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-8 animate-in fade-in duration-300 cursor-pointer w-screen h-screen touch-none"
+                    style={{ position: 'fixed', top: 0, left: 0, right: 0, bottom: 0 }}
                 >
-                    <div className="bg-white rounded-[2rem] p-12 max-w-lg w-full shadow-2xl flex flex-col items-center animate-in zoom-in-95 duration-300 text-center relative overflow-hidden">
+                    <div className="bg-white rounded-[2rem] p-12 max-w-lg w-full shadow-2xl flex flex-col items-center animate-in zoom-in-95 duration-300 text-center relative overflow-hidden pointer-events-auto">
 
                         {/* Icon: Tablet Rotating */}
                         <div className="mb-8 relative w-48 h-32 flex items-center justify-center">
-                            <div className="w-24 h-32 border-4 border-slate-800 rounded-2xl relative bg-white flex items-center justify-center animate-[spin_4s_ease-in-out_infinite]">
-                                <div className="text-slate-300 text-4xl">A</div>
+                            <div className="w-24 h-16 border-4 border-slate-800 rounded-xl relative bg-white flex items-center justify-center animate-[spin_4s_ease-in-out_infinite]">
+                                <div className="w-1 h-1 rounded-full bg-slate-300 mx-1"></div>
                             </div>
                             {/* Arrows */}
                             <svg className="absolute w-full h-full text-slate-400 pointer-events-none" viewBox="0 0 200 150">
-                                <path d="M 40,75 A 60,60 0 0 1 160,75" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="8 8" className="animate-pulse" />
-                                <path d="M 160,75 A 60,60 0 0 1 40,75" fill="none" stroke="currentColor" strokeWidth="4" strokeDasharray="8 8" className="animate-pulse" />
+                                <path d="M 60,75 A 50,50 0 0 1 140,75" fill="none" stroke="currentColor" strokeWidth="3" strokeDasharray="6 6" className="animate-pulse" />
                             </svg>
                         </div>
 
-                        <h2 className="text-xl font-bold text-slate-700 leading-relaxed">
+                        <h2 className="text-xl font-bold text-slate-700 leading-relaxed font-gothic">
                             縦・横どちらでも利用することができます。<br />
                             お好きなスタイルでご利用ください。
                         </h2>
@@ -389,7 +391,7 @@ function TabletPageContent() {
 
             {/* Error Overlay */}
             {errorMsg && (
-                <div className="fixed inset-0 z-[110] bg-black/80 flex items-center justify-center p-8 backdrop-blur-sm">
+                <div className="fixed inset-0 z-[10000] bg-black/80 flex items-center justify-center p-8 backdrop-blur-sm w-screen h-screen">
                     <div className="bg-white p-8 rounded-2xl max-w-md w-full text-center shadow-2xl">
                         <h3 className="text-lg font-bold text-red-600 mb-2">エラー</h3>
                         <p className="text-slate-600 mb-6">{errorMsg}</p>
