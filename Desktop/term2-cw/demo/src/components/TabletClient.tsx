@@ -29,11 +29,11 @@ function TabletClientContent() {
 
     // --- State ---
     const [mode, setMode] = useState<'draw' | 'erase'>('draw');
-    const [color, setColor] = useState('#3b82f6'); // Default Blue
+    const [color, setColor] = useState('#06B6D4'); // Default Cyan/Blue-ish
     const [size, setSize] = useState(5);
     const [isConnected, setIsConnected] = useState(false);
     const [showOrientationModal, setShowOrientationModal] = useState(true);
-    const [showColorPicker, setShowColorPicker] = useState(false);
+    const [showSettings, setShowSettings] = useState(false); // Toggle for settings if needed, utilizing the layout.
 
     // --- Logic State ---
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
@@ -42,7 +42,7 @@ function TabletClientContent() {
     const tokenRef = useRef<string | null>(null);
 
     // --- Colors Preset ---
-    const colors = ['#000000', '#ef4444', '#3b82f6', '#22c55e', '#eab308', '#a855f7'];
+    const colors = ['#000000', '#FF0000', '#06B6D4', '#00FF00', '#FFFF00', '#800080'];
 
     // === ロジック: 再描画 ===
     const redraw = () => {
@@ -117,21 +117,33 @@ function TabletClientContent() {
             console.log('Pusher Connected');
             setIsConnected(true);
             channel.trigger('client-tablet-ready', { device: 'tablet' });
-            handleResize();
-        });
-
-        const handleResize = () => {
-            if (canvasRef.current && containerRef.current) {
+            // Initial resize logic
+            if (containerRef.current && canvasRef.current) {
                 const { clientWidth, clientHeight } = containerRef.current;
                 canvasRef.current.width = clientWidth;
                 canvasRef.current.height = clientHeight;
                 redraw();
-                channelRef.current?.trigger('client-resize', { width: clientWidth, height: clientHeight });
             }
+        });
+
+        const handleResize = () => {
+            // Using a timeout to prevent flickering or calculating before layout settles
+            setTimeout(() => {
+                if (canvasRef.current && containerRef.current) {
+                    const { clientWidth, clientHeight } = containerRef.current;
+                    // Only resize if dimensions actually changed to avoid clearing canvas unnecessarily
+                    if (canvasRef.current.width !== clientWidth || canvasRef.current.height !== clientHeight) {
+                        // Save current content? Redraw handles it.
+                        canvasRef.current.width = clientWidth;
+                        canvasRef.current.height = clientHeight;
+                        redraw();
+                        channelRef.current?.trigger('client-resize', { width: clientWidth, height: clientHeight });
+                    }
+                }
+            }, 100);
         };
 
         window.addEventListener('resize', handleResize);
-        setTimeout(handleResize, 100);
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -149,6 +161,9 @@ function TabletClientContent() {
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
 
+        // Ensure canvas has focus or capture pointer
+        canvas.setPointerCapture(e.pointerId);
+
         const { x, y } = getPoint(e);
         currentStrokeRef.current = { type: 'stroke', mode, color, size, points: [{ x, y }] };
 
@@ -159,12 +174,13 @@ function TabletClientContent() {
         ctx.lineCap = 'round';
         ctx.moveTo(x, y);
 
+        // Send relative coordinates
         channelRef.current?.trigger('client-stroke-start', { mode, color, size, x: x / canvas.width, y: y / canvas.height });
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
         e.preventDefault();
-        if (e.buttons !== 1) return;
+        if (e.buttons !== 1) return; // Only process if primary button is down
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
@@ -179,6 +195,9 @@ function TabletClientContent() {
 
     const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
         e.preventDefault();
+        const canvas = canvasRef.current;
+        if (canvas) canvas.releasePointerCapture(e.pointerId);
+
         historyRef.current.push({ ...currentStrokeRef.current });
         redoStackRef.current = [];
         channelRef.current?.trigger('client-stroke-end', {});
@@ -186,100 +205,97 @@ function TabletClientContent() {
 
     // === UI実装 (Figmaデザイン再現) ===
     return (
-        // 全画面コンテナ (背景: 薄いグレー #F5F5F5)
-        <div className="fixed inset-0 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none">
+        <div className="fixed inset-0 bg-[#F9FAFB] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-screen">
 
-            {/* --- ヘッダー --- */}
-            <header className="h-16 px-6 flex items-center justify-between shrink-0 bg-transparent relative z-20">
+            {/* --- ヘッダー (上部) --- */}
+            <header className="h-16 px-6 py-2 flex items-center justify-between shrink-0 bg-transparent relative z-20">
                 {/* ロゴ RE:KAI */}
-                <div className="flex items-center select-none pt-2">
+                <div className="flex items-center select-none">
                     <span className="text-3xl font-bold text-[#1E293B] tracking-tight">RE</span>
                     <span className="text-3xl font-bold text-[#06B6D4] mx-0.5">:</span>
                     <span className="text-3xl font-bold text-[#1E293B] tracking-tight">KAI</span>
                 </div>
 
-                {/* 接続ステータス (隠し要素的だが表示) */}
-                <div className={`text-[10px] font-bold px-2 py-0.5 rounded ${isConnected ? 'bg-green-100 text-green-700' : 'bg-gray-200 text-gray-500'}`}>
-                    {isConnected ? 'ONLINE' : 'OFFLINE'}
-                </div>
-
-                {/* Undo / Redo (白背景、角丸、シャドウ) */}
+                {/* Undo / Redo */}
                 <div className="flex gap-3">
-                    <button onClick={performUndo} className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform">
+                    <button onClick={performUndo} className="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50">
                         <RotateCcw size={20} />
                     </button>
-                    <button onClick={performRedo} className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform">
+                    <button onClick={performRedo} className="w-12 h-12 bg-white rounded-lg shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50">
                         <RotateCw size={20} />
                     </button>
                 </div>
             </header>
 
-            {/* --- ツールバーエリア (左上の浮遊ツール) --- */}
-            <div className="absolute top-20 left-6 z-20 flex gap-2">
+            {/* --- ツールバー (ヘッダー直下) --- */}
+            <div className="px-6 pb-2 flex items-center gap-4 z-20">
                 {/* ツール切り替え */}
                 <div className="flex gap-2">
                     <button
                         onClick={() => setMode('draw')}
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all ${mode === 'draw' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200'}`}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all shadow-sm ${mode === 'draw' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200'}`}
                     >
                         <Pencil size={20} />
                     </button>
                     <button
                         onClick={() => setMode('erase')}
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all ${mode === 'erase' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200'}`}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all shadow-sm ${mode === 'erase' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200'}`}
                     >
                         <Eraser size={20} />
                     </button>
-                    <button className="w-12 h-12 rounded-xl flex items-center justify-center bg-white text-gray-600 border border-gray-200">
+                    <button
+                        onClick={() => setShowSettings(!showSettings)}
+                        className="w-12 h-12 rounded-xl flex items-center justify-center bg-white text-gray-600 border border-gray-200 shadow-sm"
+                    >
                         <Settings size={20} />
                     </button>
                 </div>
 
-                {/* 色・太さスライダー (独自カプセルUI) */}
-                <div className="flex items-center bg-[#555555] rounded-full p-1 pl-1 gap-3 h-12 w-64 shadow-md ml-2 relative">
-                    {/* 色プレビュー (左端の丸) */}
-                    <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
-                        className="w-10 h-10 rounded-full border-2 border-white relative z-10"
-                        style={{ backgroundColor: color }}
-                    />
-
-                    {/* 太さバー (右側のトラック) */}
-                    <div className="flex-1 h-full flex items-center pr-4 relative">
-                        {/* 背景の細い線 */}
-                        <div className="w-full h-1 bg-gray-400 rounded-full" />
-                        {/* 白いツマミ (位置は size に依存) */}
-                        <div
-                            className="absolute w-6 h-6 bg-white rounded-full shadow-sm cursor-pointer"
-                            style={{ left: `${(size / 30) * 80}%` }} // 簡易的な位置計算
+                {/* ブラシ設定UI (独自デザイン: カプセル型) */}
+                <div className="flex items-center border border-gray-200 bg-white rounded-full p-1 pl-1 gap-4 h-12 w-80 shadow-sm relative">
+                    {/* 現在の色 (左端) */}
+                    <div className="relative group">
+                        <button
+                            className="w-10 h-10 rounded-full border-2 border-white shadow-sm relative z-10"
+                            style={{ backgroundColor: color }}
                         />
-                        {/* 実際のinput (透明で上に重ねる) */}
+                        {/* 簡易カラーピッカー (ホバー/タップで表示) */}
+                        <div className="absolute top-12 left-0 bg-white p-2 rounded-xl shadow-xl border border-gray-100 flex gap-2 invisible group-focus-within:visible group-hover:visible z-30 opacity-0 group-hover:opacity-100 transition-all">
+                            {colors.map(c => (
+                                <button
+                                    key={c}
+                                    onClick={() => setColor(c)}
+                                    className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
+                                    style={{ backgroundColor: c }}
+                                />
+                            ))}
+                        </div>
+                    </div>
+
+                    {/* サイズスライダー (カスタムUI) */}
+                    <div className="flex-1 h-full flex items-center pr-4 relative">
+                        {/* トラック (濃いグレーの横長バー) */}
+                        <div className="w-full h-1.5 bg-[#333333] rounded-full relative">
+                            {/* ツマミ (白い円) - Inputの値に基づいて位置調整 */}
+                            <div
+                                className="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow border border-gray-200 pointer-events-none"
+                                style={{ left: `calc(${((size - 1) / 29) * 100}% - 10px)` }}
+                            />
+                        </div>
+
+                        {/* 透明な Range Input */}
                         <input
                             type="range" min="1" max="30" value={size}
                             onChange={(e) => setSize(Number(e.target.value))}
                             className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
                         />
                     </div>
-
-                    {/* カラーパレット (ポップオーバー) */}
-                    {showColorPicker && (
-                        <div className="absolute top-14 left-0 bg-white p-3 rounded-xl shadow-xl border border-gray-100 grid grid-cols-3 gap-2 z-30 animate-in fade-in zoom-in-95 duration-200">
-                            {colors.map(c => (
-                                <button
-                                    key={c}
-                                    onClick={() => { setColor(c); setShowColorPicker(false); }}
-                                    className="w-8 h-8 rounded-full border border-gray-200 hover:scale-110 transition-transform"
-                                    style={{ backgroundColor: c }}
-                                />
-                            ))}
-                        </div>
-                    )}
                 </div>
             </div>
 
-            {/* --- キャンバスエリア --- */}
-            <div className="flex-1 p-6 pt-24 pb-6 flex overflow-hidden">
-                <div ref={containerRef} className="w-full h-full bg-white border-2 border-black relative touch-none shadow-sm">
+            {/* --- キャンバスエリア (残りエリア最大化) --- */}
+            <div className="flex-1 w-full h-full p-4 pb-4 pt-2 overflow-hidden flex flex-col">
+                <div ref={containerRef} className="flex-1 w-full bg-white border-2 border-black relative touch-none shadow-sm rounded-sm">
                     <canvas
                         ref={canvasRef}
                         onPointerDown={handlePointerDown}
@@ -291,55 +307,51 @@ function TabletClientContent() {
                 </div>
             </div>
 
-            {/* --- 初回モーダル (画像tablet_modal.pngの完全再現) --- */}
+            {/* --- 初回モーダル (tablet_modal.png 再現) --- */}
             {showOrientationModal && (
                 <div
-                    className="fixed inset-0 z-50 bg-black/40 backdrop-blur-[2px] flex items-center justify-center animate-in fade-in duration-300"
+                    className="fixed inset-0 z-50 bg-black/50 backdrop-blur-none flex items-center justify-center animate-in fade-in duration-300"
                     onClick={() => setShowOrientationModal(false)}
                 >
                     <div
-                        className="bg-white w-[500px] h-[400px] rounded-[30px] flex flex-col items-center justify-center p-10 shadow-2xl relative"
-                        onClick={(e) => e.stopPropagation()}
+                        className="bg-white w-[600px] h-[500px] rounded-[32px] flex flex-col items-center justify-center p-12 shadow-2xl relative"
+                        onClick={(e) => e.stopPropagation()} // モーダル内部クリックで閉じないようにするならここだが、仕様では「画面全体またはカード内をタップすると消える」
                     >
-                        {/* テキスト */}
-                        <div className="text-center space-y-4 mb-12">
-                            <p className="text-[#1E1E1E] font-medium text-sm tracking-widest">
-                                縦・横どちらでも利用することができます。
-                            </p>
-                            <p className="text-[#1E1E1E] font-medium text-sm tracking-widest">
-                                お好きなスタイルでご利用ください。
-                            </p>
+                        {/* タップイベントを親に伝播させるために、あえてstopPropagationしない、または親のonClickで閉じるのでOK */}
+                        <div className="absolute inset-0" onClick={() => setShowOrientationModal(false)} />
+
+                        {/* コン텐츠 (z-indexでクリック可能エリアの上に表示) */}
+                        <div className="relative z-10 flex flex-col items-center w-full h-full pointer-events-none">
+                            {/* テキスト */}
+                            <div className="text-center space-y-6 mb-16 mt-8">
+                                <p className="text-[#333333] font-medium text-lg tracking-widest">
+                                    縦・横どちらでも利用することができます。
+                                </p>
+                                <p className="text-[#333333] font-medium text-lg tracking-widest">
+                                    お好きなスタイルでご利用ください。
+                                </p>
+                            </div>
+
+                            {/* 図解 (SVG) */}
+                            <div className="relative w-64 h-40 flex items-center justify-center">
+                                {/* タブレット枠 */}
+                                <svg width="200" height="140" viewBox="0 0 200 140" fill="none" xmlns="http://www.w3.org/2000/svg" className="relative z-10">
+                                    <rect x="2" y="2" width="196" height="136" rx="12" fill="white" stroke="#E5E7EB" strokeWidth="4" />
+                                </svg>
+
+                                {/* 左上の回転矢印 */}
+                                <svg className="absolute -left-4 -top-6 w-16 h-16 text-[#666666]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round">
+                                    <path d="M 70 20 Q 20 20 20 80" />
+                                    <path d="M 40 60 L 20 80 L 0 60" />
+                                </svg>
+
+                                {/* 右下の回転矢印 */}
+                                <svg className="absolute -right-4 -bottom-6 w-16 h-16 text-[#666666]" viewBox="0 0 100 100" fill="none" stroke="currentColor" strokeWidth="4" strokeLinecap="round">
+                                    <path d="M 30 80 Q 80 80 80 20" />
+                                    <path d="M 60 40 L 80 20 L 100 40" />
+                                </svg>
+                            </div>
                         </div>
-
-                        {/* アイコン (SVGで手描き風矢印とタブレット枠を再現) */}
-                        <div className="relative w-48 h-32 flex items-center justify-center">
-                            {/* 回転アニメーション */}
-                            <style jsx>{`
-                                @keyframes rotate-device {
-                                    0%, 30% { transform: rotate(0deg); }
-                                    50%, 80% { transform: rotate(90deg); }
-                                    100% { transform: rotate(0deg); }
-                                }
-                                .device-anim { animation: rotate-device 4s ease-in-out infinite; }
-                            `}</style>
-
-                            {/* 左の矢印 */}
-                            <svg className="absolute left-0 top-0 w-12 h-12 text-[#666]" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                <path d="M40 10 Q 10 10 10 40" />
-                                <path d="M20 30 L 10 40 L 0 30" />
-                            </svg>
-
-                            {/* 中央のデバイス */}
-                            <div className="device-anim w-32 h-20 border-[4px] border-[#D4D4D4] rounded-xl bg-white relative z-10" />
-
-                            {/* 右の矢印 */}
-                            <svg className="absolute right-0 bottom-0 w-12 h-12 text-[#666]" viewBox="0 0 50 50" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round">
-                                <path d="M10 40 Q 40 40 40 10" />
-                                <path d="M30 20 L 40 10 L 50 20" />
-                            </svg>
-                        </div>
-
-                        {/* タップで閉じるための透明なレイヤー or 明示的なボタンはデザインにないがUXのためエリア全体クリックで閉じる */}
                     </div>
                 </div>
             )}
@@ -349,7 +361,7 @@ function TabletClientContent() {
 
 export default function TabletClient() {
     return (
-        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-[#F5F5F5]">Loading...</div>}>
+        <Suspense fallback={<div className="h-screen w-full flex items-center justify-center bg-[#F9FAFB] text-gray-500">Loading...</div>}>
             <TabletClientContent />
         </Suspense>
     );
