@@ -1,0 +1,26 @@
+﻿01/30/2026 16:10:56 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getPipe" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.GetPipeAsync(ServiceMoniker, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getProxy" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.GetProxyAsync(ServiceRpcDescriptor, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "handshake" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.HandshakeAsync(ServiceBrokerClientMetadata, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "requestServiceChannel" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.RequestServiceChannelAsync(ServiceMoniker, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "cancelServiceRequest" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.CancelServiceRequestAsync(Guid) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getPipe" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.GetPipeAsync(ServiceMoniker, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getProxy" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.GetProxyAsync(ServiceRpcDescriptor, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "handshake" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.HandshakeAsync(ServiceBrokerClientMetadata, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "requestServiceChannel" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.RequestServiceChannelAsync(ServiceMoniker, ServiceActivationOptions, CancellationToken) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "cancelServiceRequest" -> Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.CancelServiceRequestAsync(Guid) (Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View)
+01/30/2026 16:10:56 日本標準時: Information : 2 :Listening for events from Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.AvailabilityChanged to raise notification.
+01/30/2026 16:10:56 日本標準時: Information : 3 :Listening started.
+01/30/2026 16:10:56 日本標準時: Information : 7 :{"id":2,"method":"handshake"}
+01/30/2026 16:10:56 日本標準時: Information : 6 :Received request "2" for method "handshake".
+01/30/2026 16:10:56 日本標準時: Information : 9 :Invoking Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.HandshakeAsync(ServiceBrokerClientMetadata, CancellationToken)
+01/30/2026 16:10:56 日本標準時 : Start : handshake
+01/30/2026 16:10:56 日本標準時 : Stop : handshake
+01/30/2026 16:10:56 日本標準時: Information : 8 :{"id":2}
+01/30/2026 16:10:56 日本標準時: Information : 7 :{"id":3,"method":"requestServiceChannel"}
+01/30/2026 16:10:56 日本標準時: Information : 6 :Received request "3" for method "requestServiceChannel".
+01/30/2026 16:10:56 日本標準時: Information : 9 :Invoking Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.RequestServiceChannelAsync(ServiceMoniker, ServiceActivationOptions, CancellationToken)
+01/30/2026 16:10:56 日本標準時 : Start : requestServiceChannel
+01/30/2026 16:10:56 日本標準時 : Stop : requestServiceChannel
+01/30/2026 16:10:56 日本標準時: Information : 8 :{"id":3}
+01/31/2026 00:11:41 日本標準時: Information : 13 :Connection closing (RemotePartyTerminated: ストリームの終わりに達しました。). 

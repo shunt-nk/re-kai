@@ -1,0 +1,95 @@
+﻿01/30/2026 16:10:55 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+01/30/2026 16:10:56 日本標準時 : Information : Service Hub .NET service module host started. Host id: dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE. Controller pipe: net.pipe://69180491E7. PID: 69197
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr read: Content-Length: 111
+
+{"jsonrpc":"2.0","id":2,"method":"initializeHost","params":[{"HostsRootDirectory":".","AppConfigFallback":""}]}
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 79
+
+{"jsonrpc":"2.0","id":2,"result":"dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"}
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr read: Content-Length: 974
+
+{"jsonrpc":"2.0","id":3,"method":"startService","params":[{"name":"Microsoft.CodeCoverage.VSCode.ReportService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.ReportServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c00b7a9ed2","__servicehub__RequestedServiceVersion":"1.0"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr read: Content-Length: 1031
+
+{"jsonrpc":"2.0","id":4,"method":"startService","params":[{"name":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c96fd9720c","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja-JP","ClientUICulture":"ja-JP"}]}Content-Length: 1044
+
+{"jsonrpc":"2.0","id":5,"method":"startService","params":[{"name":"Microsoft.VisualStudio.TestWindow.VSCode.Service","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll","fullClassName":"Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/d0d5e29a5f","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : CLR host received start request for service 'Microsoft.CodeCoverage.VSCode.ReportService'
+01/30/2026 16:10:56 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64'
+01/30/2026 16:10:56 日本標準時 : Information : Starting service module 'Microsoft.CodeCoverage.VSCode.ReportService'. Class: Microsoft.VisualStudio.CoverageServices.ReportServiceFactory, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : Started service 'Microsoft.CodeCoverage.VSCode.ReportService'. Pipe name: /Users/s2240025/.ServiceHub/aeb0f5ff1e/33ea7a6288, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService'
+01/30/2026 16:10:56 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64'
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":3,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/33ea7a6288"}
+01/30/2026 16:10:56 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.CodeCoverage.VSCode.ReportService'
+01/30/2026 16:10:56 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService'. Class: Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : Started service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService'. Pipe name: /Users/s2240025/.ServiceHub/aeb0f5ff1e/627719a844, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr read: Content-Length: 982
+
+{"jsonrpc":"2.0","id":6,"method":"startService","params":[{"name":"Microsoft.CodeCoverage.VSCode.CollectionService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/5cc05aa646","__servicehub__RequestedServiceVersion":"1.0"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service'
+01/30/2026 16:10:56 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64'
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 105
+
+{"jsonrpc":"2.0","method":"hostServicesStarted","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":4,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/627719a844"}
+01/30/2026 16:10:56 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.CodeCoverage.VSCode.ReportService.
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+01/30/2026 16:10:56 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService'
+01/30/2026 16:10:56 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService.
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+01/30/2026 16:10:56 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.TestWindow.VSCode.Service'. Class: Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : Started service 'Microsoft.VisualStudio.TestWindow.VSCode.Service'. Pipe name: /Users/s2240025/.ServiceHub/aeb0f5ff1e/7bdd0ab69f, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : CLR host received start request for service 'Microsoft.CodeCoverage.VSCode.CollectionService'
+01/30/2026 16:10:56 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64'
+01/30/2026 16:10:56 日本標準時 : Information : Starting service module 'Microsoft.CodeCoverage.VSCode.CollectionService'. Class: Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":5,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/7bdd0ab69f"}
+01/30/2026 16:10:56 日本標準時 : Information : Started service 'Microsoft.CodeCoverage.VSCode.CollectionService'. Pipe name: /Users/s2240025/.ServiceHub/aeb0f5ff1e/6892979f88, Supported Version: 
+01/30/2026 16:10:56 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":6,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6892979f88"}
+01/30/2026 16:10:56 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.TestWindow.VSCode.Service'
+01/30/2026 16:10:56 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.TestWindow.VSCode.Service.
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+01/30/2026 16:10:56 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.CodeCoverage.VSCode.CollectionService'
+01/30/2026 16:10:56 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.CodeCoverage.VSCode.CollectionService.
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+01/30/2026 16:10:56 日本標準時 : Information : Creating service Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=1.0.
+01/30/2026 16:10:56 日本標準時 : Information : Creating service Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+01/30/2026 16:10:56 日本標準時 : Information : Creating service Microsoft.VisualStudio.CoverageServices.ReportServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=1.0.
+01/30/2026 16:10:56 日本標準時 : Information : Creating service Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+01/30/2026 16:10:56 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' from factory
+01/30/2026 16:10:56 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' from factory
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' implements System.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory' implements System.IDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' implements System.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.CoverageServices.ReportServiceFactory' implements System.IDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements System.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements System.IDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : hubHostClr write: Content-Length: 103
+
+{"jsonrpc":"2.0","method":"hostServicesEnded","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' implements System.IAsyncDisposable.
+01/31/2026 00:11:41 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory' implements System.IDisposable.
+01/31/2026 00:11:42 日本標準時 : Information : hubHostClr read: Content-Length: 46
+
+{"jsonrpc":"2.0","method":"exit","params":[3]}
+01/31/2026 00:11:42 日本標準時 : Information : Exit command received with reason 'ForcedControllerShutdown'. Exiting CLR host
+01/31/2026 00:11:42 日本標準時 : Information : hubHostClr JSON RPC has been disposed
+01/31/2026 00:11:42 日本標準時 : Information : hubHostClr read: end of stream

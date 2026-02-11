@@ -1,0 +1,698 @@
+﻿01/30/2026 16:10:53 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+01/30/2026 16:10:53 日本標準時 : Information : Started controller with command line /Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller aeb0f5ff1e /ControllerCooldownTimeout:30000 /TelemetrySession:{"TelemetryLevel":"all","IsOptedIn":false,"HostName":"Default","AppInsightsInstrumentationKey":null,"AsimovInstrumentationKey":null,"CollectorApiKey":"0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255","AppId":1010,"UserId":"252e7850-b89d-45a8-a4f3-5d724077c154","Id":"3fa5f1e5-5c7b-4efa-b7b2-c0fac49bfa0e1769757041936","ProcessStartTime":134142306503351110,"SkuName":null,"VSExeVersion":null,"BucketFiltersToEnableWatsonForFaults":[],"BucketFiltersToAddDumpsToFaults":[]}
+01/30/2026 16:10:53 日本標準時 : Information : Acquiring single controller instance mutex with name '233294731-ServiceHubControllerSingleInstanceMutex'
+01/30/2026 16:10:53 日本標準時 : Information : Acquired single controller instance mutex with name '233294731-ServiceHubControllerSingleInstanceMutex'
+01/30/2026 16:10:53 日本標準時 : Information : Controller cooldown timeout is set to 30000ms
+01/30/2026 16:10:53 日本標準時 : Information : Starting server 'hubController' at 'net.pipe://aeb0f5ff1e' (at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/aeb0f5ff1e').
+01/30/2026 16:10:53 日本標準時 : Information : Successfully started server on pipe aeb0f5ff1e
+01/30/2026 16:10:53 日本標準時 : Information : Triggered controller shutdown timer process.
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:53 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:53 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:53 日本標準時 : Information : Starting server 'clientWatch' at 'net.pipe://69180FABA2' (at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/69180FABA2').
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:53 日本標準時 : Information : External client connect to client watch
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:53 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 801
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.CpsProjectIconSourceService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectIconSourceServiceFactory"}}]}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:53 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 802
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.LaunchConfigurationService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory"}}]}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:53 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:53 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 800
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.CompositionService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 832
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 802
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 821
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 782
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.AspireSessionSynchronizeService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.AspireSessionSynchronizeService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 790
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.GenericHotReloadAgentManagerService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.GenericHotReloadAgentManagerService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 764
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.HotReloadClientService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.HotReloadClientService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 790
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 807
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.ManagedEditAndContinueCsDevKitEngineService2"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.ManagedEditAndContinueCsDevKitEngineService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 807
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.ManagedEditAndContinueRemoteDebuggerService2"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.ManagedEditAndContinueRemoteDebuggerService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 790
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.ManagedHotReloadAgentManagerService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.ManagedHotReloadAgentManagerService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 766
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.ManagedHotReloadService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.ManagedHotReloadService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 754
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.SourceLinkService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.SourceLinkService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 791
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.SymbolLocatorService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.BrokeredServices.SymbolLocator.SymbolLocatorService+Factory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 858
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.TestWindow.VSCode.ProjectSystemProvider.Service"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll","fullClassName":"Microsoft.VisualStudio.TestWindow.VSCode.ProjectSystemProvider.Service.ProjectSystemProviderServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 809
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.TestWindow.VSCode.Service"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll","fullClassName":"Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 649
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.AspireServer"},{"host":"dotnet.aspireServer","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/WebTools/node_modules/@microsoft/vscode.webtools/Services","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/WebTools/node_modules/@microsoft/vscode.webtools/Services/Microsoft.WebTools.AspireServer.dll","fullClassName":"Microsoft.WebTools.AspireServer.ServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 757
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.Debugger.AspireService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/WebTools/node_modules/@microsoft/vscode.webtools/Services","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/WebTools/node_modules/@microsoft/vscode.webtools/Services/Microsoft.WebTools.Aspire.VSCode.Services.dll","fullClassName":"Microsoft.WebTools.Aspire.VSCode.Services.ServiceFactory"},"friendServices":["Microsoft.VisualStudio.ProjectSystem.CompositionService"]}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 872
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.DebugTargetFrameworkService"},{"host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/dotnet-project-system-vscode/node_modules/@microsoft/vscode.projectsystem.managed/Services","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/dotnet-project-system-vscode/node_modules/@microsoft/vscode.projectsystem.managed/Services/Microsoft.ProjectSystem.Managed.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Services.DebugTargetFrameworkServiceFactory"},"friendServices":["Microsoft.VisualStudio.ProjectSystem.CompositionService"]}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 690
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.TemplateEngine.VSCode.TemplateService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/dotnet-project-system-vscode/node_modules/@microsoft/vscode.templateengine","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/dotnet-project-system-vscode/node_modules/@microsoft/vscode.templateengine/Microsoft.TemplateEngine.VSCode.dll","fullClassName":"Microsoft.TemplateEngine.VSCode.TemplateServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 747
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.CodeCoverage.VSCode.CollectionService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 739
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.CodeCoverage.VSCode.ReportService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.ReportServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 789
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"Microsoft.VisualStudio.ProjectQueryTestService"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-server-samples-sayhello.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-server-samples-sayhello.darwin-arm64/Microsoft.VisualStudio.Samples.SayHello.dll","fullClassName":"Microsoft.VisualStudio.Samples.SayHello.ProjectQueryTestServiceFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Client connected to controller
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 109
+
+{"jsonrpc":"2.0","id":2,"method":"UpdateClientInfoAsync","params":[{"clientName":"VsHubClient","pid":69162}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/30/2026 16:10:54 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 445
+
+{"jsonrpc":"2.0","id":2,"result":{"ClientWatchServerName":"net.pipe://69180FABA2","ControllerConfig":{"Executable":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/servicehub-controller-net60.darwin-arm64/Microsoft.ServiceHub.Controller","Args":["aeb0f5ff1e"],"PipeName":"aeb0f5ff1e"},"HostsConfig":{"RootDir":".","AppConfigFallback":""}}}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 755
+
+{"jsonrpc":"2.0","id":3,"method":"RegisterServiceAsync","params":[{"Name":"helloServiceHubDotNetHost"},{"host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-server-samples-sayhello.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-server-samples-sayhello.darwin-arm64/Microsoft.VisualStudio.Samples.SayHello.dll","fullClassName":"Microsoft.VisualStudio.Samples.SayHello.HelloWorldFactory"}}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 38
+
+{"jsonrpc":"2.0","id":3,"result":null}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 351
+
+{"jsonrpc":"2.0","id":3,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider","Version":"0.1"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/0fd3d42b64"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 338
+
+{"jsonrpc":"2.0","id":4,"method":"requestServiceChannel","params":[{"Name":"Microsoft.CodeCoverage.VSCode.ReportService","Version":"1.0"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c00b7a9ed2"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:54 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 343
+
+{"jsonrpc":"2.0","id":5,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.TestWindow.VSCode.Service","Version":"0.1"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/d0d5e29a5f"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}Content-Length: 328
+
+{"jsonrpc":"2.0","id":6,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.LaunchConfigurationService"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/aea957904e"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:54 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider' has not been loaded before. Loading now.
+01/30/2026 16:10:54 日本標準時 : Information : Starting server 'hostCallback' at 'net.pipe://69180491E7' (at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/69180491E7').
+01/30/2026 16:10:54 日本標準時 : Information : Discovering configuration files for 'HostConfigurationFileManager'
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.projectSystem.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file 'dotnet.projectSystem' at "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.projectSystem.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.aspireServer.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file 'dotnet.aspireServer' at "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.aspireServer.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Found configuration file 'dotnet' at "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.servicehub.host.json"
+01/30/2026 16:10:54 日本標準時 : Information : Loading host info for 'dotnet.projectSystem' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.projectSystem.servicehub.host.json'
+01/30/2026 16:10:54 日本標準時 : Information : Launching 'dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' hub host with command line: '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE net.pipe://69180491E7 "/TelemetrySession:{\"TelemetryLevel\":\"all\",\"IsOptedIn\":false,\"HostName\":\"Default\",\"AppInsightsInstrumentationKey\":null,\"AsimovInstrumentationKey\":null,\"CollectorApiKey\":\"0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255\",\"AppId\":1010,\"UserId\":\"252e7850-b89d-45a8-a4f3-5d724077c154\",\"Id\":\"3fa5f1e5-5c7b-4efa-b7b2-c0fac49bfa0e1769757041936\",\"ProcessStartTime\":134142306503351110,\"SkuName\":null,\"VSExeVersion\":null,\"BucketFiltersToEnableWatsonForFaults\":[],\"BucketFiltersToAddDumpsToFaults\":[]}"'
+01/30/2026 16:10:54 日本標準時 : Information : Setting environment variable 'DOTNET_ROOT' to '/Users/s2240025/Library/Application Support/Code/User/globalStorage/ms-dotnettools.vscode-dotnet-runtime/.dotnet/8.0.23~arm64~aspnetcore' in the "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost" process.
+01/30/2026 16:10:54 日本標準時 : Information : Setting environment variable 'DOTNET_ROLL_FORWARD_TO_PRERELEASE' to '0' in the "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost" process.
+01/30/2026 16:10:54 日本標準時 : Information : Setting environment variable 'DOTNET_ROLL_FORWARD' to 'Major' in the "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost" process.
+01/30/2026 16:10:54 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 368
+
+{"jsonrpc":"2.0","id":7,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService","Version":"0.1"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c96fd9720c"},"ClientCredentials":{},"ClientCulture":"ja-JP","ClientUICulture":"ja-JP"}]}
+01/30/2026 16:10:54 日本標準時 : Information : Launched 'dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' hub host. PID: 69196
+01/30/2026 16:10:54 日本標準時 : Information : Locating service 'Microsoft.CodeCoverage.VSCode.ReportService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:54 日本標準時 : Information : Service 'Microsoft.CodeCoverage.VSCode.ReportService' has not been loaded before. Loading now.
+01/30/2026 16:10:54 日本標準時 : Information : Loading host info for 'dotnet' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/servicehub/dotnet.servicehub.host.json'
+01/30/2026 16:10:54 日本標準時 : Information : Launching 'dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' hub host with command line: '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-code-servicehost.darwin-arm64/Microsoft.VisualStudio.Code.ServiceHost dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE net.pipe://69180491E7 "/TelemetrySession:{\"TelemetryLevel\":\"all\",\"IsOptedIn\":false,\"HostName\":\"Default\",\"AppInsightsInstrumentationKey\":null,\"AsimovInstrumentationKey\":null,\"CollectorApiKey\":\"0c6ae279ed8443289764825290e4f9e2-1a736e7c-1324-4338-be46-fc2a58ae4d14-7255\",\"AppId\":1010,\"UserId\":\"252e7850-b89d-45a8-a4f3-5d724077c154\",\"Id\":\"3fa5f1e5-5c7b-4efa-b7b2-c0fac49bfa0e1769757041936\",\"ProcessStartTime\":134142306503351110,\"SkuName\":null,\"VSExeVersion\":null,\"BucketFiltersToEnableWatsonForFaults\":[],\"BucketFiltersToAddDumpsToFaults\":[]}"'
+01/30/2026 16:10:54 日本標準時 : Information : Launched 'dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' hub host. PID: 69197
+01/30/2026 16:10:54 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.TestWindow.VSCode.Service' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:54 日本標準時 : Information : Service 'Microsoft.VisualStudio.TestWindow.VSCode.Service' has not been loaded before. Loading now.
+01/30/2026 16:10:54 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.LaunchConfigurationService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:54 日本標準時 : Information : Service 'Microsoft.VisualStudio.LaunchConfigurationService' has not been loaded before. Loading now.
+01/30/2026 16:10:54 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:54 日本標準時 : Information : Service 'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService' has not been loaded before. Loading now.
+01/30/2026 16:10:55 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 366
+
+{"jsonrpc":"2.0","id":8,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService","Version":"0.1"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/b901428ecd"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:55 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:55 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService' has not been loaded before. Loading now.
+01/30/2026 16:10:55 日本標準時 : Information : LocationService write: Content-Length: 111
+
+{"jsonrpc":"2.0","id":2,"method":"initializeHost","params":[{"HostsRootDirectory":".","AppConfigFallback":""}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 93
+
+{"jsonrpc":"2.0","id":2,"result":"dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 1037
+
+{"jsonrpc":"2.0","id":3,"method":"startService","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/0fd3d42b64","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 991
+
+{"jsonrpc":"2.0","id":5,"method":"startService","params":[{"name":"Microsoft.VisualStudio.LaunchConfigurationService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/aea957904e"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 1067
+
+{"jsonrpc":"2.0","id":4,"method":"startService","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/b901428ecd","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":3,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/f58f8ae50e"}Content-Length: 85
+
+{"jsonrpc":"2.0","id":5,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c909b7fa39"}Content-Length: 85
+
+{"jsonrpc":"2.0","id":4,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6a053053f8"}
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/f58f8ae50e @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/6a053053f8 @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.LaunchConfigurationService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/c909b7fa39 @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 165
+
+{"jsonrpc":"2.0","id":3,"result":{"RequestId":"55696fe2-ed0d-4db0-86cf-082ef3f649e9","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/f58f8ae50e","IsEmpty":false}}
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 165
+
+{"jsonrpc":"2.0","id":6,"result":{"RequestId":"8f438362-8efc-48df-a564-f65923b48e55","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c909b7fa39","IsEmpty":false}}Content-Length: 165
+
+{"jsonrpc":"2.0","id":8,"result":{"RequestId":"66441a72-1714-4290-9d20-ee598ca7036a","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6a053053f8","IsEmpty":false}}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 119
+
+{"jsonrpc":"2.0","method":"hostServicesStarted","params":["dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 111
+
+{"jsonrpc":"2.0","id":2,"method":"initializeHost","params":[{"HostsRootDirectory":".","AppConfigFallback":""}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 79
+
+{"jsonrpc":"2.0","id":2,"result":"dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 974
+
+{"jsonrpc":"2.0","id":3,"method":"startService","params":[{"name":"Microsoft.CodeCoverage.VSCode.ReportService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.ReportServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c00b7a9ed2","__servicehub__RequestedServiceVersion":"1.0"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 1031
+
+{"jsonrpc":"2.0","id":4,"method":"startService","params":[{"name":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSDebugCore/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-debugger-devkit.darwin-arm64/Microsoft.VisualStudio.Debugger.DevKit.dll","fullClassName":"Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService+Factory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/c96fd9720c","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja-JP","ClientUICulture":"ja-JP"}]}Content-Length: 1044
+
+{"jsonrpc":"2.0","id":5,"method":"startService","params":[{"name":"Microsoft.VisualStudio.TestWindow.VSCode.Service","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll","fullClassName":"Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/d0d5e29a5f","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":3,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/33ea7a6288"}
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.CodeCoverage.VSCode.ReportService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/33ea7a6288 @ dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 165
+
+{"jsonrpc":"2.0","id":4,"result":{"RequestId":"afa20858-360b-42ba-a64c-29889da91136","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/33ea7a6288","IsEmpty":false}}
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 342
+
+{"jsonrpc":"2.0","id":9,"method":"requestServiceChannel","params":[{"Name":"Microsoft.CodeCoverage.VSCode.CollectionService","Version":"1.0"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/5cc05aa646"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : Locating service 'Microsoft.CodeCoverage.VSCode.CollectionService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.CodeCoverage.VSCode.CollectionService' has not been loaded before. Loading now.
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 982
+
+{"jsonrpc":"2.0","id":6,"method":"startService","params":[{"name":"Microsoft.CodeCoverage.VSCode.CollectionService","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/vs-code-coverage/platforms/darwin-arm64/node_modules/@microsoft/coverage-services.darwin-arm64/Microsoft.CodeCoverage.VSCode.Services.dll","fullClassName":"Microsoft.VisualStudio.CoverageServices.CollectionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/5cc05aa646","__servicehub__RequestedServiceVersion":"1.0"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 105
+
+{"jsonrpc":"2.0","method":"hostServicesStarted","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":4,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/627719a844"}
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.Debugger.HotReloadSessionNotificationService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/627719a844 @ dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 165
+
+{"jsonrpc":"2.0","id":7,"result":{"RequestId":"bb6b9d85-2596-461f-a8c2-fe344014e95d","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/627719a844","IsEmpty":false}}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":5,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/7bdd0ab69f"}Content-Length: 85
+
+{"jsonrpc":"2.0","id":6,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6892979f88"}
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.TestWindow.VSCode.Service\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/7bdd0ab69f @ dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.CodeCoverage.VSCode.CollectionService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/6892979f88 @ dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 165
+
+{"jsonrpc":"2.0","id":5,"result":{"RequestId":"2ed18912-dd8e-4fd0-9d0e-915693be8812","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/7bdd0ab69f","IsEmpty":false}}Content-Length: 165
+
+{"jsonrpc":"2.0","id":9,"result":{"RequestId":"c246a463-f503-4dc3-8671-553d3183dd35","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6892979f88","IsEmpty":false}}
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 351
+
+{"jsonrpc":"2.0","id":10,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.CompositionService","Version":"0.1"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6161c82eac"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.ProjectSystem.CompositionService' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.CompositionService' has not been loaded before. Loading now.
+01/30/2026 16:10:56 日本標準時 : Information : LocationService write: Content-Length: 1035
+
+{"jsonrpc":"2.0","id":6,"method":"startService","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.CompositionService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/6161c82eac","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 16:10:56 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":6,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/10c909fb16"}
+01/30/2026 16:10:56 日本標準時 : Information : Located service \'Microsoft.VisualStudio.ProjectSystem.CompositionService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/10c909fb16 @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 16:10:56 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 166
+
+{"jsonrpc":"2.0","id":10,"result":{"RequestId":"02946b16-b860-466c-85ba-44dfcd70b901","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/10c909fb16","IsEmpty":false}}
+01/30/2026 17:16:40 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 369
+
+{"jsonrpc":"2.0","id":11,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService","Version":"0.3"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/bb628f5ca3"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 17:16:41 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService' requested by VsHubClient (pid:69162)
+01/30/2026 17:16:41 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService' has not been loaded before. Loading now.
+01/30/2026 17:16:41 日本標準時 : Information : LocationService write: Content-Length: 1056
+
+{"jsonrpc":"2.0","id":7,"method":"startService","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/bb628f5ca3","__servicehub__RequestedServiceVersion":"0.3"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/30/2026 17:16:41 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":7,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/b0f41b7a61"}
+01/30/2026 17:16:41 日本標準時 : Information : Located service \'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/b0f41b7a61 @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/30/2026 17:16:41 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController write: Content-Length: 166
+
+{"jsonrpc":"2.0","id":11,"result":{"RequestId":"21c4019e-6c65-44a2-8b0f-48557f72a199","PipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/b0f41b7a61","IsEmpty":false}}
+01/31/2026 00:11:41 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: Content-Length: 329
+
+{"jsonrpc":"2.0","id":12,"method":"requestServiceChannel","params":[{"Name":"Microsoft.VisualStudio.LaunchConfigurationService"},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/66c2ab8d27"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/31/2026 00:11:41 日本標準時 : Information : LocationService read: Content-Length: 117
+
+{"jsonrpc":"2.0","method":"hostServicesEnded","params":["dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/31/2026 00:11:41 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:41 日本標準時 : Information : Locating service 'Microsoft.VisualStudio.LaunchConfigurationService' requested by VsHubClient (pid:69162)
+01/31/2026 00:11:41 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:41 日本標準時 : Information : Service 'Microsoft.VisualStudio.LaunchConfigurationService' has not been loaded before. Loading now.
+01/31/2026 00:11:41 日本標準時 : Information : LocationService write: Content-Length: 991
+
+{"jsonrpc":"2.0","id":8,"method":"startService","params":[{"name":"Microsoft.VisualStudio.LaunchConfigurationService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.11.14-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/66c2ab8d27"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+01/31/2026 00:11:41 日本標準時 : Information : LocationService read: Content-Length: 85
+
+{"jsonrpc":"2.0","id":8,"result":"/Users/s2240025/.ServiceHub/aeb0f5ff1e/8f6c81c5c0"}
+01/31/2026 00:11:41 日本標準時 : Information : Located service \'Microsoft.VisualStudio.LaunchConfigurationService\' at '/Users/s2240025/.ServiceHub/aeb0f5ff1e/8f6c81c5c0 @ dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' requested by VsHubClient (pid:69162)
+01/31/2026 00:11:41 日本標準時 : Information : LocationService read: Content-Length: 103
+
+{"jsonrpc":"2.0","method":"hostServicesEnded","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : Microsoft.ServiceHub.Controller.HubController read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : JsonRpc disconnected due to RemotePartyTerminated. Reached end of stream.
+01/31/2026 00:11:42 日本標準時 : Information : External client disconnected from client watch.
+01/31/2026 00:11:42 日本標準時 : Information : Starting fast shutdown
+01/31/2026 00:11:42 日本標準時 : Information : Stopping the location service server.
+01/31/2026 00:11:42 日本標準時 : Information : Exiting hub controller.
+01/31/2026 00:11:42 日本標準時 : Information : Releasing single controller instance mutex.
+01/31/2026 00:11:42 日本標準時 : Information : Stopping host 'dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' PID: 69197 due to ForcedControllerShutdown
+01/31/2026 00:11:42 日本標準時 : Information : LocationService write: Content-Length: 46
+
+{"jsonrpc":"2.0","method":"exit","params":[3]}
+01/31/2026 00:11:42 日本標準時 : Information : Stopping host 'dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' PID: 69196 due to ForcedControllerShutdown
+01/31/2026 00:11:42 日本標準時 : Information : LocationService write: Content-Length: 46
+
+{"jsonrpc":"2.0","method":"exit","params":[3]}
+01/31/2026 00:11:42 日本標準時 : Information : Host 'dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' has been removed from the hosts cache.
+01/31/2026 00:11:42 日本標準時 : Information : Host 'dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' has been removed from the hosts cache.
+01/31/2026 00:11:42 日本標準時 : Information : Waiting for host 'dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' with pid '69197' to exit...
+01/31/2026 00:11:42 日本標準時 : Information : Waiting for host 'dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE' with pid '69196' to exit...
+01/31/2026 00:11:42 日本標準時 : Information : LocationService read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : Waiting for all hosts to shutdown. Running hosts: dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE, dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE
+01/31/2026 00:11:42 日本標準時 : Information : LocationService read: end of stream
+01/31/2026 00:11:42 日本標準時 : Information : code: 'Hub host 'C94B8CFE-E3FD-4BAF-A941-2866DBB566FE', PID: 69196 exited.' 0.
+01/31/2026 00:11:42 日本標準時 : Information : code: 'Hub host 'C94B8CFE-E3FD-4BAF-A941-2866DBB566FE', PID: 69197 exited.' 0.
+01/31/2026 00:11:42 日本標準時 : Information : All hosts have exited.
+01/31/2026 00:11:42 日本標準時 : Information : Controller terminating with exit code '0'.

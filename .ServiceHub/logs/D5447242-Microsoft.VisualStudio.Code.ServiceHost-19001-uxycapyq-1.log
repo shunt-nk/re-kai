@@ -1,0 +1,44 @@
+﻿02/03/2026 18:44:15 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+02/03/2026 18:44:15 日本標準時 : Information : Service Hub .NET service module host started. Host id: dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE. Controller pipe: net.pipe://18991BE3C9. PID: 19001
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr read: Content-Length: 116
+
+{"jsonrpc":"2.0","id":2,"method":"InitializeHostAsync","params":[{"HostsRootDirectory":".","AppConfigFallback":""}]}
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 79
+
+{"jsonrpc":"2.0","id":2,"result":"dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"}
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr read: Content-Length: 1047
+
+{"jsonrpc":"2.0","id":3,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.TestWindow.VSCode.Service","host":"dotnet","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll","fullClassName":"Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/b109ff71fa","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+02/03/2026 18:44:15 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service'
+02/03/2026 18:44:15 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64/Microsoft.VisualStudio.TestWindow.VSCode.Service.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/VSUnitTesting/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-testwindow-vscode-service.darwin-arm64'
+02/03/2026 18:44:15 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.TestWindow.VSCode.Service'. Class: Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : Started service 'Microsoft.VisualStudio.TestWindow.VSCode.Service'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/11a3f2ca78, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":3,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/11a3f2ca78"}
+02/03/2026 18:44:15 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.TestWindow.VSCode.Service'
+02/03/2026 18:44:15 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.TestWindow.VSCode.Service.
+02/03/2026 18:44:15 日本標準時 : Information : Service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 110
+
+{"jsonrpc":"2.0","method":"HostServicesStartedAsync","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+02/03/2026 18:44:15 日本標準時 : Information : Creating service Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+02/03/2026 18:44:15 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' from factory
+02/05/2026 11:50:12 日本標準時 : Information : hubHostClr write: Content-Length: 108
+
+{"jsonrpc":"2.0","method":"HostServicesEndedAsync","params":["dotnet$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements System.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.TestWindow.VSCode.Service.TestWindowVSCodeServiceFactory' implements System.IDisposable.
+02/05/2026 11:50:13 日本標準時 : Information : hubHostClr read: end of stream
+02/05/2026 11:50:13 日本標準時 : Error : Disconnected hubHostClr RemotePartyTerminated error: : ストリームの終わりに達しました。 at 
+02/05/2026 11:50:13 日本標準時 : Error : Controller callback pipe is connected: 'False'
+    Controller callback pipe has reached the end: 'True'
+    Controller callback pipe has been disposed: 'False'
+    JsonRpc object is disposed: 'False'
+    MessageHandler is disposed: 'False'
+    Reason: 'RemotePartyTerminated'
+    Description: 'ストリームの終わりに達しました。'
+    Host is disposed: 'False'
+

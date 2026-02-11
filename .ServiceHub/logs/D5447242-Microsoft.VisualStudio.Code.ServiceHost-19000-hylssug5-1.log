@@ -1,0 +1,126 @@
+﻿02/03/2026 18:44:15 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+02/03/2026 18:44:15 日本標準時 : Information : Service Hub .NET service module host started. Host id: dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE. Controller pipe: net.pipe://18991BE3C9. PID: 19000
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr read: Content-Length: 116
+
+{"jsonrpc":"2.0","id":2,"method":"InitializeHostAsync","params":[{"HostsRootDirectory":".","AppConfigFallback":""}]}
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 93
+
+{"jsonrpc":"2.0","id":2,"result":"dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"}
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr read: Content-Length: 1070
+
+{"jsonrpc":"2.0","id":4,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/c1e4ac214e","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}Content-Length: 1070
+
+{"jsonrpc":"2.0","id":3,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/3b3bf8cf36","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}Content-Length: 994
+
+{"jsonrpc":"2.0","id":5,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.LaunchConfigurationService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/e002f9f9af"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}Content-Length: 1040
+
+{"jsonrpc":"2.0","id":6,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeN
+02/03/2026 18:44:15 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr read: ame":"/Users/s2240025/.ServiceHub/54f4cc2e06/c4f4416cf5","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+02/03/2026 18:44:15 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:15 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'. Class: Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : Started service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/532a86194f, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'
+02/03/2026 18:44:15 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:15 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'. Class: Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : Started service 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/d82e84be40, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.LaunchConfigurationService'
+02/03/2026 18:44:15 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:15 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.LaunchConfigurationService'. Class: Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : Started service 'Microsoft.VisualStudio.LaunchConfigurationService'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/f6c4945b1e, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider'
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":4,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/532a86194f"}Content-Length: 85
+
+{"jsonrpc":"2.0","id":3,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/d82e84be40"}
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":5,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/f6c4945b1e"}
+02/03/2026 18:44:15 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:15 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider'. Class: Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : Started service 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/ce4b69f120, Supported Version: 
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":6,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/ce4b69f120"}
+02/03/2026 18:44:15 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'
+02/03/2026 18:44:15 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService'
+02/03/2026 18:44:15 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.LaunchConfigurationService'
+02/03/2026 18:44:15 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider'
+02/03/2026 18:44:15 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.ProjectSystem.ProjectInitializationStatusService.
+02/03/2026 18:44:15 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:15 日本標準時 : Information : hubHostClr write: Content-Length: 124
+
+{"jsonrpc":"2.0","method":"HostServicesStartedAsync","params":["dotnet.projectSystem$C94B8CFE-E3FD-4BAF-A941-2866DBB566FE"]}
+02/03/2026 18:44:15 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.LaunchConfigurationService.
+02/03/2026 18:44:15 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:15 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.ProjectSystem.ProjectTreeProvider.
+02/03/2026 18:44:15 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:15 日本標準時 : Information : Found IServiceHubServiceFactory in cache. Creating instance from the factory.
+02/03/2026 18:44:15 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+02/03/2026 18:44:15 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+02/03/2026 18:44:15 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+02/03/2026 18:44:15 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=.
+02/03/2026 18:44:15 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' from factory
+02/03/2026 18:44:15 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' from factory
+02/03/2026 18:44:15 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' from factory
+02/03/2026 18:44:15 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : hubHostClr read: Content-Length: 1038
+
+{"jsonrpc":"2.0","id":7,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.CompositionService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/7e43159eb5","__servicehub__RequestedServiceVersion":"0.1"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+02/03/2026 18:44:16 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.ProjectSystem.CompositionService'
+02/03/2026 18:44:16 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:16 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.ProjectSystem.CompositionService'. Class: Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory, Supported Version: 
+02/03/2026 18:44:16 日本標準時 : Information : Started service 'Microsoft.VisualStudio.ProjectSystem.CompositionService'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/cd03e4c0d4, Supported Version: 
+02/03/2026 18:44:16 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":7,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/cd03e4c0d4"}
+02/03/2026 18:44:16 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.ProjectSystem.CompositionService'
+02/03/2026 18:44:16 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.ProjectSystem.CompositionService.
+02/03/2026 18:44:16 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:16 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.1.
+02/03/2026 18:44:16 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.CompositionServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' from factory
+02/03/2026 18:44:16 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' from factory
+02/03/2026 18:44:21 日本標準時 : Information : hubHostClr read: Content-Length: 1059
+
+{"jsonrpc":"2.0","id":8,"method":"StartServiceAsync","params":[{"name":"Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService","host":"dotnet.projectSystem","hostId":"C94B8CFE-E3FD-4BAF-A941-2866DBB566FE","serviceBaseDirectory":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64","entryPoint":{"assemblyPath":"/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll","fullClassName":"Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory"}},{"ActivationArguments":{"__servicehub__ServiceHubRemoteServiceBrokerPipeName":"/Users/s2240025/.ServiceHub/54f4cc2e06/02c34a7e77","__servicehub__RequestedServiceVersion":"0.3"},"ClientCredentials":{},"ClientCulture":"ja","ClientUICulture":"ja"}]}
+02/03/2026 18:44:21 日本標準時 : Information : CLR host received start request for service 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService'
+02/03/2026 18:44:21 日本標準時 : Information : Loading service module assembly '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64/Microsoft.VisualStudio.ProjectSystem.Server.Implementation.dll' from '/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/CPS/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-projectsystem-server.darwin-arm64'
+02/03/2026 18:44:21 日本標準時 : Information : Starting service module 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService'. Class: Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory, Supported Version: 
+02/03/2026 18:44:21 日本標準時 : Information : Started service 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService'. Pipe name: /Users/s2240025/.ServiceHub/54f4cc2e06/dfd5c9dbb2, Supported Version: 
+02/03/2026 18:44:21 日本標準時 : Information : hubHostClr write: Content-Length: 85
+
+{"jsonrpc":"2.0","id":8,"result":"/Users/s2240025/.ServiceHub/54f4cc2e06/dfd5c9dbb2"}
+02/03/2026 18:44:21 日本標準時 : Information : A new client connected to CLR service module 'Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService'
+02/03/2026 18:44:21 日本標準時 : Information : Found FactoryVersion=Version2 for service : Microsoft.VisualStudio.ProjectSystem.Query.Remoting.QueryExecutionService.
+02/03/2026 18:44:21 日本標準時 : Information : Service 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' implements IServiceHubServiceFactory. Creating factory instance and caching it.
+02/03/2026 18:44:21 日本標準時 : Information : Creating service Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory from factory with FactoryVersion=Version2 and ClientRequestedVersion=0.3.
+02/03/2026 18:44:21 日本標準時 : Information : Setting up RPC connection for service 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' from factory
+02/03/2026 18:44:21 日本標準時 : Information : Completed RPC connection setup for service 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' from factory
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' implements Microsoft.VisualStudio.Threading.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' implements System.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectInitializationStatusServiceFactory' implements System.IDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' implements System.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.QueryExecutionServiceFactory' implements System.IDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' implements System.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.ProjectTreeProviderFactory' implements System.IDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' implements System.IAsyncDisposable.
+02/05/2026 11:50:12 日本標準時 : Information : Checking if 'Microsoft.VisualStudio.ProjectSystem.Server.LaunchConfigurationServiceFactory' implements System.IDisposable.
+02/05/2026 11:50:13 日本標準時 : Information : hubHostClr read: end of stream
+02/05/2026 11:50:13 日本標準時 : Error : Disconnected hubHostClr RemotePartyTerminated error: : ストリームの終わりに達しました。 at 
+02/05/2026 11:50:13 日本標準時 : Error : Controller callback pipe is connected: 'False'
+    Controller callback pipe has reached the end: 'True'
+    Controller callback pipe has been disposed: 'False'
+    JsonRpc object is disposed: 'False'
+    MessageHandler is disposed: 'False'
+    Reason: 'RemotePartyTerminated'
+    Description: 'ストリームの終わりに達しました。'
+    Host is disposed: 'False'
+

@@ -1,0 +1,8 @@
+﻿02/03/2026 18:44:13 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+02/03/2026 18:44:13 日本標準時 : Information : Acquiring semaphore to try to start the Controller.
+02/03/2026 18:44:13 日本標準時 : Information : Beginning to try to start the Controller.
+02/03/2026 18:44:13 日本標準時 : Information : Starting hub controller
+02/03/2026 18:44:13 日本標準時 : Information : Setting environment variable 'ServiceHubCurrentOsLocale' to 'ja' in the "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-controller.darwin-arm64/Microsoft.VisualStudio.Code.ServiceController" process.
+02/03/2026 18:44:13 日本標準時 : Information : Setting environment variable 'ServiceHubLocationServicePipeName' to '54f4cc2e06' in the "/Users/s2240025/.vscode/extensions/ms-dotnettools.csdevkit-1.90.2-darwin-arm64/components/vs-green-server/platforms/darwin-arm64/node_modules/@microsoft/visualstudio-controller.darwin-arm64/Microsoft.VisualStudio.Code.ServiceController" process.
+02/03/2026 18:44:13 日本標準時 : Information : Attempting to connect to location service pipe at '54f4cc2e06'.
+02/03/2026 18:44:14 日本標準時 : Information : Hub controller started. PID 18991

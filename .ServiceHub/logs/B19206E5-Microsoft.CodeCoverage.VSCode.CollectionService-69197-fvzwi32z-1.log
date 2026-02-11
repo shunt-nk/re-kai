@@ -1,0 +1,14 @@
+﻿01/30/2026 16:10:56 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "start" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StartAsync(CollectionServerData) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "start" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StartAsync(String, String, String) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "stop" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StopAsync(String) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "dispose" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.Dispose() (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "start" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StartAsync(CollectionServerData) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "start" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StartAsync(String, String, String) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "stop" -> Microsoft.VisualStudio.CoverageServices.Collection.CollectionService.StopAsync(String) (Microsoft.VisualStudio.CoverageServices.Collection.CollectionService)
+01/30/2026 16:10:56 日本標準時: Information : 3 :Listening started.
+01/31/2026 00:11:41 日本標準時 : Information : Microsoft.CodeCoverage.VSCode.CollectionService read: end of stream
+01/31/2026 00:11:41 日本標準時 : Information : Waiting for 'Microsoft.CodeCoverage.VSCode.CollectionService' instance to complete its completionTask.
+01/31/2026 00:11:41 日本標準時: Information : 13 :Connection closing (RemotePartyTerminated: ストリームの終わりに達しました。). 
+01/31/2026 00:11:41 日本標準時 : Information : Disposed 'Microsoft.CodeCoverage.VSCode.CollectionService' via 'completionTask' method.
+01/31/2026 00:11:41 日本標準時 : Information : Finishing shutting down service: Microsoft.CodeCoverage.VSCode.CollectionService.

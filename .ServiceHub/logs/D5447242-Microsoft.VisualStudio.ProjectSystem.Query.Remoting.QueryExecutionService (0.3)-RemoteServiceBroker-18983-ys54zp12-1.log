@@ -1,0 +1,9 @@
+﻿02/03/2026 18:44:21 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+02/03/2026 18:44:21 日本標準時: Information : 3 :Listening started.
+02/03/2026 18:44:21 日本標準時: Information : 7 :{"id":2,"method":"handshake"}
+02/03/2026 18:44:21 日本標準時: Information : 6 :Received request "2" for method "handshake".
+02/03/2026 18:44:21 日本標準時: Information : 9 :Invoking Microsoft.VisualStudio.Utilities.ServiceBroker.GlobalBrokeredServiceContainer+View.HandshakeAsync(ServiceBrokerClientMetadata, CancellationToken)
+02/03/2026 18:44:21 日本標準時 : Start : handshake
+02/03/2026 18:44:21 日本標準時 : Stop : handshake
+02/03/2026 18:44:21 日本標準時: Information : 8 :{"id":2}
+02/05/2026 11:50:12 日本標準時: Information : 13 :Connection closing (RemotePartyTerminated: ストリームの終わりに達しました。). 

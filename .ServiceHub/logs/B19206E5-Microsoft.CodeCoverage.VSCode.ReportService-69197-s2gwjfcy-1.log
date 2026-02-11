@@ -1,0 +1,11 @@
+﻿01/30/2026 16:10:56 日本標準時 : Information : Local timezone is (UTC+09:00) 日本標準時 (東京)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "mergeCoverageFiles" -> Microsoft.VisualStudio.CoverageServices.Report.ReportService.MergeCoverageFilesAsync(String, String[], MergeOperation, CancellationToken) (Microsoft.VisualStudio.CoverageServices.Report.ReportService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getReport" -> Microsoft.VisualStudio.CoverageServices.Report.ReportService.GetReportAsync(String, CancellationToken) (Microsoft.VisualStudio.CoverageServices.Report.ReportService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "mergeCoverageFiles" -> Microsoft.VisualStudio.CoverageServices.Report.ReportService.MergeCoverageFilesAsync(String, String[], MergeOperation, CancellationToken) (Microsoft.VisualStudio.CoverageServices.Report.ReportService)
+01/30/2026 16:10:56 日本標準時 : Information : Added local RPC method "getReport" -> Microsoft.VisualStudio.CoverageServices.Report.ReportService.GetReportAsync(String, CancellationToken) (Microsoft.VisualStudio.CoverageServices.Report.ReportService)
+01/30/2026 16:10:56 日本標準時: Information : 3 :Listening started.
+01/31/2026 00:11:41 日本標準時 : Information : Microsoft.CodeCoverage.VSCode.ReportService read: end of stream
+01/31/2026 00:11:41 日本標準時 : Information : Waiting for 'Microsoft.CodeCoverage.VSCode.ReportService' instance to complete its completionTask.
+01/31/2026 00:11:41 日本標準時: Information : 13 :Connection closing (RemotePartyTerminated: ストリームの終わりに達しました。). 
+01/31/2026 00:11:41 日本標準時 : Information : Disposed 'Microsoft.CodeCoverage.VSCode.ReportService' via 'completionTask' method.
+01/31/2026 00:11:41 日本標準時 : Information : Finishing shutting down service: Microsoft.CodeCoverage.VSCode.ReportService.

@@ -1,2 +1,8 @@
-2025/12/04-13:34:31.189 f527b7 Creating DB /Users/s2240025/.gemini/antigravity-browser-profile/Default/Session Storage since it was missing.
-2025/12/04-13:34:31.197 f527b7 Reusing MANIFEST /Users/s2240025/.gemini/antigravity-browser-profile/Default/Session Storage/MANIFEST-000001
+2026/02/07-15:16:01.478 8b265 Reusing MANIFEST /Users/s2240025/.gemini/antigravity-browser-profile/Default/Session Storage/MANIFEST-000001
+2026/02/07-15:16:01.480 8b265 Recovering log #76
+2026/02/07-15:16:01.480 8b265 Reusing old log /Users/s2240025/.gemini/antigravity-browser-profile/Default/Session Storage/000076.log 
+2026/02/11-16:56:02.712 8b268 Level-0 table #80: started
+2026/02/11-16:56:02.718 8b268 Level-0 table #80: 14968 bytes OK
+2026/02/11-16:56:02.725 8b268 Delete type=0 #76
+2026/02/11-16:56:02.726 8b268 Compacting 4@0 + 1@1 files
+2026/02/11-16:56:02.728 8b268 compacted to: files[ 4 1 1 0 0 0 0 ]
