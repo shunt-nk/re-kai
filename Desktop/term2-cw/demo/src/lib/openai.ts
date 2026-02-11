@@ -15,24 +15,9 @@ export async function gradeWithOpenAI(
     userAnswers: Record<string, string>
 ): Promise<GradingResult> {
 
-    // Fallback Mock Logic (used if no API Key)
+    // Check API Key
     if (!API_KEY) {
-        console.warn("OpenAI API Key missing. Running Mock Grading.");
-        let correctCount = 0;
-        questions.forEach(q => {
-            if ((userAnswers[q.id] || '').trim() === q.correctAnswer) {
-                correctCount++;
-            }
-        });
-        const score = Math.floor((correctCount / questions.length) * 10);
-        return {
-            score,
-            isCorrect: correctCount === questions.length,
-            feedback: `【AI分析結果（デモモード）】
-正解数は ${correctCount}/${questions.length} です。
-記述内容や筆跡からの詳細な分析を行うには、OPENAI_API_KEYを設定してください。
-（現状は回答の一致のみで判定しています）`
-        };
+        throw new Error("OpenAI API Key is not configured.");
     }
 
     const openai = new OpenAI({

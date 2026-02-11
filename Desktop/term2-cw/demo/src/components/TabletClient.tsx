@@ -297,29 +297,59 @@ export default function TabletClient() {
                 onRedo={performRedo}
             />
 
-            {/* Orientation Modal (変更なし) */}
+            {/* Orientation Modal */}
             {showOrientationModal && (
                 <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-4 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
-                    <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-2xl" onClick={e => e.stopPropagation()}>
-                        <div className="text-center mb-8">
-                            <p className="text-slate-600 leading-relaxed font-medium">
+                    <div className="bg-white rounded-3xl p-10 max-w-sm w-full shadow-2xl flex flex-col items-center" onClick={e => e.stopPropagation()}>
+
+                        <div className="text-center mb-10">
+                            <p className="text-slate-700 leading-relaxed font-bold text-sm tracking-wide">
                                 縦・横どちらでも利用することができます。<br />
                                 お好きなスタイルでご利用ください。
                             </p>
                         </div>
 
-                        <div className="relative h-40 flex items-center justify-center">
-                            {/* SVGアイコン部分は長いので省略しますが、元のままでOKです */}
-                            <div className="w-16 h-28 border-4 border-slate-300 rounded-xl relative">
-                                <div className="absolute top-2 left-1/2 -translate-x-1/2 w-8 h-1 bg-slate-200 rounded-full"></div>
+                        {/* Animation Container */}
+                        <div className="relative w-32 h-32 flex items-center justify-center mb-8">
+                            <style jsx>{`
+                                @keyframes rotate-device {
+                                    0% { transform: rotate(0deg); opacity: 1; }
+                                    30% { transform: rotate(0deg); opacity: 1; }
+                                    50% { transform: rotate(90deg); opacity: 1; }
+                                    80% { transform: rotate(90deg); opacity: 1; }
+                                    100% { transform: rotate(0deg); opacity: 1; }
+                                }
+                                .device-icon {
+                                    animation: rotate-device 4s infinite ease-in-out;
+                                }
+                            `}</style>
+
+                            {/* Device Icon */}
+                            <div className="device-icon w-16 h-24 border-[3px] border-slate-400 rounded-lg flex flex-col items-center justify-between py-2 relative bg-white">
+                                {/* Top Speaker/Cam */}
+                                <div className="w-1 h-1 bg-slate-400 rounded-full"></div>
+                                {/* Screen Area */}
+                                <div className="w-12 h-16 bg-slate-100 rounded"></div>
+                                {/* Home Button */}
+                                <div className="w-2 h-2 border border-slate-400 rounded-full"></div>
+
+                                {/* Rotate Arrow (Visual Hint) */}
+                                <div className="absolute -right-6 top-1/2 -translate-y-1/2 text-slate-400">
+                                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transform rotate-90">
+                                        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+                                        <path d="M3 3v5h5"></path>
+                                    </svg>
+                                </div>
                             </div>
                         </div>
 
+                        {/* Close / OK Button */}
+                        {/* Note: User's image didn't clearly show a button, but UX requires one. styling to be subtle or standard. */}
                         <button
                             onClick={() => setShowOrientationModal(false)}
-                            className="w-full mt-6 py-3 bg-[#58cc02] text-white font-bold rounded-xl shadow-lg hover:bg-[#46a302] transition-transform active:scale-95"
+                            className="w-full py-3 bg-slate-900 text-white font-bold rounded-xl shadow-lg hover:bg-slate-700 transition-all active:scale-95 text-sm"
                         >
-                            OK
+                            始める
                         </button>
                     </div>
                 </div>
