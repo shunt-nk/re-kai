@@ -30,7 +30,7 @@ function TabletClientContent() {
     // --- State ---
     const [mode, setMode] = useState<'draw' | 'erase'>('draw');
     const [color, setColor] = useState('#3b82f6'); // 初期色: 青
-    const [size, setSize] = useState(5);
+    const [size, setSize] = useState(8);
     const [isConnected, setIsConnected] = useState(false);
     const [showColorPicker, setShowColorPicker] = useState(false);
 
@@ -121,7 +121,6 @@ function TabletClientContent() {
 
         const handleResize = () => {
             if (canvasRef.current && containerRef.current) {
-                // コンテナのサイズに合わせてキャンバスをリサイズ（Retina対応はあえてせず、座標ズレ防止優先）
                 const { clientWidth, clientHeight } = containerRef.current;
                 canvasRef.current.width = clientWidth;
                 canvasRef.current.height = clientHeight;
@@ -140,14 +139,30 @@ function TabletClientContent() {
         };
     }, [searchParams]);
 
-    // === ロジック: 描画イベント ===
-    const getPoint = (e: React.PointerEvent) => ({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
+    // === ロジック: 描画イベント (座標ズレ修正版) ===
+    const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        const canvas = canvasRef.current;
+        if (!canvas) return { x: 0, y: 0 };
+
+        // 重要: getBoundingClientRectを使ってキャンバスの絶対位置を取得し、
+        // クリック位置から引くことで、枠線やパディングによるズレを解消する
+        const rect = canvas.getBoundingClientRect();
+        return {
+            x: e.clientX - rect.left,
+            y: e.clientY - rect.top
+        };
+    };
 
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
         e.preventDefault();
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
+
+        // ペン・指の補正 (タッチデバイスでの誤動作防止)
+        if (e.pointerType === 'touch') {
+            // タッチの場合の微調整が必要ならここで行うが、rect計算で基本は合うはず
+        }
 
         const { x, y } = getPoint(e);
         currentStrokeRef.current = { type: 'stroke', mode, color, size, points: [{ x, y }] };
@@ -184,113 +199,119 @@ function TabletClientContent() {
         channelRef.current?.trigger('client-stroke-end', {});
     };
 
-    // === UI実装 (フルスクリーン化) ===
+    // === UI実装 ===
     return (
-        // 重要: fixed inset-0 で画面全体を強制確保し、z-index最前面に配置
         <div className="fixed inset-0 z-50 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-screen">
 
-            {/* --- ヘッダー (高さ固定・横幅いっぱい) --- */}
-            <header className="h-16 flex-none px-6 flex items-center justify-between bg-transparent w-full">
-                {/* ロゴ */}
+            {/* --- ロゴ (左上) --- */}
+            <div className="pt-4 px-6 flex-none">
                 <div className="flex items-center select-none">
-                    <span className="text-3xl font-bold text-[#1E293B] tracking-tight">RE</span>
-                    <span className="text-3xl font-bold text-[#06B6D4] mx-0.5">:</span>
-                    <span className="text-3xl font-bold text-[#1E293B] tracking-tight">KAI</span>
-                </div>
-
-                {/* Undo / Redo */}
-                <div className="flex gap-4">
-                    <button
-                        onClick={performUndo}
-                        className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50"
-                    >
-                        <RotateCcw size={24} />
-                    </button>
-                    <button
-                        onClick={performRedo}
-                        className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50"
-                    >
-                        <RotateCw size={24} />
-                    </button>
-                </div>
-            </header>
-
-            {/* --- ツールバー (横一列配置) --- */}
-            <div className="flex-none px-6 pb-4 flex items-center gap-6 w-full">
-                {/* ツール切り替え */}
-                <div className="flex gap-3">
-                    <button
-                        onClick={() => setMode('draw')}
-                        className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all shadow-sm ${mode === 'draw' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
-                    >
-                        <Pencil size={24} />
-                    </button>
-                    <button
-                        onClick={() => setMode('erase')}
-                        className={`w-14 h-14 rounded-2xl flex items-center justify-center border-2 transition-all shadow-sm ${mode === 'erase' ? 'bg-[#333333] text-white border-[#333333]' : 'bg-white text-gray-600 border-gray-200 hover:bg-gray-50'}`}
-                    >
-                        <Eraser size={24} />
-                    </button>
-                    <button className="w-14 h-14 rounded-2xl flex items-center justify-center bg-white text-gray-600 border-2 border-gray-200 shadow-sm hover:bg-gray-50">
-                        <Settings size={24} />
-                    </button>
-                </div>
-
-                {/* スライダー (幅広に設定) */}
-                <div className="flex items-center bg-[#D1D5DB] rounded-full p-1.5 gap-4 h-14 flex-1 max-w-lg shadow-inner relative border border-gray-300">
-                    <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
-                        className="w-11 h-11 rounded-full border-4 border-white shadow-sm relative z-10 hover:scale-105 transition-transform shrink-0"
-                        style={{ backgroundColor: color }}
-                    />
-
-                    <div className="flex-1 relative h-full flex items-center pr-4">
-                        <input
-                            type="range"
-                            min="1"
-                            max="50"
-                            value={size}
-                            onChange={(e) => setSize(Number(e.target.value))}
-                            className="w-full h-3 bg-[#555555] rounded-full appearance-none outline-none slider-thumb"
-                            style={{
-                                background: `linear-gradient(to right, #555555 0%, #555555 ${((size - 1) / 49) * 100}%, #9CA3AF ${((size - 1) / 49) * 100}%, #9CA3AF 100%)`
-                            }}
-                        />
-                        <style jsx>{`
-                            .slider-thumb::-webkit-slider-thumb {
-                                -webkit-appearance: none;
-                                appearance: none;
-                                width: 28px;
-                                height: 28px;
-                                background: #ffffff;
-                                border: 2px solid #d1d5db;
-                                border-radius: 50%;
-                                cursor: pointer;
-                                box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-                            }
-                        `}</style>
-                    </div>
-
-                    {showColorPicker && (
-                        <div className="absolute top-16 left-0 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 grid grid-cols-3 gap-3 z-30 animate-in fade-in zoom-in-95 duration-200">
-                            {colors.map(c => (
-                                <button
-                                    key={c}
-                                    onClick={() => { setColor(c); setShowColorPicker(false); }}
-                                    className="w-10 h-10 rounded-full border-2 transition-transform hover:scale-110"
-                                    style={{ backgroundColor: c, borderColor: color === c ? '#333' : 'transparent' }}
-                                />
-                            ))}
-                        </div>
-                    )}
+                    <span className="text-4xl font-extrabold text-[#0F172A] tracking-tighter">RE</span>
+                    <span className="text-4xl font-extrabold text-[#06B6D4] mx-1">:</span>
+                    <span className="text-4xl font-extrabold text-[#0F172A] tracking-tighter">KAI</span>
                 </div>
             </div>
 
-            {/* --- キャンバスエリア (残りの領域全て) --- */}
+            {/* --- ツールバー行 --- */}
+            <div className="px-6 py-4 flex items-center justify-between flex-none">
+                <div className="flex items-center gap-4">
+                    {/* ツールボタン群 */}
+                    <div className="flex gap-3">
+                        {/* 鉛筆 (Active: Dark Grey) */}
+                        <button
+                            onClick={() => setMode('draw')}
+                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'draw'
+                                    ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                                    : 'bg-white border-gray-200 text-gray-700'
+                                }`}
+                        >
+                            <Pencil size={32} strokeWidth={2.5} />
+                        </button>
+
+                        {/* 消しゴム */}
+                        <button
+                            onClick={() => setMode('erase')}
+                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'erase'
+                                    ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                                    : 'bg-white border-gray-200 text-gray-700'
+                                }`}
+                        >
+                            <Eraser size={32} strokeWidth={2.5} />
+                        </button>
+
+                        {/* 設定 */}
+                        <button className="w-14 h-14 rounded-xl flex items-center justify-center bg-white border-2 border-gray-200 text-gray-700 shadow-sm">
+                            <Settings size={32} strokeWidth={2.5} />
+                        </button>
+                    </div>
+
+                    {/* スライダー (画像再現: 左に色、右にバー) */}
+                    <div className="flex items-center bg-[#E5E7EB] rounded-full p-1 pl-1 h-14 shadow-inner relative border border-gray-300 ml-2">
+                        {/* 左：現在の色 (大きめの円) */}
+                        <button
+                            onClick={() => setShowColorPicker(!showColorPicker)}
+                            className="w-12 h-12 rounded-full border-4 border-white shadow-sm relative z-10 shrink-0"
+                            style={{ backgroundColor: color }}
+                        />
+
+                        {/* 右：ダークなトラックバー */}
+                        <div className="w-48 h-full flex items-center px-3 relative bg-[#4B4B4B] rounded-r-full -ml-6 pl-8 z-0">
+                            <input
+                                type="range"
+                                min="1"
+                                max="40"
+                                value={size}
+                                onChange={(e) => setSize(Number(e.target.value))}
+                                className="w-full h-full opacity-0 absolute inset-0 z-20 cursor-pointer"
+                            />
+                            {/* 白いツマミ (Visual Only) */}
+                            <div
+                                className="absolute w-8 h-8 bg-white rounded-full shadow-md pointer-events-none transition-transform"
+                                style={{
+                                    left: `calc(${((size - 1) / 39) * 100}% + 20px)`, // 位置調整
+                                    transform: 'translateX(-50%)'
+                                }}
+                            />
+                        </div>
+
+                        {/* カラーパレット */}
+                        {showColorPicker && (
+                            <div className="absolute top-16 left-0 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 grid grid-cols-3 gap-3 z-30 animate-in fade-in zoom-in-95 duration-200">
+                                {colors.map(c => (
+                                    <button
+                                        key={c}
+                                        onClick={() => { setColor(c); setShowColorPicker(false); }}
+                                        className="w-10 h-10 rounded-full border-2 transition-transform hover:scale-110"
+                                        style={{ backgroundColor: c, borderColor: color === c ? '#333' : 'transparent' }}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                </div>
+
+                {/* 右側: Undo/Redo */}
+                <div className="flex gap-3">
+                    <button
+                        onClick={performUndo}
+                        className="w-14 h-14 bg-white rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-center text-gray-600 active:scale-95"
+                    >
+                        <RotateCcw size={32} strokeWidth={2.5} />
+                    </button>
+                    <button
+                        onClick={performRedo}
+                        className="w-14 h-14 bg-white rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-center text-gray-600 active:scale-95"
+                    >
+                        <RotateCw size={32} strokeWidth={2.5} />
+                    </button>
+                </div>
+            </div>
+
+            {/* --- キャンバスエリア (残り全て) --- */}
             <div className="flex-1 w-full px-6 pb-6 overflow-hidden">
                 <div
                     ref={containerRef}
-                    className="w-full h-full bg-white border-[3px] border-black rounded-lg shadow-sm relative touch-none overflow-hidden"
+                    className="w-full h-full bg-white border-[3px] border-black relative touch-none shadow-sm"
                 >
                     <canvas
                         ref={canvasRef}
