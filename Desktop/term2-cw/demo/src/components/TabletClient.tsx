@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Pusher from 'pusher-js';
 import { useSearchParams } from 'next/navigation';
-import { Pencil, Eraser, Settings, RotateCcw, RotateCw } from 'lucide-react';
+import { Pencil, Eraser, Palette, RotateCcw, RotateCw } from 'lucide-react'; // SettingsをPaletteに変更
 
 // === 型定義 ===
 interface Stroke {
@@ -144,8 +144,6 @@ function TabletClientContent() {
         const canvas = canvasRef.current;
         if (!canvas) return { x: 0, y: 0 };
 
-        // 重要: getBoundingClientRectを使ってキャンバスの絶対位置を取得し、
-        // クリック位置から引くことで、枠線やパディングによるズレを解消する
         const rect = canvas.getBoundingClientRect();
         return {
             x: e.clientX - rect.left,
@@ -158,11 +156,6 @@ function TabletClientContent() {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
-
-        // ペン・指の補正 (タッチデバイスでの誤動作防止)
-        if (e.pointerType === 'touch') {
-            // タッチの場合の微調整が必要ならここで行うが、rect計算で基本は合うはず
-        }
 
         const { x, y } = getPoint(e);
         currentStrokeRef.current = { type: 'stroke', mode, color, size, points: [{ x, y }] };
@@ -203,112 +196,122 @@ function TabletClientContent() {
     return (
         <div className="fixed inset-0 z-50 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-screen">
 
-            {/* --- ロゴ (左上) --- */}
-            <div className="pt-4 px-6 flex-none">
+            {/* --- ヘッダー: ロゴとUndo/Redo --- */}
+            <header className="px-6 py-4 flex items-center justify-between flex-none">
+                {/* ロゴ: スタイル適用 */}
                 <div className="flex items-center select-none">
-                    <span className="text-4xl font-extrabold text-[#0F172A] tracking-tighter">RE</span>
-                    <span className="text-4xl font-extrabold text-[#06B6D4] mx-1">:</span>
-                    <span className="text-4xl font-extrabold text-[#0F172A] tracking-tighter">KAI</span>
-                </div>
-            </div>
-
-            {/* --- ツールバー行 --- */}
-            <div className="px-6 py-4 flex items-center justify-between flex-none">
-                <div className="flex items-center gap-4">
-                    {/* ツールボタン群 */}
-                    <div className="flex gap-3">
-                        {/* 鉛筆 (Active: Dark Grey) */}
-                        <button
-                            onClick={() => setMode('draw')}
-                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'draw'
-                                    ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
-                                    : 'bg-white border-gray-200 text-gray-700'
-                                }`}
-                        >
-                            <Pencil size={32} strokeWidth={2.5} />
-                        </button>
-
-                        {/* 消しゴム */}
-                        <button
-                            onClick={() => setMode('erase')}
-                            className={`w-14 h-14 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'erase'
-                                    ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
-                                    : 'bg-white border-gray-200 text-gray-700'
-                                }`}
-                        >
-                            <Eraser size={32} strokeWidth={2.5} />
-                        </button>
-
-                        {/* 設定 */}
-                        <button className="w-14 h-14 rounded-xl flex items-center justify-center bg-white border-2 border-gray-200 text-gray-700 shadow-sm">
-                            <Settings size={32} strokeWidth={2.5} />
-                        </button>
-                    </div>
-
-                    {/* スライダー (画像再現: 左に色、右にバー) */}
-                    <div className="flex items-center bg-[#E5E7EB] rounded-full p-1 pl-1 h-14 shadow-inner relative border border-gray-300 ml-2">
-                        {/* 左：現在の色 (大きめの円) */}
-                        <button
-                            onClick={() => setShowColorPicker(!showColorPicker)}
-                            className="w-12 h-12 rounded-full border-4 border-white shadow-sm relative z-10 shrink-0"
-                            style={{ backgroundColor: color }}
-                        />
-
-                        {/* 右：ダークなトラックバー */}
-                        <div className="w-48 h-full flex items-center px-3 relative bg-[#4B4B4B] rounded-r-full -ml-6 pl-8 z-0">
-                            <input
-                                type="range"
-                                min="1"
-                                max="40"
-                                value={size}
-                                onChange={(e) => setSize(Number(e.target.value))}
-                                className="w-full h-full opacity-0 absolute inset-0 z-20 cursor-pointer"
-                            />
-                            {/* 白いツマミ (Visual Only) */}
-                            <div
-                                className="absolute w-8 h-8 bg-white rounded-full shadow-md pointer-events-none transition-transform"
-                                style={{
-                                    left: `calc(${((size - 1) / 39) * 100}% + 20px)`, // 位置調整
-                                    transform: 'translateX(-50%)'
-                                }}
-                            />
-                        </div>
-
-                        {/* カラーパレット */}
-                        {showColorPicker && (
-                            <div className="absolute top-16 left-0 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 grid grid-cols-3 gap-3 z-30 animate-in fade-in zoom-in-95 duration-200">
-                                {colors.map(c => (
-                                    <button
-                                        key={c}
-                                        onClick={() => { setColor(c); setShowColorPicker(false); }}
-                                        className="w-10 h-10 rounded-full border-2 transition-transform hover:scale-110"
-                                        style={{ backgroundColor: c, borderColor: color === c ? '#333' : 'transparent' }}
-                                    />
-                                ))}
-                            </div>
-                        )}
-                    </div>
+                    <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">RE</span>
+                    <span className="text-3xl font-extrabold text-[#06B6D4] mx-1">:</span>
+                    <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">KAI</span>
                 </div>
 
                 {/* 右側: Undo/Redo */}
                 <div className="flex gap-3">
                     <button
                         onClick={performUndo}
-                        className="w-14 h-14 bg-white rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-center text-gray-600 active:scale-95"
+                        className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50"
                     >
-                        <RotateCcw size={32} strokeWidth={2.5} />
+                        <RotateCcw size={24} strokeWidth={2.5} />
                     </button>
                     <button
                         onClick={performRedo}
-                        className="w-14 h-14 bg-white rounded-xl shadow-sm border-2 border-gray-200 flex items-center justify-center text-gray-600 active:scale-95"
+                        className="w-12 h-12 bg-white rounded-xl shadow-sm border border-gray-200 flex items-center justify-center text-gray-600 active:scale-95 transition-transform hover:bg-gray-50"
                     >
-                        <RotateCw size={32} strokeWidth={2.5} />
+                        <RotateCw size={24} strokeWidth={2.5} />
                     </button>
                 </div>
+            </header>
+
+            {/* --- ツールバー行 --- */}
+            <div className="px-6 pb-4 flex items-center gap-4 flex-none relative z-20">
+
+                {/* ツールボタン群 */}
+                <div className="flex gap-3">
+                    {/* 鉛筆 */}
+                    <button
+                        onClick={() => setMode('draw')}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'draw'
+                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            }`}
+                    >
+                        <Pencil size={24} strokeWidth={2.5} />
+                    </button>
+
+                    {/* 消しゴム */}
+                    <button
+                        onClick={() => setMode('erase')}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'erase'
+                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            }`}
+                    >
+                        <Eraser size={24} strokeWidth={2.5} />
+                    </button>
+
+                    {/* カラーパレットボタン (修正箇所) */}
+                    <button
+                        onClick={() => setShowColorPicker(!showColorPicker)}
+                        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${showColorPicker
+                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            }`}
+                    >
+                        <Palette size={24} strokeWidth={2.5} />
+                    </button>
+                </div>
+
+                {/* スライダーバー (復活・修正箇所) */}
+                <div className="flex items-center bg-[#E5E7EB] rounded-full p-1 pl-1 h-12 shadow-inner relative border border-gray-300 flex-1 max-w-xs">
+                    {/* 左：現在の色プレビュー (クリックでパレット開閉も可) */}
+                    <button
+                        onClick={() => setShowColorPicker(!showColorPicker)}
+                        className="w-10 h-10 rounded-full border-4 border-white shadow-sm relative z-10 shrink-0 transition-transform hover:scale-105"
+                        style={{ backgroundColor: color }}
+                    />
+
+                    {/* 右：スライダーのトラックとツマミ */}
+                    <div className="flex-1 h-full flex items-center pr-3 relative ml-2">
+                        {/* トラック背景 */}
+                        <div className="w-full h-2 bg-[#4B4B4B] rounded-full absolute" />
+
+                        {/* 実際のinput (透明) */}
+                        <input
+                            type="range"
+                            min="1"
+                            max="40"
+                            value={size}
+                            onChange={(e) => setSize(Number(e.target.value))}
+                            className="w-full h-full opacity-0 absolute inset-0 z-20 cursor-pointer"
+                        />
+
+                        {/* 白いツマミ (Visual Only) */}
+                        <div
+                            className="absolute w-6 h-6 bg-white rounded-full shadow-md pointer-events-none transition-transform border border-gray-200 top-1/2 -translate-y-1/2"
+                            style={{
+                                left: `calc(${((size - 1) / 39) * 100}% - 12px + 1.5rem)`, // 位置計算
+                            }}
+                        />
+                    </div>
+                </div>
+
+                {/* カラーパレットポップオーバー */}
+                {showColorPicker && (
+                    <div className="absolute top-16 left-0 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 grid grid-cols-3 gap-3 z-30 animate-in fade-in zoom-in-95 duration-200">
+                        {colors.map(c => (
+                            <button
+                                key={c}
+                                onClick={() => { setColor(c); setShowColorPicker(false); }}
+                                className="w-10 h-10 rounded-full border-2 transition-transform hover:scale-110"
+                                style={{ backgroundColor: c, borderColor: color === c ? '#333' : 'transparent' }}
+                            />
+                        ))}
+                    </div>
+                )}
             </div>
 
-            {/* --- キャンバスエリア (残り全て) --- */}
-            <div className="flex-1 w-full px-6 pb-6 overflow-hidden">
+            {/* --- キャンバスエリア --- */}
+            <div className="flex-1 w-full px-6 pb-6 overflow-hidden relative z-10">
                 <div
                     ref={containerRef}
                     className="w-full h-full bg-white border-[3px] border-black relative touch-none shadow-sm"
