@@ -3,7 +3,7 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Pusher from 'pusher-js';
 import { useSearchParams } from 'next/navigation';
-import { Pencil, Eraser, Palette, RotateCcw, RotateCw } from 'lucide-react'; // SettingsをPaletteに変更
+import { Pencil, Eraser, Palette, RotateCcw, RotateCw } from 'lucide-react';
 
 // === 型定義 ===
 interface Stroke {
@@ -26,22 +26,19 @@ function TabletClientContent() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const channelRef = useRef<PusherChannel | null>(null);
     const containerRef = useRef<HTMLDivElement>(null);
+    const colorInputRef = useRef<HTMLInputElement>(null); // カラーパレット用
 
     // --- State ---
     const [mode, setMode] = useState<'draw' | 'erase'>('draw');
     const [color, setColor] = useState('#3b82f6'); // 初期色: 青
     const [size, setSize] = useState(8);
     const [isConnected, setIsConnected] = useState(false);
-    const [showColorPicker, setShowColorPicker] = useState(false);
 
     // --- Logic State ---
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
     const tokenRef = useRef<string | null>(null);
-
-    // --- Colors Preset ---
-    const colors = ['#1E293B', '#EF4444', '#3B82F6', '#10B981', '#F59E0B', '#8B5CF6'];
 
     // === ロジック: 再描画 ===
     const redraw = () => {
@@ -139,15 +136,19 @@ function TabletClientContent() {
         };
     }, [searchParams]);
 
-    // === ロジック: 描画イベント (座標ズレ修正版) ===
+    // === ロジック: 描画イベント (ズレ完全修正版) ===
     const getPoint = (e: React.PointerEvent<HTMLCanvasElement>) => {
         const canvas = canvasRef.current;
         if (!canvas) return { x: 0, y: 0 };
 
         const rect = canvas.getBoundingClientRect();
+        // キャンバスの表示サイズと内部解像度の比率を計算して補正
+        const scaleX = canvas.width / rect.width;
+        const scaleY = canvas.height / rect.height;
+
         return {
-            x: e.clientX - rect.left,
-            y: e.clientY - rect.top
+            x: (e.clientX - rect.left) * scaleX,
+            y: (e.clientY - rect.top) * scaleY
         };
     };
 
@@ -192,13 +193,19 @@ function TabletClientContent() {
         channelRef.current?.trigger('client-stroke-end', {});
     };
 
+    // カラーパレットを開く
+    const openColorPicker = () => {
+        colorInputRef.current?.click();
+    };
+
     // === UI実装 ===
     return (
-        <div className="fixed inset-0 z-50 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-screen">
+        // flex-col と h-[100dvh] で画面サイズに完全に追従させる（突き抜け防止）
+        <div className="fixed inset-0 z-50 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-[100dvh]">
 
             {/* --- ヘッダー: ロゴとUndo/Redo --- */}
-            <header className="px-6 py-4 flex items-center justify-between flex-none">
-                {/* ロゴ: スタイル適用 */}
+            <header className="px-6 pt-4 pb-2 flex items-center justify-between flex-none">
+                {/* ロゴ */}
                 <div className="flex items-center select-none">
                     <span className="text-3xl font-extrabold text-[#0F172A] tracking-tighter">RE</span>
                     <span className="text-3xl font-extrabold text-[#06B6D4] mx-1">:</span>
@@ -249,72 +256,75 @@ function TabletClientContent() {
                         <Eraser size={24} strokeWidth={2.5} />
                     </button>
 
-                    {/* カラーパレットボタン (修正箇所) */}
+                    {/* カラーパレットボタン (ブラウザ標準ピッカー起動) */}
                     <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
-                        className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${showColorPicker
-                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
-                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
-                            }`}
+                        onClick={openColorPicker}
+                        className="w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 bg-white border-gray-200 text-gray-700 hover:bg-gray-50 relative"
                     >
-                        <Palette size={24} strokeWidth={2.5} />
+                        <Palette size={24} strokeWidth={2.5} style={{ color: color }} />
+                        {/* 隠しカラーインプット */}
+                        <input
+                            ref={colorInputRef}
+                            type="color"
+                            value={color}
+                            onChange={(e) => setColor(e.target.value)}
+                            className="absolute inset-0 opacity-0 w-full h-full cursor-pointer"
+                        />
                     </button>
                 </div>
 
-                {/* スライダーバー (復活・修正箇所) */}
+                {/* スライダーバー */}
                 <div className="flex items-center bg-[#E5E7EB] rounded-full p-1 pl-1 h-12 shadow-inner relative border border-gray-300 flex-1 max-w-xs">
-                    {/* 左：現在の色プレビュー (クリックでパレット開閉も可) */}
+                    {/* 左：現在の色プレビュー */}
                     <button
-                        onClick={() => setShowColorPicker(!showColorPicker)}
+                        onClick={openColorPicker}
                         className="w-10 h-10 rounded-full border-4 border-white shadow-sm relative z-10 shrink-0 transition-transform hover:scale-105"
                         style={{ backgroundColor: color }}
                     />
 
-                    {/* 右：スライダーのトラックとツマミ */}
+                    {/* 右：スライダー */}
                     <div className="flex-1 h-full flex items-center pr-3 relative ml-2">
-                        {/* トラック背景 */}
-                        <div className="w-full h-2 bg-[#4B4B4B] rounded-full absolute" />
-
-                        {/* 実際のinput (透明) */}
+                        {/* 実際のinput (透明度なしで表示し、カスタムCSSでスタイル) */}
                         <input
                             type="range"
                             min="1"
                             max="40"
                             value={size}
                             onChange={(e) => setSize(Number(e.target.value))}
-                            className="w-full h-full opacity-0 absolute inset-0 z-20 cursor-pointer"
+                            className="w-full h-2 bg-[#4B4B4B] rounded-full appearance-none outline-none slider-thumb cursor-pointer"
                         />
-
-                        {/* 白いツマミ (Visual Only) */}
-                        <div
-                            className="absolute w-6 h-6 bg-white rounded-full shadow-md pointer-events-none transition-transform border border-gray-200 top-1/2 -translate-y-1/2"
-                            style={{
-                                left: `calc(${((size - 1) / 39) * 100}% - 12px + 1.5rem)`, // 位置計算
-                            }}
-                        />
+                        <style jsx>{`
+                            /* スライダーのツマミを大きくして操作しやすくする */
+                            .slider-thumb::-webkit-slider-thumb {
+                                -webkit-appearance: none;
+                                appearance: none;
+                                width: 28px; /* 大きくしました */
+                                height: 28px; /* 大きくしました */
+                                background: #ffffff;
+                                border: 1px solid #d1d5db;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                            }
+                            .slider-thumb::-moz-range-thumb {
+                                width: 28px;
+                                height: 28px;
+                                background: #ffffff;
+                                border: 1px solid #d1d5db;
+                                border-radius: 50%;
+                                cursor: pointer;
+                                box-shadow: 0 2px 4px rgba(0,0,0,0.15);
+                            }
+                        `}</style>
                     </div>
                 </div>
-
-                {/* カラーパレットポップオーバー */}
-                {showColorPicker && (
-                    <div className="absolute top-16 left-0 bg-white p-4 rounded-2xl shadow-xl border border-gray-100 grid grid-cols-3 gap-3 z-30 animate-in fade-in zoom-in-95 duration-200">
-                        {colors.map(c => (
-                            <button
-                                key={c}
-                                onClick={() => { setColor(c); setShowColorPicker(false); }}
-                                className="w-10 h-10 rounded-full border-2 transition-transform hover:scale-110"
-                                style={{ backgroundColor: c, borderColor: color === c ? '#333' : 'transparent' }}
-                            />
-                        ))}
-                    </div>
-                )}
             </div>
 
-            {/* --- キャンバスエリア --- */}
-            <div className="flex-1 w-full px-6 pb-6 overflow-hidden relative z-10">
+            {/* --- キャンバスエリア (flex-1 と min-h-0 で画面内に収める) --- */}
+            <div className="flex-1 w-full px-6 pb-6 min-h-0 overflow-hidden relative z-10">
                 <div
                     ref={containerRef}
-                    className="w-full h-full bg-white border-[3px] border-black relative touch-none shadow-sm"
+                    className="w-full h-full bg-white border-[3px] border-black relative touch-none shadow-sm overflow-hidden"
                 >
                     <canvas
                         ref={canvasRef}
