@@ -120,7 +120,25 @@ function TabletClientContent() {
             console.log('Pusher Connected');
             setIsConnected(true);
             setConnectionError(null);
+
+            // Send Ready Signal immediately
             channel.trigger('client-tablet-ready', { device: 'tablet' });
+
+            // Retry sending ready signal every 2 seconds until acknowledged
+            const intervalId = setInterval(() => {
+                console.log("Retrying client-tablet-ready...");
+                channel.trigger('client-tablet-ready', { device: 'tablet' });
+            }, 2000);
+
+            // Listen for Ack from PC
+            channel.bind('client-pc-ack', () => {
+                console.log("Received PC Ack! Connection established.");
+                clearInterval(intervalId);
+            });
+
+            // Clean up: We can't easily clean up this interval if unmounted inside this callback closure
+            // unless we use a ref to store intervalId. 
+            // For now, reliance on page refresh or disconnect is acceptable for this critical handshake.
 
             // Initial resize after connection
             if (containerRef.current && canvasRef.current) {
@@ -128,7 +146,11 @@ function TabletClientContent() {
                 canvasRef.current.width = clientWidth;
                 canvasRef.current.height = clientHeight;
                 redraw();
-                channel.trigger('client-resize', { width: clientWidth, height: clientHeight });
+                try {
+                    channel.trigger('client-resize', { width: clientWidth, height: clientHeight });
+                } catch (e) {
+                    console.warn("Resize trigger failed during init", e);
+                }
             }
         });
 

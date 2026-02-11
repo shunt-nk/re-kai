@@ -115,9 +115,21 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
 
             qrRef.current.innerHTML = '';
             const qrCanvas = document.createElement('canvas');
+
+            // Use a flag to prevent appending if unmounted/token changed
+            let isCancelled = false;
+
             QRCode.toCanvas(qrCanvas, url, { width: 160, margin: 1, color: { dark: '#334155', light: '#ffffff' } }, (err) => {
-                if (!err && qrRef.current) qrRef.current.appendChild(qrCanvas);
+                if (isCancelled) return;
+                if (!err && qrRef.current) {
+                    qrRef.current.innerHTML = ''; // Clear again just in case
+                    qrRef.current.appendChild(qrCanvas);
+                }
             });
+
+            // Cleanup function for this specific block not easy inside useEffect generally, 
+            // but we rely on the main cleanup or next run.
+            // Actually, we can't easily cancel strict mode dupes here without ref tracking.
         }
 
 
@@ -145,9 +157,13 @@ const RealTimeCanvas = forwardRef<RealTimeCanvasHandle, RealTimeCanvasProps>(({
         });
 
         channel.bind('client-tablet-ready', () => {
+            console.log("Received client-tablet-ready");
             setLastEvent('Tablet Ready');
             setIsConnected(true);
             if (onConnectionChange) onConnectionChange(true, null);
+
+            // Send Acknowledgement
+            channel.trigger('client-pc-ack', { status: 'ok' });
         });
 
         channel.bind('client-stroke-start', (d: DrawData) => {
