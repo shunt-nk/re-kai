@@ -86,6 +86,9 @@ function TabletClientContent() {
     // === ロジック: Pusher接続 & リサイズ ===
     const searchParams = useSearchParams();
 
+    // connection error state
+    const [connectionError, setConnectionError] = useState<string | null>(null);
+
     useEffect(() => {
         const token = searchParams.get('token');
         tokenRef.current = token;
@@ -97,8 +100,12 @@ function TabletClientContent() {
 
         if (!pusherKey || !pusherCluster) {
             console.error("Missing Pusher Env Vars");
+            setConnectionError("Pusher設定が見つかりません");
             return;
         }
+
+        // Enable logger
+        Pusher.logToConsole = true;
 
         const pusher = new Pusher(pusherKey, {
             cluster: pusherCluster,
@@ -112,8 +119,23 @@ function TabletClientContent() {
         channel.bind('pusher:subscription_succeeded', () => {
             console.log('Pusher Connected');
             setIsConnected(true);
+            setConnectionError(null);
             channel.trigger('client-tablet-ready', { device: 'tablet' });
-            handleResize();
+
+            // Initial resize after connection
+            if (containerRef.current && canvasRef.current) {
+                const { clientWidth, clientHeight } = containerRef.current;
+                canvasRef.current.width = clientWidth;
+                canvasRef.current.height = clientHeight;
+                redraw();
+                channel.trigger('client-resize', { width: clientWidth, height: clientHeight });
+            }
+        });
+
+        channel.bind('pusher:subscription_error', (status: any) => {
+            console.error('Pusher Subscription Error:', status);
+            setIsConnected(false);
+            setConnectionError("接続エラー: 認証に失敗しました (" + status + ")");
         });
 
         const handleResize = () => {
@@ -122,12 +144,31 @@ function TabletClientContent() {
                 canvasRef.current.width = clientWidth;
                 canvasRef.current.height = clientHeight;
                 redraw();
-                channelRef.current?.trigger('client-resize', { width: clientWidth, height: clientHeight });
+                // Only trigger if we are connected to avoid errors
+                // We'll use the ref's current channel, and ideally check if it's subscribed, 
+                // but checking connection state via local var or ref is safer.
+                // Note: 'channel' variable is available here in closure, but 'isConnected' state might be stale.
+                // However, Pusher throws if you trigger on unsubscribed channel.
+                // We can't easily check 'subscribed' property on the generic interface.
+                // We will wrap in a try-catch for safety during resize events.
+                try {
+                    channelRef.current?.trigger('client-resize', { width: clientWidth, height: clientHeight });
+                } catch (e) {
+                    // Ignore trigger errors during resize if not connected
+                }
             }
         };
 
         window.addEventListener('resize', handleResize);
-        setTimeout(handleResize, 100);
+
+        // Initial local resize (without trigger, or with try-catch safe trigger)
+        // This handles visual sizing before connection
+        if (containerRef.current && canvasRef.current) {
+            const { clientWidth, clientHeight } = containerRef.current;
+            canvasRef.current.width = clientWidth;
+            canvasRef.current.height = clientHeight;
+            redraw();
+        }
 
         return () => {
             window.removeEventListener('resize', handleResize);
@@ -203,6 +244,13 @@ function TabletClientContent() {
         // flex-col と h-[100dvh] で画面サイズに完全に追従させる（突き抜け防止）
         <div className="fixed inset-0 z-50 bg-[#F5F5F5] flex flex-col font-sans select-none overflow-hidden touch-none w-screen h-[100dvh]">
 
+            {/* エラー表示 (最前面) */}
+            {connectionError && (
+                <div className="absolute top-0 left-0 right-0 bg-red-500 text-white text-xs font-bold text-center py-1 z-[60]">
+                    {connectionError}
+                </div>
+            )}
+
             {/* --- ヘッダー: ロゴとUndo/Redo --- */}
             <header className="px-6 pt-4 pb-2 flex items-center justify-between flex-none">
                 {/* ロゴ */}
@@ -238,8 +286,8 @@ function TabletClientContent() {
                     <button
                         onClick={() => setMode('draw')}
                         className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'draw'
-                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
-                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                            : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <Pencil size={24} strokeWidth={2.5} />
@@ -249,8 +297,8 @@ function TabletClientContent() {
                     <button
                         onClick={() => setMode('erase')}
                         className={`w-12 h-12 rounded-xl flex items-center justify-center transition-all shadow-sm border-2 ${mode === 'erase'
-                                ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
-                                : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
+                            ? 'bg-[#4B4B4B] border-[#4B4B4B] text-white'
+                            : 'bg-white border-gray-200 text-gray-700 hover:bg-gray-50'
                             }`}
                     >
                         <Eraser size={24} strokeWidth={2.5} />
