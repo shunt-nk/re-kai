@@ -694,7 +694,6 @@ function TabletClientContent() {
                     </button>
                 </div>
                 <div className="flex items-center bg-[#E5E7EB] rounded-full p-1 pl-1 h-12 shadow-inner relative border border-gray-300 flex-1 max-w-xs">
-                    <button onClick={openColorPicker} className="w-10 h-10 rounded-full border-4 border-white shadow-sm relative z-10 shrink-0 transition-transform hover:scale-105" style={{ backgroundColor: color }} />
                     <div className="flex-1 h-full flex items-center pr-3 relative ml-2">
                         <input type="range" min="1" max="40" value={size} onChange={(e) => setSize(Number(e.target.value))} className="w-full h-2 bg-[#4B4B4B] rounded-full appearance-none outline-none slider-thumb cursor-pointer" />
                         <style jsx>{`
