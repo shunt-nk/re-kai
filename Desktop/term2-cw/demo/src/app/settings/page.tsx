@@ -5,12 +5,11 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import styles from '../dashboard/dashboard.module.css';
 import { useRouter } from 'next/navigation';
-import { CURRENT_USER } from '@/data/mockData';
 
 export default function SettingsPage() {
     const router = useRouter();
-    const [name, setName] = useState(CURRENT_USER.name);
-    const [email, setEmail] = useState('demo@example.com'); // Mock email
+    const [name, setName] = useState('');
+    const [email, setEmail] = useState('');
     const [targetLevel, setTargetLevel] = useState('MARCHレベル');
     const [weakSubjects, setWeakSubjects] = useState<string[]>(['数B']);
     const [soundEnabled, setSoundEnabled] = useState(true);
@@ -18,11 +17,32 @@ export default function SettingsPage() {
     const [isSaving, setIsSaving] = useState(false);
     const [saveMessage, setSaveMessage] = useState('');
 
+    useEffect(() => {
+        const fetchUserData = async () => {
+            const userId = localStorage.getItem('userId');
+            if (userId) {
+                try {
+                    const res = await fetch(`/api/user?id=${userId}`);
+                    if (res.ok) {
+                        const data = await res.json();
+                        if (data.user) {
+                            setName(data.user.name);
+                            setEmail(data.user.email || 'user@example.com');
+                        }
+                    }
+                } catch (e) {
+                    console.error("Failed to fetch user data", e);
+                }
+            }
+        };
+        fetchUserData();
+    }, []);
+
     const handleSave = async () => {
         setIsSaving(true);
         setSaveMessage('');
 
-        // Simulate API call
+        // Simulate API call for now (Settings API to be implemented)
         await new Promise(resolve => setTimeout(resolve, 1000));
 
         setIsSaving(false);

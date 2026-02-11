@@ -44,7 +44,8 @@ const DashboardProbCard = ({
 
 export default function Dashboard() {
     const router = useRouter();
-    const [user, setUser] = React.useState(CURRENT_USER);
+    // Initialize with partial mock or null, but rely on effect to fetch real data
+    const [user, setUser] = React.useState<typeof CURRENT_USER | null>(null);
     const [history, setHistory] = React.useState<any[]>([]);
 
     // Determine badge class helper
@@ -68,7 +69,10 @@ export default function Dashboard() {
     React.useEffect(() => {
         const fetchUserData = async () => {
             const userId = localStorage.getItem('userId');
-            if (!userId) return;
+            if (!userId) {
+                router.push('/register');
+                return;
+            }
 
             try {
                 // Fetch User Stats
@@ -76,6 +80,11 @@ export default function Dashboard() {
                 if (userRes.ok) {
                     const data = await userRes.json();
                     setUser(data.user);
+                } else {
+                    // Even if userId exists, if server returns error, might need to re-login
+                    // But for now just keep loading or show error?
+                    // Let's redirect to register if user not found
+                    if (userRes.status === 404) router.push('/register');
                 }
                 // Fetch History
                 const histRes = await fetch(`/api/history?userId=${userId}`);
@@ -92,29 +101,15 @@ export default function Dashboard() {
         fetchUserData();
     }, []);
 
-    // Static Data Mapping for UI Sections (Mocking the exact problems for the layout)
-    // Static Data Mapping for UI Sections (Mocking the exact problems for the layout)
-    // Find one problem per subject from selections
-    const subjectProblems = SUBJECT_SELECTIONS.map(sel => {
-        // Try to find a problem that matches this subject title (e.g. '数学I' or '科学' or '日本史' which maps to '日本史' subject in problems)
-        // Note: For Science/Society, we have subjects like '物理' so we might need loose matching or just pick 'any' from that category.
-        // Actually, SUBJECT_SELECTIONS has titles like '科学' but PROBLEMS have subjects like '科学' or '物理'.
-        // Let's create a map or simplistic finder.
-        // Math subjects: MATCH EXACTLY '数学I', '数学A', '数学II', '数学B'
-        // Science: '科学' (selection) vs '科学' (problem). Wait, units have `subject: '物理'` or `'化学'` but we set `subject: '科学'` for some problems?
-        // Let's re-read PROBLEMS.
-        // Math I -> subject: '数学I'
-        // Science -> subject: '科学'
-        // JP History -> subject: '日本史'
-        // World History -> subject: '世界史'
-        // So simple matching on `sel.title` should work for broad categories.
+    if (!user) return <div className={styles.dashboardContainer}>Loading...</div>;
 
+    // Retrieve problems matching selected subjects
+    const subjectProblems = SUBJECT_SELECTIONS.map(sel => {
         return PROBLEMS.find(p => p.subject === sel.title) || PROBLEMS[0];
     }).filter((p, index, self) =>
-        // Unique by ID to prevent duplicates if fallback is used
         index === self.findIndex(t => t.id === p.id)
     );
-    const levelProblems = PROBLEMS.slice(0, 4); // Just reusing for demo
+    const levelProblems = PROBLEMS.slice(0, 4); // Standard Level Problems
     const weaknessProblems = PROBLEMS.slice(0, 4);
 
     return (

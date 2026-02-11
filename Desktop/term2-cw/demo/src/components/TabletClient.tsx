@@ -249,13 +249,28 @@ export default function TabletClient() {
     return (
         <div className="fixed inset-0 bg-white touch-none overflow-hidden">
             {/* Header / Logo Area */}
-            <div className="absolute top-0 left-0 right-0 p-4 z-50 flex items-start justify-between pointer-events-none">
-                <img src="/logo.png" alt="RE:KAI" className="h-8 object-contain pointer-events-auto" />
+            <div className="absolute top-0 left-0 right-0 p-3 z-50 flex items-center justify-between pointer-events-none">
+                <img src="/logo.png" alt="RE:KAI" className="h-5 object-contain pointer-events-auto" />
 
-                {/* Connection Status Indicator (Subtle) */}
-                <div className={`flex items-center gap-2 text-xs font-bold transition-colors duration-300 ${isConnected ? 'text-[#58cc02]' : 'text-[#afafaf]'} pointer-events-auto bg-white/80 backdrop-blur rounded-full px-3 py-1 shadow-sm`}>
-                    <div className={`w-2 h-2 rounded-full transition-colors duration-300 ${isConnected ? 'bg-[#58cc02]' : 'bg-[#e5e5e5]'}`} />
-                    {isConnected ? 'Connected' : (tokenRef.current ? 'Connecting...' : 'No Token')}
+                <div className="flex items-center gap-2 pointer-events-auto">
+                    {/* Connection Status Indicator */}
+                    <div className={`flex items-center gap-2 text-[10px] font-bold transition-all duration-300 ${isConnected ? 'text-green-600 bg-green-50 border border-green-200' : 'text-slate-400 bg-slate-50 border border-slate-200'} rounded-full px-3 py-1 shadow-sm`}>
+                        <div className={`w-1.5 h-1.5 rounded-full transition-colors duration-300 ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                        {isConnected ? 'Connected' : (tokenRef.current ? 'Connecting...' : 'No Token')}
+                    </div>
+
+                    {/* Resend Signal Button (Only if not connected or to force sync) */}
+                    <button
+                        onClick={() => {
+                            if (channelRef.current) {
+                                channelRef.current.trigger('client-tablet-ready', { device: 'tablet', force: true });
+                                setLastSentEvent('Resent Ready Signal');
+                            }
+                        }}
+                        className="bg-blue-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-sm active:scale-95 transition-transform hover:bg-blue-600"
+                    >
+                        再接続信号を送る
+                    </button>
                 </div>
             </div>
 

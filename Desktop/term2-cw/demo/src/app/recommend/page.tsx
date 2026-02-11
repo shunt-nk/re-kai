@@ -20,7 +20,7 @@ export default function RecommendPage() {
         const analyzeAndRecommend = async () => {
             const userId = localStorage.getItem('userId');
             if (!userId) {
-                // Default fallback for guest/demo
+                // Initial state for new users (not logged in)
                 setRecommendedParams({
                     reason: "まずは基礎から始めましょう。数学Iの基本的な問題をおすすめします。",
                     problems: PROBLEMS.filter(p => p.subject === '数I').slice(0, 4)
