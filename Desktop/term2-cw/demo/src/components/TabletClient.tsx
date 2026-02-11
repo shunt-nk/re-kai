@@ -3,9 +3,9 @@
 import React, { useEffect, useRef, useState, Suspense } from 'react';
 import Pusher from 'pusher-js';
 import { useSearchParams } from 'next/navigation';
-import { Pencil, Eraser, Settings, RotateCcw, RotateCw } from 'lucide-react';
+import { Pencil, Eraser, Settings, RotateCcw, RotateCw, Check, Palette, X } from 'lucide-react';
 
-// === Interfaces ===
+// === Types ===
 interface Stroke {
     type: string;
     mode: string;
@@ -21,23 +21,36 @@ interface PusherChannel {
 }
 
 function TabletClientContent() {
+    // --- Refs ---
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const channelRef = useRef<PusherChannel | null>(null);
+    const containerRef = useRef<HTMLDivElement>(null);
 
-    // State
+    // --- State ---
     const [mode, setMode] = useState<'draw' | 'erase'>('draw');
-    const [color, setColor] = useState('#000000');
-    const [size, setSize] = useState(2);
+    const [color, setColor] = useState('#3b82f6'); // Default Blue
+    const [size, setSize] = useState(5);
     const [isConnected, setIsConnected] = useState(false);
     const [showOrientationModal, setShowOrientationModal] = useState(true);
+    const [showColorPicker, setShowColorPicker] = useState(false);
 
-    // Drawing State
+    // --- Logic State ---
     const currentStrokeRef = useRef<Stroke>({ type: 'stroke', mode: 'draw', points: [] });
     const historyRef = useRef<Stroke[]>([]);
     const redoStackRef = useRef<Stroke[]>([]);
     const tokenRef = useRef<string | null>(null);
 
-    // === Helper: Redraw ===
+    // --- Colors Preset ---
+    const colors = [
+        '#000000', // Black
+        '#ef4444', // Red
+        '#3b82f6', // Blue
+        '#22c55e', // Green
+        '#eab308', // Yellow
+        '#a855f7', // Purple
+    ];
+
+    // === Core Logic: Redraw Canvas ===
     const redraw = () => {
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
@@ -61,10 +74,8 @@ function TabletClientContent() {
             }
         });
 
-        // Restore current settings
+        // Restore context for preview or next stroke
         ctx.globalCompositeOperation = 'source-over';
-        ctx.strokeStyle = color;
-        ctx.lineWidth = size;
     };
 
     // === Undo / Redo ===
@@ -84,94 +95,88 @@ function TabletClientContent() {
         channelRef.current?.trigger('client-redo', {});
     };
 
-    // === Initialization (Pusher) ===
+    // === Pusher & Resize Setup ===
     const searchParams = useSearchParams();
 
     useEffect(() => {
         const token = searchParams.get('token');
         tokenRef.current = token;
 
-        if (token) {
-            const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
-            const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
+        if (!token) return;
 
-            if (!pusherKey || !pusherCluster) {
-                console.error("Pusher Env Vars missing", { pusherKey, pusherCluster });
-                return;
-            }
+        // 1. Pusher Init
+        const pusherKey = process.env.NEXT_PUBLIC_PUSHER_KEY;
+        const pusherCluster = process.env.NEXT_PUBLIC_PUSHER_CLUSTER;
 
-            const pusher = new Pusher(pusherKey, {
-                cluster: pusherCluster,
-                authEndpoint: '/api/pusher',
-            });
-
-            const channelName = `private-session-${token}`;
-            const channel = pusher.subscribe(channelName);
-            channelRef.current = channel as unknown as PusherChannel;
-
-            channel.bind('pusher:subscription_succeeded', () => {
-                console.log('Connected to Pusher!');
-                setIsConnected(true);
-                channel.trigger('client-tablet-ready', { device: 'tablet' });
-                if (typeof window !== 'undefined') {
-                    channel.trigger('client-resize', {
-                        width: window.innerWidth,
-                        height: window.innerHeight
-                    });
-                }
-            });
-
-            channel.bind('pusher:subscription_error', (status: any) => {
-                console.error('Pusher Subscription Error', status);
-            });
-
-            const handleResize = () => {
-                if (canvasRef.current) {
-                    canvasRef.current.width = window.innerWidth;
-                    canvasRef.current.height = window.innerHeight;
-                    redraw();
-                    channelRef.current?.trigger('client-resize', {
-                        width: window.innerWidth,
-                        height: window.innerHeight
-                    });
-                }
-            };
-
-            window.addEventListener('resize', handleResize);
-            handleResize();
-
-            // Prevent touch scrolling
-            const canvas = canvasRef.current;
-            const preventDefault = (e: Event) => e.preventDefault();
-            if (canvas) {
-                canvas.addEventListener('touchstart', preventDefault, { passive: false });
-                canvas.addEventListener('touchmove', preventDefault, { passive: false });
-            }
-
-            return () => {
-                window.removeEventListener('resize', handleResize);
-                if (canvas) {
-                    canvas.removeEventListener('touchstart', preventDefault);
-                    canvas.removeEventListener('touchmove', preventDefault);
-                }
-                pusher.unsubscribe(channelName);
-                pusher.disconnect();
-            };
+        if (!pusherKey || !pusherCluster) {
+            console.error("Missing Pusher Env Vars");
+            return;
         }
+
+        const pusher = new Pusher(pusherKey, {
+            cluster: pusherCluster,
+            authEndpoint: '/api/pusher', // Adjust if you use /api/pusher/auth
+        });
+
+        const channelName = `private-session-${token}`;
+        const channel = pusher.subscribe(channelName);
+        channelRef.current = channel as unknown as PusherChannel;
+
+        // 2. Events
+        channel.bind('pusher:subscription_succeeded', () => {
+            console.log('Pusher Connected');
+            setIsConnected(true);
+            channel.trigger('client-tablet-ready', { device: 'tablet' });
+            handleResize();
+        });
+
+        // 3. Resize Logic
+        const handleResize = () => {
+            if (canvasRef.current && containerRef.current) {
+                const { clientWidth, clientHeight } = containerRef.current;
+                canvasRef.current.width = clientWidth;
+                canvasRef.current.height = clientHeight;
+                redraw();
+
+                // Notify PC
+                channelRef.current?.trigger('client-resize', {
+                    width: clientWidth,
+                    height: clientHeight
+                });
+            }
+        };
+
+        window.addEventListener('resize', handleResize);
+        // Delay initial resize to ensure layout is ready
+        setTimeout(handleResize, 100);
+
+        // 4. Cleanup
+        return () => {
+            window.removeEventListener('resize', handleResize);
+            pusher.unsubscribe(channelName);
+            pusher.disconnect();
+        };
     }, [searchParams]);
 
-    // === Drawing Event Handlers ===
+    // === Drawing Handlers ===
+    const getPoint = (e: React.PointerEvent) => {
+        return { x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY };
+    };
+
     const handlePointerDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        e.preventDefault(); // Prevent scrolling
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
+
+        const { x, y } = getPoint(e);
 
         currentStrokeRef.current = {
             type: 'stroke',
             mode,
             color,
             size,
-            points: [{ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY }]
+            points: [{ x, y }]
         };
 
         ctx.beginPath();
@@ -179,204 +184,194 @@ function TabletClientContent() {
         ctx.strokeStyle = color;
         ctx.lineWidth = size;
         ctx.lineCap = 'round';
-        ctx.moveTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        ctx.moveTo(x, y);
 
         channelRef.current?.trigger('client-stroke-start', {
-            mode,
-            color,
-            size,
-            x: e.nativeEvent.offsetX / canvas.width,
-            y: e.nativeEvent.offsetY / canvas.height
+            mode, color, size,
+            x: x / canvas.width,
+            y: y / canvas.height
         });
     };
 
     const handlePointerMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        e.preventDefault();
         if (e.buttons !== 1) return;
         const canvas = canvasRef.current;
         const ctx = canvas?.getContext('2d');
         if (!canvas || !ctx) return;
 
-        currentStrokeRef.current.points.push({ x: e.nativeEvent.offsetX, y: e.nativeEvent.offsetY });
-        ctx.lineTo(e.nativeEvent.offsetX, e.nativeEvent.offsetY);
+        const { x, y } = getPoint(e);
+
+        currentStrokeRef.current.points.push({ x, y });
+        ctx.lineTo(x, y);
         ctx.stroke();
 
         channelRef.current?.trigger('client-stroke-move', {
-            x: e.nativeEvent.offsetX / canvas.width,
-            y: e.nativeEvent.offsetY / canvas.height
+            x: x / canvas.width,
+            y: y / canvas.height
         });
     };
 
-    const handlePointerUp = () => {
+    const handlePointerUp = (e: React.PointerEvent<HTMLCanvasElement>) => {
+        e.preventDefault();
         historyRef.current.push({ ...currentStrokeRef.current });
         redoStackRef.current = [];
         channelRef.current?.trigger('client-stroke-end', {});
     };
 
-    // 色のプリセット定義
-    const colors = ['#000000', '#FF3B30', '#34C759', '#007AFF', '#AF52DE', '#FF9500'];
+    // === UI Components ===
 
     return (
-        <div className="fixed inset-0 bg-[#EBF4FF] select-none font-sans">
-            {/* Header */}
-            <div className="absolute top-0 left-0 right-0 h-16 px-6 flex items-center justify-between z-10 bg-white shadow-[0_4px_0_#e5e5e5] border-b-2 border-[#e5e5e5]">
+        <div className="fixed inset-0 bg-[#EBF4FF] flex flex-col font-sans select-none overflow-hidden touch-none">
+
+            {/* --- Header --- */}
+            <header className="h-16 px-4 flex items-center justify-between shrink-0 bg-white border-b-2 border-[#e5e7eb] shadow-sm z-20">
                 {/* Logo */}
-                <div className="flex items-center">
-                    <span className="text-2xl font-extrabold text-[#3c3c3c] tracking-tight font-sans">RE</span>
-                    <span className="text-2xl font-extrabold text-[#1cb0f6] mx-[2px]">:</span>
-                    <span className="text-2xl font-extrabold text-[#3c3c3c] tracking-tight font-sans">KAI</span>
+                <div className="flex items-center select-none">
+                    <span className="text-2xl font-black text-slate-800 tracking-tighter">RE</span>
+                    <span className="text-2xl font-black text-cyan-500 mx-[2px]">:</span>
+                    <span className="text-2xl font-black text-slate-800 tracking-tighter">KAI</span>
                 </div>
 
-                {/* Undo/Redo Buttons */}
-                <div className="flex items-center gap-3">
-                    <button
-                        onClick={performUndo}
-                        className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777]"
-                        aria-label="Undo"
-                    >
-                        <RotateCcw size={20} strokeWidth={2.5} />
-                    </button>
-                    <button
-                        onClick={performRedo}
-                        className="w-10 h-10 bg-white rounded-xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777]"
-                        aria-label="Redo"
-                    >
-                        <RotateCw size={20} strokeWidth={2.5} />
-                    </button>
+                {/* Connection Indicator */}
+                <div className={`px-3 py-1 rounded-full text-[10px] font-bold border flex items-center gap-1.5 transition-colors ${isConnected ? 'bg-green-50 text-green-600 border-green-200' : 'bg-slate-50 text-slate-400 border-slate-200'}`}>
+                    <div className={`w-2 h-2 rounded-full ${isConnected ? 'bg-green-500 animate-pulse' : 'bg-slate-300'}`} />
+                    {isConnected ? 'ONLINE' : 'CONNECTING...'}
                 </div>
-            </div>
 
-            {/* Main Layout: Toolbar & Canvas */}
-            <div className="absolute top-16 left-0 right-0 bottom-0 flex flex-col p-4 gap-4 bg-[#EBF4FF]">
+                {/* Undo/Redo */}
+                <div className="flex gap-2">
+                    <ActionButton icon={<RotateCcw size={18} />} onClick={performUndo} label="Undo" />
+                    <ActionButton icon={<RotateCw size={18} />} onClick={performRedo} label="Redo" />
+                </div>
+            </header>
 
-                {/* Toolbar Area */}
-                <div className="flex items-center gap-3 px-2">
-                    {/* Tools */}
-                    <div className="flex items-center gap-2 bg-white p-1 rounded-2xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5]">
-                        <button
-                            onClick={() => setMode('draw')}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${mode === 'draw'
-                                ? 'bg-[#3c3c3c] text-white'
-                                : 'text-[#777777] hover:bg-[#f0f0f0]'
-                                }`}
-                        >
-                            <Pencil size={20} strokeWidth={2.5} fill={mode === 'draw' ? "currentColor" : "none"} />
-                        </button>
-                        <button
-                            onClick={() => setMode('erase')}
-                            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${mode === 'erase'
-                                ? 'bg-[#3c3c3c] text-white'
-                                : 'text-[#777777] hover:bg-[#f0f0f0]'
-                                }`}
-                        >
-                            <Eraser size={20} strokeWidth={2.5} fill={mode === 'erase' ? "currentColor" : "none"} />
-                        </button>
-                    </div>
+            {/* --- Main Workspace --- */}
+            <div className="flex-1 flex p-4 gap-4 overflow-hidden relative">
 
-                    {/* Capsule Indicator (Color & Size) */}
-                    <div className="flex-1 flex items-center bg-white rounded-2xl p-1 pl-3 gap-4 h-12 shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] max-w-md">
-                        {/* Color Preview & Picker Trigger */}
-                        <div className="relative group">
+                {/* 1. Toolbar (Floating Left) */}
+                <div className="flex flex-col gap-3 bg-white p-2 rounded-2xl border-2 border-[#e5e7eb] shadow-[0_4px_0_#e5e7eb] h-fit z-10">
+                    <ToolButton
+                        active={mode === 'draw'}
+                        onClick={() => setMode('draw')}
+                        icon={<Pencil size={20} />}
+                    />
+                    <ToolButton
+                        active={mode === 'erase'}
+                        onClick={() => setMode('erase')}
+                        icon={<Eraser size={20} />}
+                    />
+                    <div className="w-full h-0.5 bg-gray-100 my-1" />
+                    <ToolButton
+                        active={false}
+                        onClick={() => {/* Settings logic */ }}
+                        icon={<Settings size={20} />}
+                    />
+                </div>
+
+                {/* 2. Top Bar (Color & Size) - Floating Top Center */}
+                <div className="absolute top-4 left-20 right-4 flex gap-4 z-10 pointer-events-none">
+                    <div className="pointer-events-auto flex items-center bg-white rounded-2xl p-1.5 pl-3 gap-4 border-2 border-[#e5e7eb] shadow-[0_4px_0_#e5e7eb] w-full max-w-md">
+
+                        {/* Color Picker Trigger */}
+                        <div className="relative">
                             <button
-                                className="w-8 h-8 rounded-full border-[3px] border-white ring-2 ring-[#e5e5e5] shadow-sm shrink-0 transition-transform group-hover:scale-105"
+                                onClick={() => setShowColorPicker(!showColorPicker)}
+                                className="w-9 h-9 rounded-full border-4 border-white ring-2 ring-gray-200 shadow-sm transition-transform active:scale-95 hover:scale-105"
                                 style={{ backgroundColor: color }}
                             />
-                            {/* Simple Color Palette Popover */}
-                            <div className="absolute top-full left-0 mt-2 p-2 bg-white rounded-xl shadow-lg border-2 border-[#e5e5e5] grid grid-cols-3 gap-2 hidden group-hover:grid z-20">
-                                {colors.map(c => (
-                                    <button
-                                        key={c}
-                                        className="w-6 h-6 rounded-full border-2 border-white ring-1 ring-[#e5e5e5] hover:scale-110 transition-all"
-                                        style={{ backgroundColor: c }}
-                                        onClick={() => setColor(c)}
-                                    />
-                                ))}
-                            </div>
+
+                            {/* Popover Color Palette */}
+                            {showColorPicker && (
+                                <div className="absolute top-full left-0 mt-3 p-3 bg-white rounded-2xl border-2 border-gray-100 shadow-xl grid grid-cols-3 gap-2 animate-in fade-in zoom-in-95 duration-200 w-36">
+                                    {colors.map((c) => (
+                                        <button
+                                            key={c}
+                                            onClick={() => { setColor(c); setShowColorPicker(false); }}
+                                            className={`w-8 h-8 rounded-full border-2 transition-transform hover:scale-110 ${color === c ? 'border-slate-800 scale-110' : 'border-transparent ring-1 ring-gray-100'}`}
+                                            style={{ backgroundColor: c }}
+                                        />
+                                    ))}
+                                </div>
+                            )}
                         </div>
 
-                        {/* Size Preview & Slider */}
-                        <div className="flex-1 flex items-center h-full pr-3 relative group">
-                            {/* Background Track & Thumb (Visual) */}
-                            <div className="w-full h-2 bg-[#e5e5e5] rounded-full overflow-hidden relative">
+                        {/* Custom Size Slider */}
+                        <div className="flex-1 flex items-center h-full pr-2 relative group">
+                            {/* Track */}
+                            <div className="w-full h-3 bg-slate-100 rounded-full overflow-hidden relative inner-shadow">
                                 <div
-                                    className="h-full bg-[#3c3c3c] rounded-full"
-                                    style={{ width: `${(size / 20) * 100}%` }}
+                                    className="h-full bg-slate-800 rounded-full origin-left"
+                                    style={{ width: `${(size / 30) * 100}%` }}
                                 />
                             </div>
+
+                            {/* Thumb (Visual only) */}
                             <div
-                                className="absolute w-5 h-5 bg-white rounded-full shadow-sm border-2 border-[#3c3c3c] top-1/2 -translate-y-1/2 pointer-events-none transition-all group-hover:scale-110"
+                                className="absolute w-6 h-6 bg-white border-2 border-slate-800 rounded-full shadow-sm pointer-events-none transition-transform group-active:scale-110"
                                 style={{
-                                    left: `${(size / 20) * 100}%`,
-                                    transform: `translate(-50%, -50%)`
+                                    left: `${(size / 30) * 100}%`,
+                                    transform: 'translateX(-50%)'
                                 }}
                             />
-                            {/* Actual Range Input (Hidden but Functional) */}
+
+                            {/* Hidden Input for Logic */}
                             <input
                                 type="range"
-                                min="1"
-                                max="20"
+                                min="1" max="30"
                                 value={size}
                                 onChange={(e) => setSize(Number(e.target.value))}
-                                className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                                className="absolute inset-0 w-full h-full opacity-0 cursor-ew-resize"
                             />
                         </div>
                     </div>
-
-                    <button className="w-12 h-12 bg-white rounded-2xl shadow-[0_4px_0_#e5e5e5] border-2 border-[#e5e5e5] flex items-center justify-center active:translate-y-[4px] active:shadow-none transition-all text-[#777777] ml-auto">
-                        <Settings size={24} strokeWidth={2.5} />
-                    </button>
                 </div>
 
-                {/* Canvas Container */}
-                <div className="flex-1 relative rounded-3xl border-[3px] border-[#3c3c3c] bg-white overflow-hidden shadow-sm">
+                {/* 3. Canvas Area */}
+                <div ref={containerRef} className="flex-1 relative bg-white rounded-3xl border-[3px] border-slate-900 shadow-sm overflow-hidden touch-none">
                     <canvas
                         ref={canvasRef}
                         onPointerDown={handlePointerDown}
                         onPointerMove={handlePointerMove}
                         onPointerUp={handlePointerUp}
                         onPointerLeave={handlePointerUp}
-                        className="block w-full h-full touch-none cursor-crosshair"
+                        className="block touch-none cursor-crosshair"
                     />
                 </div>
             </div>
 
-            {/* Orientation Modal */}
+            {/* --- Orientation Modal --- */}
             {showOrientationModal && (
-                <div className="fixed inset-0 z-[100] bg-black/60 flex items-center justify-center p-6 backdrop-blur-sm" onClick={() => setShowOrientationModal(false)}>
-                    <div className="bg-white rounded-[32px] p-8 max-w-sm w-full shadow-[0_8px_30px_rgba(0,0,0,0.12)] flex flex-col items-center animate-in fade-in zoom-in duration-300 border-2 border-[#e5e5e5]" onClick={e => e.stopPropagation()}>
+                <div className="fixed inset-0 z-50 bg-slate-900/60 backdrop-blur-sm flex items-center justify-center p-6 animate-in fade-in duration-300">
+                    <div className="bg-white w-full max-w-sm rounded-[2rem] p-8 flex flex-col items-center shadow-2xl animate-in zoom-in-95 duration-300 text-center">
+                        <h2 className="text-xl font-black text-slate-800 mb-2">画面の向きについて</h2>
+                        <p className="text-slate-500 font-bold text-sm mb-8 leading-relaxed">
+                            縦・横どちらでも利用可能です。<br />お好きなスタイルでどうぞ。
+                        </p>
 
-                        <div className="text-center mb-10">
-                            <p className="text-[#3c3c3c] font-bold text-lg tracking-wider leading-relaxed">
-                                縦・横どちらでも利用することができます。<br />
-                                お好きなスタイルでご利用ください。
-                            </p>
-                        </div>
-
-                        {/* Animation Container */}
-                        <div className="relative w-full h-48 flex items-center justify-center mb-10">
+                        {/* Device Animation */}
+                        <div className="relative w-40 h-40 mb-8 flex items-center justify-center">
                             <style jsx>{`
                                 @keyframes rotate-device {
                                     0%, 20% { transform: rotate(0deg); }
-                                    50%, 70% { transform: rotate(90deg); }
-                                    100% { transform: rotate(0deg); }
+                                    40%, 60% { transform: rotate(90deg); }
+                                    80%, 100% { transform: rotate(0deg); }
                                 }
-                                .device-icon {
-                                    animation: rotate-device 4s ease-in-out infinite;
-                                }
+                                .device-anim { animation: rotate-device 4s ease-in-out infinite; }
                             `}</style>
-                            {/* SVG Device Icon for better scaling and detail */}
-                            <svg className="device-icon w-32 h-32 drop-shadow-xl" viewBox="0 0 100 140" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <rect x="5" y="5" width="90" height="130" rx="12" fill="white" stroke="#3c3c3c" strokeWidth="4" />
-                                <circle cx="50" cy="125" r="4" stroke="#3c3c3c" strokeWidth="2" />
-                                <rect x="35" y="12" width="30" height="3" rx="1.5" fill="#cecece" />
-                                <rect x="12" y="25" width="76" height="90" rx="4" fill="#F5F5F5" stroke="#cecece" strokeWidth="1" />
-                            </svg>
+                            <div className="device-anim w-24 h-32 border-[5px] border-slate-800 rounded-2xl bg-white flex flex-col items-center py-2 shadow-lg">
+                                <div className="w-1 h-1 bg-slate-300 rounded-full mb-1" />
+                                <div className="w-16 h-20 bg-slate-100 rounded" />
+                                <div className="w-2 h-2 border-2 border-slate-300 rounded-full mt-auto" />
+                            </div>
                         </div>
 
                         <button
                             onClick={() => setShowOrientationModal(false)}
-                            className="w-full py-4 bg-[#58cc02] text-white font-extrabold rounded-2xl shadow-[0_4px_0_#58a700] hover:brightness-110 active:translate-y-[4px] active:shadow-none transition-all text-xl tracking-widest uppercase"
+                            className="w-full py-4 rounded-2xl bg-[#58cc02] hover:bg-[#46a302] text-white font-black text-lg shadow-[0_4px_0_#46a302] active:shadow-none active:translate-y-[4px] transition-all flex items-center justify-center gap-2"
                         >
-                            始める
+                            <Check strokeWidth={4} size={20} />
+                            はじめる
                         </button>
                     </div>
                 </div>
@@ -385,13 +380,37 @@ function TabletClientContent() {
     );
 }
 
+// --- Sub Components for Consistent Design ---
+
+function ActionButton({ icon, onClick, label }: { icon: React.ReactNode, onClick: () => void, label: string }) {
+    return (
+        <button
+            onClick={onClick}
+            aria-label={label}
+            className="w-10 h-10 flex items-center justify-center bg-white border-2 border-[#e5e7eb] rounded-xl shadow-[0_4px_0_#e5e7eb] text-slate-500 active:shadow-none active:translate-y-[4px] transition-all hover:bg-slate-50"
+        >
+            {icon}
+        </button>
+    );
+}
+
+function ToolButton({ active, onClick, icon }: { active: boolean, onClick: () => void, icon: React.ReactNode }) {
+    return (
+        <button
+            onClick={onClick}
+            className={`w-11 h-11 flex items-center justify-center rounded-xl border-2 transition-all active:shadow-none active:translate-y-[4px] ${active
+                    ? 'bg-slate-800 border-slate-800 text-white shadow-[0_4px_0_#1e293b]'
+                    : 'bg-white border-[#e5e7eb] text-slate-400 shadow-[0_4px_0_#e5e7eb] hover:bg-slate-50'
+                }`}
+        >
+            {icon}
+        </button>
+    );
+}
+
 export default function TabletClient() {
     return (
-        <Suspense fallback={
-            <div className="flex items-center justify-center min-h-screen bg-[#EBF4FF]">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-b-4 border-[#1cb0f6]"></div>
-            </div>
-        }>
+        <Suspense fallback={<div className="h-screen w-screen flex items-center justify-center bg-[#EBF4FF] text-slate-400 font-bold">LOADING...</div>}>
             <TabletClientContent />
         </Suspense>
     );
