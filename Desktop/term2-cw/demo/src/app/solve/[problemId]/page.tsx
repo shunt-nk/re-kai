@@ -10,11 +10,52 @@ import katex from 'katex';
 import 'katex/dist/katex.min.css';
 import styles from '../solve.module.css';
 
+// Define a type for your problem structure if not already defined
+interface Problem {
+    id: string;
+    title: string;
+    text: string;
+    timeLimit?: number; // Optional
+    subject?: string;
+    unit?: string;
+    questions: { id: string; label: string; correctAnswer?: string; }[];
+}
+
 export default function SolvePage() {
     const router = useRouter();
     const params = useParams();
     const problemId = params.problemId as string;
-    const problem = PROBLEMS.find(p => p.id === problemId);
+
+    // Initialize problem state
+    const [problem, setProblem] = useState<Problem | null>(null);
+
+    // Timer Logic
+    const [remainingTime, setRemainingTime] = useState(0);
+
+    useEffect(() => {
+        // 1. Try to find in static mock data
+        let found = PROBLEMS.find(p => p.id === problemId);
+
+        // 2. If not found, check localStorage for generated problems
+        if (!found) {
+            try {
+                const cached = localStorage.getItem('generatedProblems');
+                if (cached) {
+                    const generatedList = JSON.parse(cached);
+                    found = generatedList.find((p: any) => p.id === problemId);
+                }
+            } catch (e) {
+                console.error("Failed to load from local storage", e);
+            }
+        }
+
+        if (found) {
+            setProblem(found);
+            setRemainingTime(found.timeLimit || 0);
+        } else {
+            // Handle not found
+        }
+    }, [problemId]);
 
     const [elapsedTime, setElapsedTime] = useState(0);
     const [isConnected, setIsConnected] = useState(false);
@@ -33,9 +74,6 @@ export default function SolvePage() {
 
     const canvasRef = useRef<RealTimeCanvasHandle>(null);
     const qrContainerRef = useRef<HTMLDivElement>(null);
-
-    // Timer Logic
-    const [remainingTime, setRemainingTime] = useState(problem?.timeLimit || 0);
 
     // Timer Effect
     useEffect(() => {

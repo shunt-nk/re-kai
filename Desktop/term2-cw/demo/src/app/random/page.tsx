@@ -5,7 +5,7 @@ import Header from '@/components/layout/Header';
 import Footer from '@/components/layout/Footer';
 import styles from '../dashboard/dashboard.module.css';
 import { useRouter } from 'next/navigation';
-import { SUBJECT_SELECTIONS, UNITS, PROBLEMS } from '@/data/mockData';
+import { SUBJECT_SELECTIONS, UNITS } from '@/data/mockData';
 
 export default function RandomPage() {
     const router = useRouter();
@@ -21,28 +21,43 @@ export default function RandomPage() {
     const handleGenerate = async () => {
         setIsGenerating(true);
 
-        // Simulate AI generation delay
-        await new Promise(resolve => setTimeout(resolve, 2000));
+        try {
+            const res = await fetch('/api/generate', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    subject: selectedSubject,
+                    unit: selectedUnit
+                })
+            });
 
-        // Find matching problems
-        let candidates = PROBLEMS;
-        if (selectedSubject) {
-            candidates = candidates.filter(p => p.subject === selectedSubject);
-        }
-        if (selectedUnit) {
-            // Find unit title
-            const unit = UNITS.find(u => u.id === selectedUnit);
-            if (unit) {
-                candidates = candidates.filter(p => p.unit === unit.title);
+            if (!res.ok) {
+                console.error("Generation failed");
+                setIsGenerating(false);
+                return;
             }
+
+            const problem = await res.json();
+
+            // Store the generated problem in localStorage or pass it via query params/state
+            // For now, simpler approach: Use the ID if we save it to DB, or just pass data.
+            // But since the current app structure relies on ID lookup in `PROBLEMS` array (which is static),
+            // we have a conflict. The app expects `PROBLEMS.find(id)`.
+            // We need to inject this new problem into a place where `solve/[id]` can find it.
+            // Strategy: Save to localStorage and have `solve/[id]` check localStorage if not found in mock data.
+
+            // Save to localStorage
+            const existingCache = localStorage.getItem('generatedProblems');
+            const cache = existingCache ? JSON.parse(existingCache) : [];
+            cache.push(problem);
+            localStorage.setItem('generatedProblems', JSON.stringify(cache));
+
+            router.push(`/solve/${problem.id}?source=generated`);
+
+        } catch (e) {
+            console.error(e);
+            setIsGenerating(false);
         }
-
-        // Pick random
-        const targetProblem = candidates.length > 0
-            ? candidates[Math.floor(Math.random() * candidates.length)]
-            : PROBLEMS[Math.floor(Math.random() * PROBLEMS.length)]; // Fallback
-
-        router.push(`/solve/${targetProblem.id}`);
     };
 
     return (
@@ -61,8 +76,8 @@ export default function RandomPage() {
 
                 <div className={styles.heroCard} style={{ flexDirection: 'column', alignItems: 'stretch' }}>
                     <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-                        <h1 className={styles.sectionTitle} style={{ margin: '0 0 20px 0' }}>ランダム問題生成</h1>
-                        <p style={{ color: '#666', fontSize: '16px' }}>教科と単元を選択し、あなただけの問題を生成します。</p>
+                        <h1 className={styles.sectionTitle} style={{ margin: '0 0 20px 0' }}>ランダム問題生成 (AI)</h1>
+                        <p style={{ color: '#666', fontSize: '16px' }}>OpenAIがあなただけの問題を生成します。</p>
                     </div>
 
                     {isGenerating ? (
