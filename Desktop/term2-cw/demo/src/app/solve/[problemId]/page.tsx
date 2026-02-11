@@ -144,35 +144,37 @@ export default function SolvePage() {
 
         // Submit Results to API
         const userId = localStorage.getItem('userId');
-        if (userId) {
-            try {
-                const res = await fetch('/api/solve', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        userId,
-                        problemId: problem.id,
-                        answers,
-                        image, // Send base64 image
-                        timeSpentSec: elapsedTime
-                    })
-                });
 
-                if (res.ok) {
-                    const data = await res.json();
-                    if (data.success && data.grading) {
-                        setScore(data.grading.score);
-                        setAiFeedback(data.grading.feedback);
-                    }
+        try {
+            const res = await fetch('/api/solve', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    userId, // Can be null
+                    problemId: problem.id,
+                    problemData: problem, // Send full problem data for generated problems
+                    answers,
+                    image, // Send base64 image
+                    timeSpentSec: elapsedTime
+                })
+            });
+
+            if (res.ok) {
+                const data = await res.json();
+                if (data.success && data.grading) {
+                    setScore(data.grading.score);
+                    setAiFeedback(data.grading.feedback);
+                } else {
+                    setAiFeedback("採点結果の取得に失敗しました。");
                 }
-            } catch (e) {
-                console.error("Failed to save progress", e);
+            } else {
+                setScore(0);
+                const errData = await res.json().catch(() => ({}));
+                setAiFeedback(`エラーが発生しました: ${errData.error || 'サーバーエラー'}`);
             }
-        } else {
-            // Fallback for no user ID (Demo)
-            await new Promise(r => setTimeout(r, 2000));
-            setScore(8);
-            setAiFeedback("※ユーザー登録がないため、デモ用の点数を表示しています。");
+        } catch (e) {
+            console.error("Failed to save progress", e);
+            setAiFeedback("通信エラーが発生しました。");
         }
 
         setGradingStatus('complete');
